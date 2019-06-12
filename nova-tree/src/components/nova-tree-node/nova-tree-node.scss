@@ -1,0 +1,119 @@
+$blue-1: #1890ff;
+$blue-2: #bae7ff;
+$white: #ffffff;
+$grey: #d9d9d9;
+
+li {
+  list-style-type: none;
+  margin: 4px 0px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.container > * {
+  display: inline-block;
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  transition-property: all;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transition-delay: 0s;
+}
+
+/* The Caret */
+.caret {
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+
+.caret::before {
+  content: "\25B6";
+  display: inline-block;
+  color: black;
+  margin-right: 6px;
+}
+
+.caret-down::before {
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari */
+  transform: rotate(90deg);
+}
+
+.hide {
+  display: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.tree-checkmark {
+  position: relative;
+  top: 0;
+  // left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: $white;
+  border: 1px solid $grey;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .tree-checkmark {
+  border-color: $blue-1;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .tree-checkmark {
+  background-color: $blue-1;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.tree-checkmark:after {
+  content: "";
+  position: relative;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+label input:checked ~ .tree-checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .tree-checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.text {
+  background-color: $blue-2;
+  display: inline-block;
+  height: 24px;
+  margin: 0;
+  padding: 0 5px;
+
+  line-height: 24px;
+  text-decoration: none;
+  vertical-align: top;
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}

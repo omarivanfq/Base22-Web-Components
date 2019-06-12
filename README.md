@@ -19,8 +19,8 @@
 
 ## Authors
 
--- Eduardo Hernández Garza - [http://github.com/eddyhdzg](http://github.com/eddyhdzg)
--- David
--- Omar
--- Sergio
--- Ivan
+- Eduardo Hernández Garza - [http://github.com/eddyhdzg](http://github.com/eddyhdzg)
+- David
+- Omar
+- Sergio
+- Ivan

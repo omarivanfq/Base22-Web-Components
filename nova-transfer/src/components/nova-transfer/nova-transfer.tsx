@@ -14,7 +14,7 @@ export class MyComponent {
   componentWillLoad() {
     this.selected = [];
     this.dataSource = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 7; i++) {
       this.dataSource.push({
         key: i.toString(),
         title: `item${i + 1}`,
@@ -62,6 +62,7 @@ export class MyComponent {
     else {
       this.selected.push(key);
     }
+    this.selected = [...this.selected]; // to force re-rendering
   }
 
   getItems(source:boolean) {
@@ -71,48 +72,72 @@ export class MyComponent {
       .map(item =>{
         var props = {
             key: item.key,
-            onClick: () => this.handleSelect(item.key),
             checked: this.selected.indexOf(item.key) !== -1
         }
-        return <li><span class="item"><input type="checkbox" {...props}/>{item.title}</span></li>;
+        return <li><span class="item" 
+          onClick= {() => this.handleSelect(item.key)}><input type="checkbox" {...props}/>{item.title}</span></li>;
       })
+  }
+
+  getSourceSelected() {
+    return this.selected.filter(key => this.targetKeys.indexOf(key) === -1).length;
+  }
+
+  getTargetSelected() {
+    return this.selected.filter(key => this.targetKeys.indexOf(key) !== -1).length;
+  }
+
+  getSourceCount() {
+    var selectedCount = this.getSourceSelected();
+    var total = this.dataSource.length - this.targetKeys.length;
+    return <span>{selectedCount != 0? selectedCount + "/": ""} {total} {total > 0? "items" : "item"}</span>;
+  }
+
+  getTargetCount() {
+    var selectedCount = this.getTargetSelected();
+    var total = this.targetKeys.length;
+    return <span>{selectedCount != 0? selectedCount + "/" : ""} {total} {total > 0? "items" : "item"}</span>;
   }
 
   render() {
     return (
         <div class="container">
-            <div class="column column--source">
-              <div class="column-header">
-                <span class="items-count">
-                  <input type="checkbox"/>
-                  3/10 items
-                </span>
-                <span class="column-title">Source</span>      
-              </div>
-              <div class="items">
-                <ul>
-                  { this.getItems(true) }
-                </ul>
-              </div>
+          <div class="column column--source">
+            <div class="column-header">
+              <span class="items-count">
+                <input type="checkbox"/>
+                {this.getSourceCount()}
+              </span>
+              <span class="column-title">Source</span>      
             </div>
-            <span class="switch">
-              <button onClick={() => this.moveToTarget()}>{">"}</button>
-              <button onClick={() => this.moveToSource()}>{"<"}</button>
-            </span>
-            <div class="column column--target">
-              <div class="column-header">
-                <span class="items-count">
-                  <input type="checkbox"/>
-                  4/6 items
-                </span>
-                <span class="column-title">Target</span>
-              </div>
-              <div class="items">
-                <ul>
-                  { this.getItems(false) }
-                </ul>
-              </div>
+            <div class="items">
+              <ul>
+                { this.getItems(true) }
+              </ul>
             </div>
+          </div>
+          <span class="switch">
+            <button 
+              class={this.getSourceSelected() > 0? "btn-active":""} 
+              onClick={() => this.moveToTarget()}>{">"}</button>
+            <button 
+              class={this.getTargetSelected() > 0? "btn-active":""} 
+              onClick={() => this.moveToSource()}>{"<"}</button>
+          </span>
+          <div class="column column--target">
+            <div class="column-header">
+              <span class="items-count">
+                <input type="checkbox"/>
+                {this.getTargetCount()}
+              </span>
+              <span class="column-title">Target</span>
+            </div>
+            <div class="items">
+              <ul>
+                { this.getItems(false) }
+              </ul>
+            </div>
+          </div>
         </div>
     );
   }

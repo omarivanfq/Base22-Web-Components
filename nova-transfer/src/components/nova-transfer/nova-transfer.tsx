@@ -71,7 +71,7 @@ export class MyComponent {
       .map(item =>{
         var props = {
             key: item.key,
-            onClick: ()=>this.handleSelect(item.key),
+            onClick: () => this.handleSelect(item.key),
             checked: this.selected.indexOf(item.key) !== -1
         }
         return <li><span class="item"><input type="checkbox" {...props}/>{item.title}</span></li>;
@@ -82,18 +82,36 @@ export class MyComponent {
     return (
         <div class="container">
             <div class="column column--source">
-              <ul>
-                { this.getItems(true) }
-              </ul>
+              <div class="column-header">
+                <span class="items-count">
+                  <input type="checkbox"/>
+                  3/10 items
+                </span>
+                <span class="column-title">Source</span>      
+              </div>
+              <div class="items">
+                <ul>
+                  { this.getItems(true) }
+                </ul>
+              </div>
             </div>
             <span class="switch">
               <button onClick={() => this.moveToTarget()}>{">"}</button>
               <button onClick={() => this.moveToSource()}>{"<"}</button>
             </span>
             <div class="column column--target">
-              <ul>
-                { this.getItems(false) }
-              </ul>
+              <div class="column-header">
+                <span class="items-count">
+                  <input type="checkbox"/>
+                  4/6 items
+                </span>
+                <span class="column-title">Target</span>
+              </div>
+              <div class="items">
+                <ul>
+                  { this.getItems(false) }
+                </ul>
+              </div>
             </div>
         </div>
     );

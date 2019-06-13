@@ -1,0 +1,40 @@
+ul {
+    list-style: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 200px;
+    padding: 20px 14px;
+}
+
+.switch {
+    width: 35px;
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.switch button {
+    width: 100%;
+    margin: 4px 0;
+}
+
+.column {
+    width: 170px;
+    height: 100%;
+    border: solid 2px rgba(0,0,0,0.45);
+    overflow: scroll;
+}
+
+.column--source::before {
+    content: "source";
+    position: absolute;
+}
+
+.column--target::before {
+    content: "target";
+    position: absolute;
+}

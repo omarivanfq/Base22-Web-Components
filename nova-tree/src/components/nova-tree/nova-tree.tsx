@@ -8,6 +8,10 @@ import Fragment from "stencil-fragment";
 })
 export class MyComponent {
 
+
+
+
+
   render() {
     let treeData = [
       {
@@ -58,6 +62,11 @@ export class MyComponent {
         checked: false
       }
     ];
+
+
+   //if leaf checked false  => children checked false
+   //if leaf checked true => children are individual  
+   // lo quitamos con un class="float hide noselect"
 
     const handleNode = leaf => {
       return (

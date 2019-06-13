@@ -24,11 +24,11 @@ export class MyLeaf {
           // tanto para expander y ocultar
 
           {
-            let children = this.el.shadowRoot.querySelector(".hydrated");
-            for (child in children) {
-              child.classList.toggle("hide");
-              }
-            //window.alert(hydrated)
+            //let children = this.el.shadowRoot.querySelector(".hide");
+            //for (child in children) {
+            //  child.classList.toggle("hide");
+            //  }
+            window.alert("hola")
 
 
         }

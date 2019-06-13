@@ -22,5 +22,29 @@ li {
   position: relative;
   display: inline-block;
   margin-right: 8px;
-  
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+li > span {
+  color: #e8e8e8;
+}
+
+.on {
+  color: #fadb14;
+}
+
+.background {
+  color: transparent;
+  z-index: -1;
+}
+
+.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
 }

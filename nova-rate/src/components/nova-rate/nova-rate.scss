@@ -11,5 +11,16 @@ li > span {
   opacity: 0;
 }
 
-.right {
+ul {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  list-style: none;
+}
+
+li {
+  position: relative;
+  display: inline-block;
+  margin-right: 8px;
+  
 }

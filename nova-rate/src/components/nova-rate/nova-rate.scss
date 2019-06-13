@@ -48,3 +48,13 @@ li > span {
   height: 100%;
   overflow: hidden;
 }
+
+.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  direction: rtl;
+}

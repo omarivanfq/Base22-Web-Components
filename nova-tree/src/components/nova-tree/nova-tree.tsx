@@ -1,6 +1,5 @@
 import { Component, h } from "@stencil/core";
 import Fragment from "stencil-fragment";
-import React from 'react';
 
 @Component({
   tag: "nova-tree",

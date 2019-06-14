@@ -1,29 +1,39 @@
-import { Component, h, State } from '@stencil/core';
+import { Component, Prop, h, State } from '@stencil/core';
 
 @Component({
   tag: 'nova-transfer',
   styleUrl: 'nova-transfer.css',
   shadow: true
 })
-export class MyComponent {
+export class NovaTransfer {
 
   @State() dataSource:any[];
+  @State() filteredDataSource:any[];
   @State() targetKeys:string[];
   @State() selected:string[];
+  @Prop() showSearch:boolean;
 
   componentWillLoad() { 
     this.selected = [];
     this.dataSource = [];
+    this.targetKeys = [];
     // dummy data 
-    for (let i = 0; i < 10; i++) {
-      this.dataSource.push({
+    for (let i = 0; i < 40; i++) {
+      var data = {
         key: i.toString(),
         title: `item${i + 1}`,
         description: `description of content${i + 1}`,
         disabled: i % 3 < 1, 
-      });
+        chosen: Math.random() * 2 > 1
+      };
+      if (data.chosen && !data.disabled) {
+        this.targetKeys.push(data.key);
+      }
+      this.dataSource.push(data);
     }
-    this.targetKeys = this.dataSource.filter(item => +item.key % 3 > 1 && !item.disabled).map(item => item.key);
+    console.log(this.dataSource);
+    this.filteredDataSource = [...this.dataSource];
+    console.log(this.dataSource);
   }
 
   isItemInTarget(key:string){
@@ -73,7 +83,7 @@ export class MyComponent {
   }
 
   getItems(fromSource:boolean) {
-    return this.dataSource.filter(item => 
+    return this.filteredDataSource.filter(item => 
         fromSource && !this.isItemInTarget(item.key)
         || !fromSource && this.isItemInTarget(item.key))
       .map(item =>{
@@ -99,7 +109,7 @@ export class MyComponent {
 
   getSourceSelected() {
     return this.selected.filter(key => !this.isItemInTarget(key) 
-      && !this.dataSource.find(item => item.key === key).disabled).length;
+      && !this.filteredDataSource.find(item => item.key === key).disabled).length;
   }
 
   getTargetSelected() {
@@ -108,7 +118,7 @@ export class MyComponent {
 
   getSourceCountSpan() {
     var selectedCount = this.getSourceSelected();
-    var total = this.dataSource.length - this.targetKeys.length;
+    var total = this.filteredDataSource.length - this.targetKeys.length;
     return <span>{selectedCount != 0? selectedCount + '/': ''}{total} {total > 0? 'items' : 'item'}</span>;
   }
 
@@ -120,8 +130,8 @@ export class MyComponent {
 
   handleSelectAll(fromSource:boolean) {
     var selectedCount = fromSource? this.getSourceSelected() : this.getTargetSelected();
-    var total = fromSource? this.dataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
-    var items = this.dataSource
+    var total = fromSource? this.filteredDataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
+    var items = this.filteredDataSource
       .filter(item => fromSource && !this.isItemInTarget(item.key) && !item.disabled
         || !fromSource && this.isItemInTarget(item.key));
 
@@ -144,7 +154,7 @@ export class MyComponent {
 
   getSelectAllCheckbox(fromSource:boolean) {
     var selectedCount = fromSource? this.getSourceSelected() : this.getTargetSelected();
-    var total = fromSource? this.dataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
+    var total = fromSource? this.filteredDataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
     var props = {
       onClick: () => this.handleSelectAll(fromSource),
       checked: selectedCount === total
@@ -156,10 +166,38 @@ export class MyComponent {
     );
   }
 
+  handleSourceQuery = (e) => {
+    var PATTERN = e.target.value;
+    if (!/^ *$/.test(PATTERN)) {
+      this.filteredDataSource = 
+        [...this.dataSource.filter(item => { return !this.isItemInTarget(item.key) 
+          && item.title.indexOf(PATTERN) !== -1; }),
+          ...this.dataSource.filter(item => { return this.isItemInTarget(item.key)})
+        ];
+    }    
+    else {
+      this.filteredDataSource = [...this.dataSource];
+    }
+  }
+
+  handleTargetQuery = (e) => {
+    var PATTERN = e.target.value;
+    if (!/^ *$/.test(PATTERN)) {
+      this.filteredDataSource = 
+        [...this.dataSource.filter(item => { return this.isItemInTarget(item.key) 
+          && item.title.indexOf(PATTERN) !== -1; }),
+          ...this.dataSource.filter(item => { return !this.isItemInTarget(item.key)})
+        ];
+    }    
+    else {
+      this.filteredDataSource = [...this.dataSource];
+    }
+  }
+
   render() {
     return (
         <div class='container'>
-          <div class='column column--source'>
+          <div class='column'>
             <div class='column-header'>
               <span class='items-count'>
                 {this.getSelectAllCheckbox(true)}
@@ -167,10 +205,17 @@ export class MyComponent {
               </span>
               <span class='column-title'>Source</span>      
             </div>
-            <div class='items'>
-              <ul>
-                { this.getItems(true) }
-              </ul>
+            <div class='items-container'>
+              <span class="search-container">
+                <input 
+                  onKeyUp={this.handleSourceQuery} 
+                  placeholder='Search here'/>
+              </span>
+              <div class='items'>
+                <ul>
+                  { this.getItems(true) }
+                </ul>
+              </div>
             </div>
           </div>
           <span class='switch'>
@@ -181,7 +226,7 @@ export class MyComponent {
               class={this.getTargetSelected() > 0? 'btn-active':''} 
               onClick={() => this.moveToSource()}>{'<'}</button>
           </span>
-          <div class='column column--target'>
+          <div class='column'>
             <div class="column-header">
               <span class="items-count">
                 {this.getSelectAllCheckbox(false)}
@@ -189,10 +234,17 @@ export class MyComponent {
               </span>
               <span class="column-title">Target</span>
             </div>
-            <div class="items">
-              <ul>
-                { this.getItems(false) }
-              </ul>
+            <div class='items-container'>
+              <span class="search-container">
+                <input 
+                  onKeyUp={this.handleTargetQuery} 
+                  placeholder='Search here'/>
+              </span>
+              <div class="items">
+                <ul>
+                  { this.getItems(false) }
+                </ul>
+              </div>
             </div>
           </div>
         </div>

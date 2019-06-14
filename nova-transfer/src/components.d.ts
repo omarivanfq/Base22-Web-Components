@@ -9,7 +9,9 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface NovaTransfer {}
+  interface NovaTransfer {
+    'showSearch': boolean;
+  }
 }
 
 declare global {
@@ -26,7 +28,9 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {}
+  interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
+    'showSearch'?: boolean;
+  }
 
   interface IntrinsicElements {
     'nova-transfer': NovaTransfer;

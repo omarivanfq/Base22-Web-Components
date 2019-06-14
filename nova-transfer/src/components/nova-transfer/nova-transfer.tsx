@@ -12,6 +12,7 @@ export class NovaTransfer {
   @State() targetKeys:string[];
   @State() selected:string[];
   @Prop() showSearch:boolean;
+  @Prop() disabled:boolean;
 
   componentWillLoad() { 
     this.selected = [];
@@ -31,9 +32,7 @@ export class NovaTransfer {
       }
       this.dataSource.push(data);
     }
-    console.log(this.dataSource);
     this.filteredDataSource = [...this.dataSource];
-    console.log(this.dataSource);
   }
 
   isItemInTarget(key:string){
@@ -41,35 +40,33 @@ export class NovaTransfer {
   }
 
   moveToTarget() {
-    console.log('move to target');
-  //  console.log(this.selected);
-    var alreadyInTarget = []
-    this.selected.forEach((key) => {
-      if (!this.isItemInTarget(key)) {
-        this.targetKeys.push(key);
-      }
-      else {
-        alreadyInTarget.push(key);
-      }
-    });
-    this.selected = [...alreadyInTarget];
- //   console.log(this.selected);
+    if (!this.disabled) {
+      var alreadyInTarget = []
+      this.selected.forEach((key) => {
+        if (!this.isItemInTarget(key)) {
+          this.targetKeys.push(key);
+        }
+        else {
+          alreadyInTarget.push(key);
+        }
+      });
+      this.selected = [...alreadyInTarget];
+    }
   }
 
   moveToSource() {
- //   console.log(this.selected);
-    console.log('move to source');
-    var alreadyInSource = []
-    this.selected.forEach((key) => {
-      if (this.isItemInTarget(key)) {
-        this.targetKeys.splice(this.targetKeys.indexOf(key), 1);
-      }
-      else {
-        alreadyInSource.push(key);
-      }
-    });
-    this.selected = [...alreadyInSource];
- //   console.log(this.selected);
+    if (!this.disabled) {
+      var alreadyInSource = []
+      this.selected.forEach((key) => {
+        if (this.isItemInTarget(key)) {
+          this.targetKeys.splice(this.targetKeys.indexOf(key), 1);
+        }
+        else {
+          alreadyInSource.push(key);
+        }
+      });
+      this.selected = [...alreadyInSource];
+    }
   }
 
   handleSelect(item:any) {
@@ -197,21 +194,20 @@ export class NovaTransfer {
   }
 
   render() {
-    {console.log('rendering again');}
     return (
-        <div class='container'>
+        <div class={'container' + (this.disabled? ' disabled' : '')}>
           <div class='column'>
             <div class='column-header'>
               <span class='items-count'>
-                {this.getSelectAllCheckbox(true)}
-                {this.getSourceCountSpan()}
+                { this.getSelectAllCheckbox(true) }
+                { this.getSourceCountSpan() }
               </span>
               <span class='column-title'>Source</span>      
             </div>
             <div class='items-container'>
               <span class="search-container">
                 <input 
-                  onKeyUp={this.handleSourceQuery} 
+                  onKeyUp={ this.handleSourceQuery } 
                   placeholder='Search here'/>
               </span>
               <div class='items'>
@@ -223,17 +219,17 @@ export class NovaTransfer {
           </div>
           <span class='switch'>
             <button 
-              class={this.getSourceSelected() > 0? 'btn-active':''} 
-              onClick={() => this.moveToTarget()}>{'>'}</button>
+              class={ this.getSourceSelected() > 0? 'btn-active':'' } 
+              onClick={ () => this.moveToTarget()}>{'>'}</button>
             <button 
-              class={this.getTargetSelected() > 0? 'btn-active':''} 
-              onClick={() => this.moveToSource()}>{'<'}</button>
+              class={ this.getTargetSelected() > 0? 'btn-active':'' } 
+              onClick={ () => this.moveToSource()}>{'<'}</button>
           </span>
           <div class='column'>
             <div class="column-header">
               <span class="items-count">
-                {this.getSelectAllCheckbox(false)}
-                {this.getTargetCountSpan()}
+                { this.getSelectAllCheckbox(false) }
+                { this.getTargetCountSpan() }
               </span>
               <span class="column-title">Target</span>
             </div>

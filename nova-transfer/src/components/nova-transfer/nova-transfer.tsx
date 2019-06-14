@@ -18,7 +18,7 @@ export class NovaTransfer {
     this.dataSource = [];
     this.targetKeys = [];
     // dummy data 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 10; i++) {
       var data = {
         key: i.toString(),
         title: `item${i + 1}`,
@@ -41,7 +41,8 @@ export class NovaTransfer {
   }
 
   moveToTarget() {
-    console.log(this.selected);
+    console.log('move to target');
+  //  console.log(this.selected);
     var alreadyInTarget = []
     this.selected.forEach((key) => {
       if (!this.isItemInTarget(key)) {
@@ -52,11 +53,12 @@ export class NovaTransfer {
       }
     });
     this.selected = [...alreadyInTarget];
-    console.log(this.selected);
+ //   console.log(this.selected);
   }
 
   moveToSource() {
-    console.log(this.selected);
+ //   console.log(this.selected);
+    console.log('move to source');
     var alreadyInSource = []
     this.selected.forEach((key) => {
       if (this.isItemInTarget(key)) {
@@ -67,7 +69,7 @@ export class NovaTransfer {
       }
     });
     this.selected = [...alreadyInSource];
-    console.log(this.selected);
+ //   console.log(this.selected);
   }
 
   handleSelect(item:any) {
@@ -157,7 +159,7 @@ export class NovaTransfer {
     var total = fromSource? this.filteredDataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
     var props = {
       onClick: () => this.handleSelectAll(fromSource),
-      checked: selectedCount === total
+      checked: selectedCount === total && total > 0
     };
     return(
       <input 
@@ -195,6 +197,7 @@ export class NovaTransfer {
   }
 
   render() {
+    {console.log('rendering again');}
     return (
         <div class='container'>
           <div class='column'>

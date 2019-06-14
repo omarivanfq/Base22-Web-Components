@@ -14,119 +14,31 @@ export class MyRatingComponent {
 
   @Prop() count: number = 5;
   @Prop({ mutable: true }) defaultValue: number = 0;
+  @Prop({ mutable: true }) value: number = this.defaultValue;
 
+  @State() mounted: boolean = false;
   @State() starList: Array<object> = [];
 
   @Event() onRatingUpdated: EventEmitter;
 
   componentWillLoad() {
-    this.allowHalf
-      ? this.createHalfStarList(this.defaultValue)
-      : this.createStarList(this.defaultValue);
+    this.createStarList(this.value);
+    this.mounted = true;
   }
 
   setValue(newValue) {
-    this.allowClear && this.defaultValue === newValue
-      ? (this.defaultValue = 0)
-      : (this.defaultValue = newValue);
-
-    this.allowHalf
-      ? this.createHalfStarList(this.defaultValue)
-      : this.createStarList(this.defaultValue);
-
+    this.allowClear && this.value === newValue
+      ? (this.value = 0)
+      : (this.value = newValue);
+    this.createStarList(this.value);
     // this.onRatingUpdated.emit({ defaultValue: this.defaultValue });
   }
 
-  createHalfStarList(numberOfStars: number) {
-    let starList = [];
-
-    let fill = i => {
-      return (
-        <li>
-          <span class="background">{this.character}</span>
-          <span
-            class="on left"
-            onMouseOver={() => this.createHalfStarList(i - 0.5)}
-            onMouseOut={() => this.createHalfStarList(this.defaultValue)}
-            onClick={() => this.setValue(i - 0.5)}
-          >
-            {this.character}
-          </span>
-          <span
-            class="on right"
-            onMouseOver={() => this.createHalfStarList(i)}
-            onMouseOut={() => this.createHalfStarList(this.defaultValue)}
-            onClick={() => this.setValue(i)}
-          >
-            {this.character}
-          </span>
-        </li>
-      );
-    };
-
-    let empty = i => {
-      return (
-        <li>
-          <span class="background">{this.character}</span>
-          <span
-            class="left"
-            onMouseOver={() => this.createHalfStarList(i - 0.5)}
-            onMouseOut={() => this.createHalfStarList(this.defaultValue)}
-            onClick={() => this.setValue(i - 0.5)}
-          >
-            {this.character}
-          </span>
-          <span
-            class="right"
-            onMouseOver={() => this.createHalfStarList(i)}
-            onMouseOut={() => this.createHalfStarList(this.defaultValue)}
-            onClick={() => this.setValue(i)}
-          >
-            {this.character}
-          </span>
-        </li>
-      );
-    };
-
-    let half = i => {
-      return (
-        <li>
-          <span class="background">{this.character}</span>
-          <span
-            class="on left"
-            onMouseOver={() => this.createHalfStarList(i - 0.5)}
-            onMouseOut={() => this.createHalfStarList(this.defaultValue)}
-            onClick={() => this.setValue(i - 0.5)}
-          >
-            {this.character}
-          </span>
-          <span
-            class="right"
-            onMouseOver={() => this.createHalfStarList(i)}
-            onMouseOut={() => this.createHalfStarList(this.defaultValue)}
-            onClick={() => this.setValue(i)}
-          >
-            {this.character}
-          </span>
-        </li>
-      );
-    };
-
-    for (let i = 1; i <= this.count; i++) {
-      if (numberOfStars - i + 1 === 0.5) {
-        starList.push(half(i));
-      } else if (i <= numberOfStars) {
-        starList.push(fill(i));
-      } else {
-        starList.push(empty(i));
-      }
-    }
-
-    this.starList = starList;
-  }
-
   createStarList(numberOfStars: number) {
-    numberOfStars = Math.floor(numberOfStars); // Eliminate Reminder
+    if (this.mounted && this.disabled) return; // disable changes
+
+    if (!this.allowHalf) numberOfStars = Math.floor(numberOfStars); // Eliminate Reminder
+
     let starList = [];
 
     let fill = i => {
@@ -135,7 +47,7 @@ export class MyRatingComponent {
           <span
             class="on"
             onMouseOver={() => this.createStarList(i)}
-            onMouseOut={() => this.createStarList(this.defaultValue)}
+            onMouseOut={() => this.createStarList(this.value)}
             onClick={() => this.setValue(i)}
           >
             {this.character}
@@ -150,7 +62,7 @@ export class MyRatingComponent {
           <span
             class="off"
             onMouseOver={() => this.createStarList(i)}
-            onMouseOut={() => this.createStarList(this.defaultValue)}
+            onMouseOut={() => this.createStarList(this.value)}
             onClick={() => this.setValue(i)}
           >
             {this.character}
@@ -159,11 +71,97 @@ export class MyRatingComponent {
       );
     };
 
-    for (let i = 1; i <= this.count; i++) {
-      if (i <= numberOfStars) {
-        starList.push(fill(i));
-      } else {
-        starList.push(empty(i));
+    let fillHalf = i => {
+      return (
+        <li>
+          <span class="background">{this.character}</span>
+          <span
+            class="on left"
+            onMouseOver={() => this.createStarList(i - 0.5)}
+            onMouseOut={() => this.createStarList(this.value)}
+            onClick={() => this.setValue(i - 0.5)}
+          >
+            {this.character}
+          </span>
+          <span
+            class="on right"
+            onMouseOver={() => this.createStarList(i)}
+            onMouseOut={() => this.createStarList(this.value)}
+            onClick={() => this.setValue(i)}
+          >
+            {this.character}
+          </span>
+        </li>
+      );
+    };
+
+    let emptyHalf = i => {
+      return (
+        <li>
+          <span class="background">{this.character}</span>
+          <span
+            class="left"
+            onMouseOver={() => this.createStarList(i - 0.5)}
+            onMouseOut={() => this.createStarList(this.value)}
+            onClick={() => this.setValue(i - 0.5)}
+          >
+            {this.character}
+          </span>
+          <span
+            class="right"
+            onMouseOver={() => this.createStarList(i)}
+            onMouseOut={() => this.createStarList(this.value)}
+            onClick={() => this.setValue(i)}
+          >
+            {this.character}
+          </span>
+        </li>
+      );
+    };
+
+    let half = i => {
+      return (
+        <li>
+          <span class="background">{this.character}</span>
+          <span
+            class="on left"
+            onMouseOver={() => this.createStarList(i - 0.5)}
+            onMouseOut={() => this.createStarList(this.value)}
+            onClick={() => this.setValue(i - 0.5)}
+          >
+            {this.character}
+          </span>
+          <span
+            class="right"
+            onMouseOver={() => this.createStarList(i)}
+            onMouseOut={() => this.createStarList(this.value)}
+            onClick={() => this.setValue(i)}
+          >
+            {this.character}
+          </span>
+        </li>
+      );
+    };
+
+    if (this.allowHalf) {
+      for (let i = 1; i <= this.count; i++) {
+        console.log("1");
+        if (numberOfStars - i + 1 === 0.5) {
+          starList.push(half(i));
+        } else if (i <= numberOfStars) {
+          starList.push(fillHalf(i));
+        } else {
+          starList.push(emptyHalf(i));
+        }
+      }
+    } else {
+      for (let i = 1; i <= this.count; i++) {
+        console.log("2");
+        if (i <= numberOfStars) {
+          starList.push(fill(i));
+        } else {
+          starList.push(empty(i));
+        }
       }
     }
 

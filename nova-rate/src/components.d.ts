@@ -9,53 +9,44 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first': string;
-    /**
-    * The last name
-    */
-    'last': string;
-    /**
-    * The middle name
-    */
-    'middle': string;
+  interface NovaRate {
+    'allowClear': boolean;
+    'allowHalf': boolean;
+    'character': string;
+    'count': number;
+    'defaultValue': number;
+    'disabled': boolean;
+    'value': number;
   }
 }
 
 declare global {
 
 
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
+  interface HTMLNovaRateElement extends Components.NovaRate, HTMLStencilElement {}
+  var HTMLNovaRateElement: {
+    prototype: HTMLNovaRateElement;
+    new (): HTMLNovaRateElement;
   };
   interface HTMLElementTagNameMap {
-    'my-component': HTMLMyComponentElement;
+    'nova-rate': HTMLNovaRateElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent extends JSXBase.HTMLAttributes<HTMLMyComponentElement> {
-    /**
-    * The first name
-    */
-    'first'?: string;
-    /**
-    * The last name
-    */
-    'last'?: string;
-    /**
-    * The middle name
-    */
-    'middle'?: string;
+  interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
+    'allowClear'?: boolean;
+    'allowHalf'?: boolean;
+    'character'?: string;
+    'count'?: number;
+    'defaultValue'?: number;
+    'disabled'?: boolean;
+    'onOnRatingUpdated'?: (event: CustomEvent<any>) => void;
+    'value'?: number;
   }
 
   interface IntrinsicElements {
-    'my-component': MyComponent;
+    'nova-rate': NovaRate;
   }
 }
 

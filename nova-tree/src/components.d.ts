@@ -9,7 +9,9 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface NovaTree {}
+  interface NovaTree {
+    'autoExpandParent': boolean;
+  }
   interface NovaTreeNode {
     'checked': boolean;
     'text': string;
@@ -37,7 +39,9 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {}
+  interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
+    'autoExpandParent'?: boolean;
+  }
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
     'checked'?: boolean;
     'text'?: string;

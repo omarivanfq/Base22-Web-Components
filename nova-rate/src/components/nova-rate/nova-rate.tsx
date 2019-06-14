@@ -1,4 +1,5 @@
 import { Component, Prop, State, EventEmitter, Event, h } from "@stencil/core";
+// import * as icons from '@ant-design/icons';
 
 @Component({
   tag: "nova-rate",

@@ -7,7 +7,7 @@ import { Component, Prop, State, EventEmitter, Event, h } from "@stencil/core";
   shadow: true
 })
 export class MyRatingComponent {
-  @Prop() allowClear: boolean = false;
+  @Prop() allowClear: boolean = true;
   @Prop() allowHalf: boolean = false;
   // autoFocus
   @Prop() character: string = "\u2605";

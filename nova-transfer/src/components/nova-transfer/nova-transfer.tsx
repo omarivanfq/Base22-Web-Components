@@ -15,18 +15,18 @@ export class MyComponent {
     this.selected = [];
     this.dataSource = [];
     // dummy data 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 10; i++) {
       this.dataSource.push({
         key: i.toString(),
         title: `item${i + 1}`,
-        description: `description of content${i + 1}`/*,
-        disabled: i % 3 < 1, */
+        description: `description of content${i + 1}`,
+        disabled: i % 3 < 1, 
       });
     }
-    this.targetKeys = this.dataSource.filter(item => +item.key % 3 > 1).map(item => item.key);
+    this.targetKeys = this.dataSource.filter(item => +item.key % 3 > 1 && !item.disabled).map(item => item.key);
   }
 
-  itemIsInTarget(key:string){
+  isItemInTarget(key:string){
     return this.targetKeys.indexOf(key) !== -1;
   }
 
@@ -34,7 +34,7 @@ export class MyComponent {
     console.log(this.selected);
     var alreadyInTarget = []
     this.selected.forEach((key) => {
-      if (!this.itemIsInTarget(key)) {
+      if (!this.isItemInTarget(key)) {
         this.targetKeys.push(key);
       }
       else {
@@ -49,7 +49,7 @@ export class MyComponent {
     console.log(this.selected);
     var alreadyInSource = []
     this.selected.forEach((key) => {
-      if (this.itemIsInTarget(key)) {
+      if (this.isItemInTarget(key)) {
         this.targetKeys.splice(this.targetKeys.indexOf(key), 1);
       }
       else {
@@ -70,19 +70,25 @@ export class MyComponent {
     this.selected = [...this.selected]; // to force re-rendering
   }
 
-  getItems(source:boolean) {
+  getItems(fromSource:boolean) {
     return this.dataSource.filter(item => 
-        source && !this.itemIsInTarget(item.key)
-        || !source && this.itemIsInTarget(item.key))
+        fromSource && !this.isItemInTarget(item.key)
+        || !fromSource && this.isItemInTarget(item.key))
       .map(item =>{
         var checkboxProps = {
             key: item.key,
-            checked: this.selected.indexOf(item.key) !== -1
+            checked: this.selected.indexOf(item.key) !== -1,
+            disabled: item.disabled
+        }
+        var spanProps ={
+          onClick: () => this.handleSelect(item.key),
+          class: 'item ' + (item.disabled? 'disabled' : '')
         }
         return(
           <li>
-            <span class='item' onClick={() => this.handleSelect(item.key)}>
-              <input type='checkbox' {...checkboxProps}/>{item.title}
+            <span {...spanProps}>
+              <input type='checkbox' {...checkboxProps}/>
+              {item.title}
             </span>
           </li>
         );
@@ -90,31 +96,31 @@ export class MyComponent {
   }
 
   getSourceSelected() {
-    return this.selected.filter(key => !this.itemIsInTarget(key)).length;
+    return this.selected.filter(key => !this.isItemInTarget(key)).length;
   }
 
   getTargetSelected() {
-    return this.selected.filter(key => this.itemIsInTarget(key)).length;
+    return this.selected.filter(key => this.isItemInTarget(key)).length;
   }
 
-  getSourceCount() {
+  getSourceCountSpan() {
     var selectedCount = this.getSourceSelected();
     var total = this.dataSource.length - this.targetKeys.length;
-    return <span>{selectedCount != 0? selectedCount + ' /': ''} {total} {total > 0? 'items' : 'item'}</span>;
+    return <span>{selectedCount != 0? selectedCount + '/': ''}{total} {total > 0? 'items' : 'item'}</span>;
   }
 
-  getTargetCount() {
+  getTargetCountSpan() {
     var selectedCount = this.getTargetSelected();
     var total = this.targetKeys.length;
-    return <span>{selectedCount != 0? selectedCount + ' /' : ''} {total} {total > 0? 'items' : 'item'}</span>;
+    return <span>{selectedCount != 0? selectedCount + '/' : ''}{total} {total > 0? 'items' : 'item'}</span>;
   }
 
   handleSelectAll(fromSource:boolean) {
     var selectedCount = fromSource? this.getSourceSelected() : this.getTargetSelected();
     var total = fromSource? this.dataSource.length - this.targetKeys.length : this.targetKeys.length;
     var items = this.dataSource
-      .filter(item => fromSource && !this.itemIsInTarget(item.key)
-        || !fromSource && this.itemIsInTarget(item.key));
+      .filter(item => fromSource && !this.isItemInTarget(item.key)
+        || !fromSource && this.isItemInTarget(item.key));
 
     if (selectedCount < total) {
       items.map(item => {
@@ -134,21 +140,17 @@ export class MyComponent {
   }
 
   getSelectAllCheckbox(fromSource:boolean) {
-
     var selectedCount = fromSource? this.getSourceSelected() : this.getTargetSelected();
     var total = fromSource? this.dataSource.length - this.targetKeys.length : this.targetKeys.length;
-    
     var props = {
       onClick: () => this.handleSelectAll(fromSource),
-      checked: selectedCount == total
+      checked: selectedCount === total
     };
-
     return(
       <input 
         type='checkbox' 
         {...props}/>
     );
-
   }
 
   render() {
@@ -158,7 +160,7 @@ export class MyComponent {
             <div class='column-header'>
               <span class='items-count'>
                 {this.getSelectAllCheckbox(true)}
-                {this.getSourceCount()}
+                {this.getSourceCountSpan()}
               </span>
               <span class='column-title'>Source</span>      
             </div>
@@ -180,7 +182,7 @@ export class MyComponent {
             <div class="column-header">
               <span class="items-count">
                 {this.getSelectAllCheckbox(false)}
-                {this.getTargetCount()}
+                {this.getTargetCountSpan()}
               </span>
               <span class="column-title">Target</span>
             </div>

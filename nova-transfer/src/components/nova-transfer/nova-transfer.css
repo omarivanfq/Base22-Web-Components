@@ -21,7 +21,7 @@ button:hover {
 
 .item {
     display: block;
-    padding: 4px 10px;
+    padding: 6px 10px;
     transition: all 0.2s linear;
 }
 
@@ -77,4 +77,14 @@ button:hover {
 button.btn-active {
     background-color: #1890ff;
     color: #ffffff;
+}
+
+.item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: none;
+}
+
+.item.disabled input[type='checkbox']{
+    cursor: not-allowed;
 }

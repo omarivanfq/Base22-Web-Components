@@ -60,12 +60,14 @@ export class MyComponent {
     console.log(this.selected);
   }
 
-  handleSelect(key:string) {
-    if (this.selected.indexOf(key) !== -1) {
-      this.selected.splice(this.selected.indexOf(key), 1);
-    }
-    else {
-      this.selected.push(key);
+  handleSelect(item:any) {
+    if (!item.disabled) {
+      if (this.selected.indexOf(item.key) !== -1) {
+        this.selected.splice(this.selected.indexOf(item.key), 1);
+      }
+      else {
+        this.selected.push(item.key);
+      }
     }
     this.selected = [...this.selected]; // to force re-rendering
   }
@@ -81,7 +83,7 @@ export class MyComponent {
             disabled: item.disabled
         }
         var spanProps ={
-          onClick: () => this.handleSelect(item.key),
+          onClick: () => this.handleSelect(item),
           class: 'item ' + (item.disabled? 'disabled' : '')
         }
         return(
@@ -96,7 +98,8 @@ export class MyComponent {
   }
 
   getSourceSelected() {
-    return this.selected.filter(key => !this.isItemInTarget(key)).length;
+    return this.selected.filter(key => !this.isItemInTarget(key) 
+      && !this.dataSource.find(item => item.key === key).disabled).length;
   }
 
   getTargetSelected() {
@@ -117,9 +120,9 @@ export class MyComponent {
 
   handleSelectAll(fromSource:boolean) {
     var selectedCount = fromSource? this.getSourceSelected() : this.getTargetSelected();
-    var total = fromSource? this.dataSource.length - this.targetKeys.length : this.targetKeys.length;
+    var total = fromSource? this.dataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
     var items = this.dataSource
-      .filter(item => fromSource && !this.isItemInTarget(item.key)
+      .filter(item => fromSource && !this.isItemInTarget(item.key) && !item.disabled
         || !fromSource && this.isItemInTarget(item.key));
 
     if (selectedCount < total) {
@@ -141,7 +144,7 @@ export class MyComponent {
 
   getSelectAllCheckbox(fromSource:boolean) {
     var selectedCount = fromSource? this.getSourceSelected() : this.getTargetSelected();
-    var total = fromSource? this.dataSource.length - this.targetKeys.length : this.targetKeys.length;
+    var total = fromSource? this.dataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
     var props = {
       onClick: () => this.handleSelectAll(fromSource),
       checked: selectedCount === total

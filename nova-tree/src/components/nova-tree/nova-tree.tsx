@@ -1,5 +1,5 @@
 import { Component, h } from "@stencil/core";
-import Fragment from "stencil-fragment";
+//import Fragment from "stencil-fragment";
 
 @Component({
   tag: "nova-tree",
@@ -10,7 +10,8 @@ import Fragment from "stencil-fragment";
 
 export class MyComponent {
 
-  function N_name() {
+   changeClass =( ) =>{
+     //window.alert("hola") <- estaba para ver si entra, si entra
     var toggler = document.getElementsByClassName("caret");
     var i;
 
@@ -25,17 +26,8 @@ export class MyComponent {
 
 
   render() {
-
-   //if leaf checked false  => children checked false
-   //if leaf checked true => children are individual
-   // lo quitamos con un class="float hide noselect" <- hide
-
-   //poniendo <script src="./index.js"></script> como funcion
-
-
-
     return (<ul id="myUL">
-      <li><span class="caret">Beverages</span>
+      <li><span class="caret" onClick={() => this.changeClass()}>Beverages</span>
         <ul class="nested">
           <li>Water</li>
           <li>Coffee</li>

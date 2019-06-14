@@ -11,8 +11,11 @@ export class NovaTransfer {
   @State() filteredDataSource:any[];
   @State() targetKeys:string[];
   @State() selected:string[];
+  @State() titles:string[];
+
   @Prop() showSearch:boolean;
   @Prop() disabled:boolean;
+  @Prop() showSelectAll:boolean;
 
   componentWillLoad() { 
     this.selected = [];
@@ -33,6 +36,7 @@ export class NovaTransfer {
       this.dataSource.push(data);
     }
     this.filteredDataSource = [...this.dataSource];
+    this.titles = ['Source', 'Target'];
   }
 
   isItemInTarget(key:string){
@@ -199,10 +203,10 @@ export class NovaTransfer {
           <div class='column'>
             <div class='column-header'>
               <span class='items-count'>
-                { this.getSelectAllCheckbox(true) }
+                { this.showSelectAll? this.getSelectAllCheckbox(true) : null}
                 { this.getSourceCountSpan() }
               </span>
-              <span class='column-title'>Source</span>      
+              <span class='column-title'>{this.titles[0]}</span>      
             </div>
             <div class='items-container'>
               <span class="search-container">
@@ -231,7 +235,7 @@ export class NovaTransfer {
                 { this.getSelectAllCheckbox(false) }
                 { this.getTargetCountSpan() }
               </span>
-              <span class="column-title">Target</span>
+              <span class="column-title">{this.titles[1]}</span>
             </div>
             <div class='items-container'>
               <span class="search-container">

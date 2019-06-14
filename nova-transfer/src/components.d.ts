@@ -12,6 +12,7 @@ export namespace Components {
   interface NovaTransfer {
     'disabled': boolean;
     'showSearch': boolean;
+    'showSelectAll': boolean;
   }
 }
 
@@ -32,6 +33,7 @@ declare namespace LocalJSX {
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
     'disabled'?: boolean;
     'showSearch'?: boolean;
+    'showSelectAll'?: boolean;
   }
 
   interface IntrinsicElements {

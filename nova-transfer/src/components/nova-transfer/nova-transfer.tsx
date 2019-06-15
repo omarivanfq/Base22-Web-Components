@@ -1,5 +1,8 @@
 import { Component, Prop, h, State } from '@stencil/core';
 
+const RIGHT:string = 'right';
+const LEFT:string = 'left';
+
 @Component({
   tag: 'nova-transfer',
   styleUrl: 'nova-transfer.css',
@@ -42,7 +45,7 @@ export class NovaTransfer {
     this.filteredDataSource = [...this.dataSource];
   }
 
-  isItemInTarget(key:string){
+  isItemInTarget(key:string) {
     return this.targetKeys.indexOf(key) !== -1;
   }
 
@@ -62,7 +65,7 @@ export class NovaTransfer {
       this.selected = [...alreadyInTarget];
       this.onChangeHandler(
         this.targetKeys,
-        'right',
+        RIGHT,
         moveKeys
       );
     }
@@ -86,7 +89,7 @@ export class NovaTransfer {
         this.dataSource.
           filter(item => this.targetKeys.indexOf(item.key) === -1)
           .map(item => item.key),
-          'left',
+          LEFT,
           moveKeys
       );
     }
@@ -121,17 +124,17 @@ export class NovaTransfer {
     this.selected = [...this.selected]; // to force re-rendering
   }
 
-  getItems(fromSource:boolean) {
+  getItems(direction:string) {
     return this.filteredDataSource.filter(item => 
-        fromSource && !this.isItemInTarget(item.key)
-        || !fromSource && this.isItemInTarget(item.key))
+        direction === LEFT && !this.isItemInTarget(item.key)
+        || direction === RIGHT && this.isItemInTarget(item.key))
       .map(item =>{
         var checkboxProps = {
             key: item.key,
             checked: this.selected.indexOf(item.key) !== -1,
             disabled: item.disabled
         }
-        var spanProps ={
+        var spanProps = {
           onClick: () => this.handleSelect(item),
           class: 'item ' + (item.disabled? 'disabled' : '')
         }
@@ -192,11 +195,12 @@ export class NovaTransfer {
     this.selected = [...this.selected]; // to force re-rendering
   }
 
-  getSelectAllCheckbox(fromSource:boolean) {
-    var selectedCount = fromSource? this.getSourceSelected() : this.getTargetSelected();
-    var total = fromSource? this.filteredDataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
+  getSelectAllCheckbox(direction:string) {
+
+    var selectedCount = direction == LEFT? this.getSourceSelected() : this.getTargetSelected();
+    var total = direction == LEFT? this.filteredDataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
     var props = {
-      onClick: () => this.handleSelectAll(fromSource),
+      onClick: () => this.handleSelectAll(direction == LEFT),
       checked: selectedCount === total && total > 0
     };
     return(
@@ -214,7 +218,7 @@ export class NovaTransfer {
           && item.title.indexOf(PATTERN) !== -1; }),
           ...this.dataSource.filter(item => { return this.isItemInTarget(item.key)})
         ];
-        this.onSearchHandler('left', PATTERN);
+        this.onSearchHandler(LEFT, PATTERN);
     }    
     else {
       this.filteredDataSource = [...this.dataSource];
@@ -229,7 +233,7 @@ export class NovaTransfer {
           && item.title.indexOf(PATTERN) !== -1; }),
           ...this.dataSource.filter(item => { return !this.isItemInTarget(item.key)})
         ];
-        this.onSearchHandler('right', PATTERN);
+        this.onSearchHandler(RIGHT, PATTERN);
     }    
     else {
       this.filteredDataSource = [...this.dataSource];
@@ -240,55 +244,67 @@ export class NovaTransfer {
     this.onScrollHandler(direction, event);
   }
 
+  getSourceSearchBox() {
+    return (
+      <span class="search-container">
+        <input 
+          onKeyUp={ this.handleSourceQuery } 
+          placeholder='Search here'/>
+      </span>
+    );
+  }
+
+  getTargetSearchBox() {
+    return(
+      <span class="search-container">
+        <input
+          onKeyUp={ this.handleTargetQuery }
+          placeholder='Search here'/>
+      </span>
+    );
+  }
+
   render() {
     return (
-        <div class={'container' + (this.disabled? ' disabled' : '')}>
-          <div class='column'>
-            <div class='column-header'>
-              <span class='items-count'>
-                { this.showSelectAll? this.getSelectAllCheckbox(true) : null }
+        <div class={"container" + (this.disabled? " disabled" : "")}>
+          <div class="column">
+            <div class="column-header">
+              <span class="items-count">
+                { this.showSelectAll? this.getSelectAllCheckbox(LEFT) : null }
                 { this.getSourceCountSpan() }
               </span>
-              <span class='column-title'>{this.titles[0]}</span>      
+              <span class="column-title">{this.titles[0]}</span>      
             </div>
-            <div class='items-container'>
-              <span class="search-container">
-                <input 
-                  onKeyUp={ this.handleSourceQuery } 
-                  placeholder='Search here'/>
-              </span>
-              <div class='items' onScroll={ event => this.handleItemsScroll('left', event) }>
+            <div class="items-container">
+              { this.showSearch? this.getSourceSearchBox() : null }
+              <div class="items" onScroll={ event => this.handleItemsScroll(LEFT, event) }>
                 <ul>
-                  { this.getItems(true) }
+                  { this.getItems(LEFT) }
                 </ul>
               </div>
             </div>
           </div>
-          <span class='switch'>
+          <span class="transfer-buttons">
             <button 
-              class={ this.getSourceSelected() > 0? 'btn-active':'' } 
-              onClick={ () => this.moveToTarget() }>{ '>' }</button>
+              class={ this.getSourceSelected() > 0 ? "btn-active" : "" } 
+              onClick={ () => this.moveToTarget() }>{ ">" }</button>
             <button 
-              class={ this.getTargetSelected() > 0? 'btn-active':'' } 
-              onClick={ () => this.moveToSource() }>{ '<' }</button>
+              class={ this.getTargetSelected() > 0 ? "btn-active" : "" } 
+              onClick={ () => this.moveToSource() }>{ "<" }</button>
           </span>
-          <div class='column'>
+          <div class="column">
             <div class="column-header">
               <span class="items-count">
-                { this.showSelectAll? this.getSelectAllCheckbox(false) : null }
+                { this.showSelectAll? this.getSelectAllCheckbox(RIGHT) : null }
                 { this.getTargetCountSpan() }
               </span>
               <span class="column-title">{ this.titles[1] }</span>
             </div>
-            <div class='items-container'>
-              <span class="search-container">
-                <input 
-                  onKeyUp={ this.handleTargetQuery } 
-                  placeholder='Search here'/>
-              </span>
-              <div class="items" onScroll={ event => this.handleItemsScroll('right', event) }>
+            <div class="items-container">
+              { this.showSearch? this.getTargetSearchBox() : null }
+              <div class="items" onScroll={ event => this.handleItemsScroll(RIGHT, event) }>
                 <ul>
-                  { this.getItems(false) }
+                  { this.getItems(RIGHT) }
                 </ul>
               </div>
             </div>

@@ -11,8 +11,10 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 export namespace Components {
   interface NovaTransfer {
     'disabled': boolean;
+    'onChangeHandler': Function;
     'showSearch': boolean;
     'showSelectAll': boolean;
+    'titles': string[];
   }
 }
 
@@ -32,8 +34,10 @@ declare global {
 declare namespace LocalJSX {
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
     'disabled'?: boolean;
+    'onChangeHandler'?: Function;
     'showSearch'?: boolean;
     'showSelectAll'?: boolean;
+    'titles'?: string[];
   }
 
   interface IntrinsicElements {

@@ -5,22 +5,22 @@ import { Component, Prop, h, State } from '@stencil/core';
   styleUrl: 'nova-transfer.css',
   shadow: true
 })
+
 export class NovaTransfer {
 
-  @State() dataSource:any[];
-  @State() filteredDataSource:any[];
-  @State() targetKeys:string[];
-  @State() selected:string[];
-  @State() titles:string[];
+  @State() dataSource:any[] = [];
+  @State() filteredDataSource:any[] = [];
+  @State() targetKeys:string[] = [];
+  @State() selected:string[] = [];
+  @Prop({ mutable: true }) titles:string[] = ['source', 'target'];
 
   @Prop() showSearch:boolean;
   @Prop() disabled:boolean;
   @Prop() showSelectAll:boolean;
 
-  componentWillLoad() { 
-    this.selected = [];
-    this.dataSource = [];
-    this.targetKeys = [];
+  @Prop() onChangeHandler:Function;
+
+  componentDidLoad() { 
     // dummy data 
     for (let i = 0; i < 10; i++) {
       var data = {
@@ -35,8 +35,8 @@ export class NovaTransfer {
       }
       this.dataSource.push(data);
     }
+//    this.titles = ["my","la"];
     this.filteredDataSource = [...this.dataSource];
-    this.titles = ['Source', 'Target'];
   }
 
   isItemInTarget(key:string){
@@ -46,30 +46,46 @@ export class NovaTransfer {
   moveToTarget() {
     if (!this.disabled) {
       var alreadyInTarget = []
+      var moveKeys = [];
       this.selected.forEach((key) => {
         if (!this.isItemInTarget(key)) {
           this.targetKeys.push(key);
+          moveKeys.push(key);
         }
         else {
           alreadyInTarget.push(key);
         }
       });
       this.selected = [...alreadyInTarget];
+      this.onChangeHandler(
+        this.targetKeys,
+        'right',
+        moveKeys
+      );
     }
   }
 
   moveToSource() {
     if (!this.disabled) {
       var alreadyInSource = []
+      var moveKeys = [];
       this.selected.forEach((key) => {
         if (this.isItemInTarget(key)) {
           this.targetKeys.splice(this.targetKeys.indexOf(key), 1);
+          moveKeys.push(key);
         }
         else {
           alreadyInSource.push(key);
         }
       });
       this.selected = [...alreadyInSource];
+      this.onChangeHandler(
+        this.dataSource.
+          filter(item => this.targetKeys.indexOf(item.key) === -1)
+          .map(item => item.key),
+          'left',
+          moveKeys
+      );
     }
   }
 
@@ -203,7 +219,7 @@ export class NovaTransfer {
           <div class='column'>
             <div class='column-header'>
               <span class='items-count'>
-                { this.showSelectAll? this.getSelectAllCheckbox(true) : null}
+                { this.showSelectAll? this.getSelectAllCheckbox(true) : null }
                 { this.getSourceCountSpan() }
               </span>
               <span class='column-title'>{this.titles[0]}</span>      
@@ -224,23 +240,23 @@ export class NovaTransfer {
           <span class='switch'>
             <button 
               class={ this.getSourceSelected() > 0? 'btn-active':'' } 
-              onClick={ () => this.moveToTarget()}>{'>'}</button>
+              onClick={ () => this.moveToTarget() }>{ '>' }</button>
             <button 
               class={ this.getTargetSelected() > 0? 'btn-active':'' } 
-              onClick={ () => this.moveToSource()}>{'<'}</button>
+              onClick={ () => this.moveToSource() }>{ '<' }</button>
           </span>
           <div class='column'>
             <div class="column-header">
               <span class="items-count">
-                { this.getSelectAllCheckbox(false) }
+                { this.showSelectAll? this.getSelectAllCheckbox(false) : null }
                 { this.getTargetCountSpan() }
               </span>
-              <span class="column-title">{this.titles[1]}</span>
+              <span class="column-title">{ this.titles[1] }</span>
             </div>
             <div class='items-container'>
               <span class="search-container">
                 <input 
-                  onKeyUp={this.handleTargetQuery} 
+                  onKeyUp={ this.handleTargetQuery } 
                   placeholder='Search here'/>
               </span>
               <div class="items">

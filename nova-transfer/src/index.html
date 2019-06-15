@@ -10,7 +10,7 @@
 
 </head>
 <body>
-  <nova-transfer id="nova-t" ></nova-transfer>
+  <nova-transfer id="nova-t" show-select-all></nova-transfer>
   <script>
     var transfer = document.querySelector("#nova-t");
     transfer.titles = ["Source", "Target"];
@@ -19,6 +19,18 @@
       console.log('direction: ', direction);
       console.log('moveKeys: ', moveKeys);
     };
+    transfer.onScrollHandler = (direction, event) => {
+      console.log(direction);
+      console.log(event);
+    }
+    transfer.onSearchHandler = (direction, value) => {
+      console.log(direction);
+      console.log(value);
+    }
+    transfer.onSelectChangeHandler = (sourceSelectedKeys, targetSelectedKeys) => {
+      console.log('source', sourceSelectedKeys);
+      console.log('target', targetSelectedKeys);
+    }
   </script>
 </body>
 </html>

@@ -12,6 +12,9 @@ export namespace Components {
   interface NovaTransfer {
     'disabled': boolean;
     'onChangeHandler': Function;
+    'onScrollHandler': Function;
+    'onSearchHandler': Function;
+    'onSelectChangeHandler': Function;
     'showSearch': boolean;
     'showSelectAll': boolean;
     'titles': string[];
@@ -35,6 +38,9 @@ declare namespace LocalJSX {
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
     'disabled'?: boolean;
     'onChangeHandler'?: Function;
+    'onScrollHandler'?: Function;
+    'onSearchHandler'?: Function;
+    'onSelectChangeHandler'?: Function;
     'showSearch'?: boolean;
     'showSelectAll'?: boolean;
     'titles'?: string[];

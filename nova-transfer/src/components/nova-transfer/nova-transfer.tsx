@@ -19,6 +19,9 @@ export class NovaTransfer {
   @Prop() showSelectAll:boolean;
 
   @Prop() onChangeHandler:Function;
+  @Prop() onScrollHandler:Function;
+  @Prop() onSearchHandler:Function;
+  @Prop() onSelectChangeHandler:Function;
 
   componentDidLoad() { 
     // dummy data 
@@ -89,6 +92,22 @@ export class NovaTransfer {
     }
   }
 
+  handleOnSelectCallback() {
+    var sourceSelectedKeys = [];
+    var targetSelectedKeys = [];
+
+    this.selected.map(key => {
+      if (this.isItemInTarget(key)) {
+        targetSelectedKeys.push(key);
+      }
+      else {
+        sourceSelectedKeys.push(key);
+      }
+    });
+
+    this.onSelectChangeHandler(sourceSelectedKeys, targetSelectedKeys);
+  }
+
   handleSelect(item:any) {
     if (!item.disabled) {
       if (this.selected.indexOf(item.key) !== -1) {
@@ -98,6 +117,7 @@ export class NovaTransfer {
         this.selected.push(item.key);
       }
     }
+    this.handleOnSelectCallback();
     this.selected = [...this.selected]; // to force re-rendering
   }
 
@@ -168,6 +188,7 @@ export class NovaTransfer {
         }
       });
     }
+    this.handleOnSelectCallback();
     this.selected = [...this.selected]; // to force re-rendering
   }
 
@@ -185,14 +206,15 @@ export class NovaTransfer {
     );
   }
 
-  handleSourceQuery = (e) => {
-    var PATTERN = e.target.value;
+  handleSourceQuery = (event) => {
+    var PATTERN = event.target.value;
     if (!/^ *$/.test(PATTERN)) {
       this.filteredDataSource = 
         [...this.dataSource.filter(item => { return !this.isItemInTarget(item.key) 
           && item.title.indexOf(PATTERN) !== -1; }),
           ...this.dataSource.filter(item => { return this.isItemInTarget(item.key)})
         ];
+        this.onSearchHandler('left', PATTERN);
     }    
     else {
       this.filteredDataSource = [...this.dataSource];
@@ -207,10 +229,15 @@ export class NovaTransfer {
           && item.title.indexOf(PATTERN) !== -1; }),
           ...this.dataSource.filter(item => { return !this.isItemInTarget(item.key)})
         ];
+        this.onSearchHandler('right', PATTERN);
     }    
     else {
       this.filteredDataSource = [...this.dataSource];
     }
+  }
+
+  handleItemsScroll(direction, event) {
+    this.onScrollHandler(direction, event);
   }
 
   render() {
@@ -230,7 +257,7 @@ export class NovaTransfer {
                   onKeyUp={ this.handleSourceQuery } 
                   placeholder='Search here'/>
               </span>
-              <div class='items'>
+              <div class='items' onScroll={ event => this.handleItemsScroll('left', event) }>
                 <ul>
                   { this.getItems(true) }
                 </ul>
@@ -259,7 +286,7 @@ export class NovaTransfer {
                   onKeyUp={ this.handleTargetQuery } 
                   placeholder='Search here'/>
               </span>
-              <div class="items">
+              <div class="items" onScroll={ event => this.handleItemsScroll('right', event) }>
                 <ul>
                   { this.getItems(false) }
                 </ul>

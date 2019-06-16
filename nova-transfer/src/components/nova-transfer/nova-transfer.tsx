@@ -11,16 +11,12 @@ const LEFT:string = 'left';
 
 export class NovaTransfer {
 
-  @State() dataSource:any[] = [];
+  @Prop() data?: any = { items: [], targetKeys: [] };
+  @Prop({ mutable: true }) configuration?: any;
+
   @State() filteredDataSource:any[] = [];
-  @State() targetKeys:string[] = [];
   @State() selected:string[] = [];
-  @Prop({ mutable: true }) titles:string[] = ['source', 'target'];
-  @Prop() operations:string[] = ['',''];
-  @Prop() unit:string = 'item';
-  @Prop() units:string = 'items';
   @Prop() notFoundContent:string = 'The list is empty';
-  @Prop() searchPlaceholder:string = 'Search here';
 
   @Prop() columnStyle:any = {}
   @Prop() wrapperStyle:any = {}
@@ -36,9 +32,9 @@ export class NovaTransfer {
   @Prop() onSelectChangeHandler:Function;
   @Prop() onRenderItemHandler:Function;
 
-  componentDidLoad() { 
+  async componentWillLoad() {
     // dummy data 
-    for (let i = 0; i < 10; i++) {
+    /*for (let i = 0; i < 10; i++) {
       var data = {
         key: i.toString(),
         title: `item${i + 1}`,
@@ -51,12 +47,19 @@ export class NovaTransfer {
       }
       this.dataSource.push(data);
     }
+    */
 //    this.titles = ["my","la"];
-    this.filteredDataSource = [...this.dataSource];
+    this._init();
+  }
+
+  private _init() {
+    this.filteredDataSource = [...this.data.items];
+    var DEFAULT_CONFIG = { labels: {titleSource: "_source", titleTarget: "_target", operationLeft: "_", operationRight: "_", unit: "_item", units: "_items", notFoundContent: "_the list is empty", searchPlaceholder: "_search here" }};
+    this.configuration.labels = {...DEFAULT_CONFIG.labels, ...this.configuration.labels}
   }
 
   isItemInTarget(key:string) {
-    return this.targetKeys.indexOf(key) !== -1;
+    return this.data.targetKeys.indexOf(key) !== -1;
   }
 
   moveToTarget() {
@@ -65,7 +68,7 @@ export class NovaTransfer {
       var moveKeys = [];
       this.selected.forEach((key) => {
         if (!this.isItemInTarget(key)) {
-          this.targetKeys.push(key);
+          this.data.targetKeys.push(key);
           moveKeys.push(key);
         }
         else {
@@ -74,7 +77,7 @@ export class NovaTransfer {
       });
       this.selected = [...alreadyInTarget];
       this.onChangeHandler(
-        this.targetKeys,
+        this.data.targetKeys,
         RIGHT,
         moveKeys
       );
@@ -87,7 +90,7 @@ export class NovaTransfer {
       var moveKeys = [];
       this.selected.forEach((key) => {
         if (this.isItemInTarget(key)) {
-          this.targetKeys.splice(this.targetKeys.indexOf(key), 1);
+          this.data.targetKeys.splice(this.data.targetKeys.indexOf(key), 1);
           moveKeys.push(key);
         }
         else {
@@ -96,8 +99,8 @@ export class NovaTransfer {
       });
       this.selected = [...alreadyInSource];
       this.onChangeHandler(
-        this.dataSource.
-          filter(item => this.targetKeys.indexOf(item.key) === -1)
+        this.data.items.
+          filter(item => this.data.targetKeys.indexOf(item.key) === -1)
           .map(item => item.key),
           LEFT,
           moveKeys
@@ -170,32 +173,42 @@ export class NovaTransfer {
 
   getSourceCountSpan() {
     var selectedCount = this.getSourceSelected();
-    var total = this.filteredDataSource.length - this.targetKeys.length;
-    return <span>{selectedCount != 0? selectedCount + '/': ''}{total} {total > 1? this.units : this.unit}</span>;
+    var total = this.filteredDataSource.length - this.data.targetKeys.length;
+    return (
+      <span>
+        { selectedCount != 0? selectedCount + '/': '' }{ total }
+        { total > 1? this.configuration.labels.unit : this.configuration.labels.units }
+      </span>
+    );
   }
-
+  
   getTargetCountSpan() {
     var selectedCount = this.getTargetSelected();
-    var total = this.targetKeys.length;
-    return <span>{selectedCount != 0? selectedCount + '/' : ''}{total} {total > 1? this.units : this.unit}</span>;
+    var total = this.data.targetKeys.length;
+    return (
+      <span>
+        { selectedCount != 0? selectedCount + '/' : '' }{ total }
+        { total > 1? this.configuration.labels.unit : this.configuration.labels.units }
+      </span>
+    );
   }
 
-  handleSelectAll(fromSource:boolean) {
-    var selectedCount = fromSource? this.getSourceSelected() : this.getTargetSelected();
-    var total = fromSource? this.filteredDataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
-    var items = this.filteredDataSource
-      .filter(item => fromSource && !this.isItemInTarget(item.key) && !item.disabled
-        || !fromSource && this.isItemInTarget(item.key));
+  handleSelectAll(direction:string) {
+    var selectedCount = direction === LEFT? this.getSourceSelected() : this.getTargetSelected();
+    var total = direction === LEFT? this.filteredDataSource.filter(item => !item.disabled).length - this.data.targetKeys.length : this.data.targetKeys.length;
+    var itemsFromColumn = this.filteredDataSource
+      .filter(item => direction === LEFT && !this.isItemInTarget(item.key) && !item.disabled
+        || direction === RIGHT && this.isItemInTarget(item.key));
 
     if (selectedCount < total) {
-      items.map(item => {
+      itemsFromColumn.map(item => {
         if (this.selected.indexOf(item.key) === -1) {
           this.selected.push(item.key);
         }
       });
     }
     else {
-      items.map(item => {
+      itemsFromColumn.map(item => {
         if (this.selected.indexOf(item.key) !== -1) {
           this.selected.splice(this.selected.indexOf(item.key), 1);
         }
@@ -207,9 +220,9 @@ export class NovaTransfer {
 
   getSelectAllCheckbox(direction:string) {
     var selectedCount = direction == LEFT? this.getSourceSelected() : this.getTargetSelected();
-    var total = direction == LEFT? this.filteredDataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
+    var total = direction == LEFT? this.filteredDataSource.filter(item => !item.disabled).length - this.data.targetKeys.length : this.data.targetKeys.length;
     var props = {
-      onClick: () => this.handleSelectAll(direction == LEFT),
+      onClick: () => this.handleSelectAll(direction),
       checked: selectedCount === total && total > 0
     };
     return(
@@ -223,14 +236,14 @@ export class NovaTransfer {
     var PATTERN = event.target.value;
     if (!/^ *$/.test(PATTERN)) {
       this.filteredDataSource = 
-        [...this.dataSource.filter(item => { return !this.isItemInTarget(item.key) 
+        [...this.data.items.filter(item => { return !this.isItemInTarget(item.key) 
           && item.title.indexOf(PATTERN) !== -1; }),
-          ...this.dataSource.filter(item => { return this.isItemInTarget(item.key)})
+          ...this.data.items.filter(item => { return this.isItemInTarget(item.key)})
         ];
         this.onSearchHandler(LEFT, PATTERN);
     }    
     else {
-      this.filteredDataSource = [...this.dataSource];
+      this.filteredDataSource = [...this.data.items];
     }
   }
 
@@ -238,14 +251,14 @@ export class NovaTransfer {
     var PATTERN = e.target.value;
     if (!/^ *$/.test(PATTERN)) {
       this.filteredDataSource = 
-        [...this.dataSource.filter(item => { return this.isItemInTarget(item.key) 
+        [...this.data.items.filter(item => { return this.isItemInTarget(item.key) 
           && item.title.indexOf(PATTERN) !== -1; }),
-          ...this.dataSource.filter(item => { return !this.isItemInTarget(item.key)})
+          ...this.data.items.filter(item => { return !this.isItemInTarget(item.key)})
         ];
         this.onSearchHandler(RIGHT, PATTERN);
     }    
     else {
-      this.filteredDataSource = [...this.dataSource];
+      this.filteredDataSource = [...this.data.items];
     }
   }
 
@@ -258,7 +271,7 @@ export class NovaTransfer {
       <span class="search-container">
         <input 
           onKeyUp={ this.handleSourceQuery } 
-          placeholder={ this.searchPlaceholder }/>
+          placeholder={ this.configuration.labels.searchPlaceholder}/>
       </span>
     );
   }
@@ -268,8 +281,31 @@ export class NovaTransfer {
       <span class="search-container">
         <input
           onKeyUp={ this.handleTargetQuery }
-          placeholder={ this.searchPlaceholder }/>
+          placeholder={ this.configuration.labels.searchPlaceholder }/>
       </span>
+    );
+  }
+
+  getTable() {
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Omar Iván</th>
+            <th>22</th>
+          </tr>
+          <tr>
+            <th>Oscar Alán</th>
+            <th>20</th>
+          </tr>
+        </tbody>
+      </table>
     );
   }
 
@@ -283,7 +319,7 @@ export class NovaTransfer {
                 { this.showSelectAll? this.getSelectAllCheckbox(LEFT) : null }
                 { this.getSourceCountSpan() }
               </span>
-              <span> { this.titles[0] } </span>      
+              <span> { this.configuration.labels.titleSource } </span>      
             </header>
             <div class="items-container">
               { this.showSearch? this.getSourceSearchBox() : null }
@@ -297,10 +333,10 @@ export class NovaTransfer {
           <span class="operation-buttons" style={this.operationStyle}>
             <button 
               class={ this.getSourceSelected() > 0 ? "btn-active" : "" } 
-              onClick={ () => this.moveToTarget() }>{ ">" } <span>{this.operations[0]}</span></button>
+              onClick={ () => this.moveToTarget() }>{ ">" } <span>{this.configuration.labels.operationLeft}</span></button>
             <button 
               class={ this.getTargetSelected() > 0 ? "btn-active" : "" } 
-              onClick={ () => this.moveToSource() }>{ "<" } <span>{this.operations[1]}</span></button>
+              onClick={ () => this.moveToSource() }>{ "<" } <span>{this.configuration.labels.operationRight}</span></button>
           </span>
           <div class="column" style={this.columnStyle}>
             <header class="column-header">
@@ -308,13 +344,15 @@ export class NovaTransfer {
                 { this.showSelectAll? this.getSelectAllCheckbox(RIGHT) : null }
                 { this.getTargetCountSpan() }
               </span>
-              <span>{ this.titles[1] }</span>
+              <span>{ this.configuration.labels.titleTarget }</span>
             </header>
             <div class="items-container">
               { this.showSearch? this.getTargetSearchBox() : null }
               <div class="items" onScroll={ event => this.handleItemsScroll(RIGHT, event) }>
                 <ul>
-                  { this.getItems(RIGHT) }
+                  <slot>
+                  { this.getItems(RIGHT) /*this.getTable() */}
+                  </slot>
                 </ul>
               </div>
             </div>

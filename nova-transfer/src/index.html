@@ -7,13 +7,15 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
   <script type="module" src="/build/nova-transfer.esm.js"></script>
   <script nomodule src="/build/nova-transfer.js"></script>
+  <script src="https://unpkg.com/@bentoboxes/nova-web-components@latest/dist/nova-web-components.js"></script>
 </head>
 <body>
   <div>
-      <nova-transfer id="nova-t" show-select-all show-search></nova-transfer>
+      <nova-transfer show-select-all>
+      </nova-transfer>
   </div>
   <script>
-    var transfer = document.querySelector("#nova-t");
+    var transfer = document.querySelector("nova-transfer");
     
     transfer.titles = ["Source", "Target"];
 
@@ -38,7 +40,7 @@
       console.log('target', targetSelectedKeys);
     }
     
-    transfer.operations = ['there', 'here'];
+   // transfer.operations = ['there', 'here'];
 
     transfer.units = 'my-item';
     transfer.units = 'my-items';
@@ -49,23 +51,172 @@
 
     transfer.searchPlaceholder = "search placeholder";
 
-    transfer.columnStyle = {
+    /*transfer.columnStyle = {
       width: "275px"
     }
-
+*/
     transfer.wrapperStyle = {
-      width: "80%",
-      margin: "0 auto",
-      borderRadius: "6px",
-      height: "340px"
+      width: "55%",
+      height: "340px",
+      margin: "0 auto"    
     }
 
+    transfer.data = {
+	"items": [
+	  {
+	    "key": "key1",
+		"title": "Title1",
+		"description": "Description1",
+		"disabled": false
+	  },
+	  {
+	    "key": "key2",
+		"title": "Title2",
+		"description": "Description2",
+		"disabled": true
+	  },
+	  {
+	    "key": "key3",
+		"title": "Title3",
+		"description": "Description3",
+		"disabled": false
+    },
+    {
+	    "key": "key4",
+		"title": "Title4",
+		"description": "Description4",
+		"disabled": false
+    },
+    {
+	    "key": "key5",
+		"title": "Title5",
+		"description": "Description5",
+		"disabled": true
+    },
+    {
+	    "key": "key6",
+		"title": "Title6",
+		"description": "Description6",
+		"disabled": false
+    }
+	],
+	"targetKeys": [
+		"key5", "key6"
+	]
+  }
+
+  transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target" } };
+
+/*
     transfer.operationStyle = {
       backgroundColor: "rgba(0,0,0,0.05)",
       padding: "7px",
       margin: 0
     }
-
+*/
   </script>
+   <script>
+      var datatable = document.querySelector("nova-datatable");
+      console.log(datatable);
+      var conf = {
+      "data": {
+          "items": [
+          {
+              "Nombre": "Omar Iván",
+              "Edad": "22",
+              "Sexo": "M"
+          },
+          {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          },
+      {
+              "Nombre": "Karina",
+              "Edad": "28",
+              "Sexo": "F"
+          }],
+          "columns": [
+          {
+              "field": "Nombre",
+              "label": "Nombre(s)"
+          },
+          {
+              "field": "Edad"
+          },
+          {
+              "field": "Sexo",
+          }]
+      },
+      "configuration": {
+          "labels":
+          {
+              "title": "Data Table with Autocomplete",
+              "numberOfRows": "# of rows"
+          },
+          "pagination":
+          {
+              "limit": 10
+          },
+          "sort":
+          {
+              "direction": "asc",
+              "sortBy":
+              {
+                  "sortByField": "Edad"
+              }
+          },
+          "indexColumnDisabled": false
+      },
+      "styling": {
+          "colorScheme": "default"
+      }
+  }
+    datatable.data = conf.data
+    datatable.configuration = conf.configuration
+    datatable.styling = conf.styling
+    
+    console.log(conf);
+    </script>
 </body>
 </html>

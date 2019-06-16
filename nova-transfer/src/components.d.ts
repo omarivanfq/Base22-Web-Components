@@ -11,6 +11,8 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 export namespace Components {
   interface NovaTransfer {
     'columnStyle': any;
+    'configuration'?: any;
+    'data'?: any;
     'disabled': boolean;
     'notFoundContent': string;
     'onChangeHandler': Function;
@@ -19,13 +21,8 @@ export namespace Components {
     'onSearchHandler': Function;
     'onSelectChangeHandler': Function;
     'operationStyle': any;
-    'operations': string[];
-    'searchPlaceholder': string;
     'showSearch': boolean;
     'showSelectAll': boolean;
-    'titles': string[];
-    'unit': string;
-    'units': string;
     'wrapperStyle': any;
   }
 }
@@ -46,6 +43,8 @@ declare global {
 declare namespace LocalJSX {
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
     'columnStyle'?: any;
+    'configuration'?: any;
+    'data'?: any;
     'disabled'?: boolean;
     'notFoundContent'?: string;
     'onChangeHandler'?: Function;
@@ -54,13 +53,8 @@ declare namespace LocalJSX {
     'onSearchHandler'?: Function;
     'onSelectChangeHandler'?: Function;
     'operationStyle'?: any;
-    'operations'?: string[];
-    'searchPlaceholder'?: string;
     'showSearch'?: boolean;
     'showSelectAll'?: boolean;
-    'titles'?: string[];
-    'unit'?: string;
-    'units'?: string;
     'wrapperStyle'?: any;
   }
 

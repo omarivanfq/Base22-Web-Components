@@ -11,13 +11,19 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 export namespace Components {
   interface NovaTransfer {
     'disabled': boolean;
+    'notFoundContent': string;
     'onChangeHandler': Function;
+    'onRenderItemHandler': Function;
     'onScrollHandler': Function;
     'onSearchHandler': Function;
     'onSelectChangeHandler': Function;
+    'operations': string[];
+    'searchPlaceholder': string;
     'showSearch': boolean;
     'showSelectAll': boolean;
     'titles': string[];
+    'unit': string;
+    'units': string;
   }
 }
 
@@ -37,13 +43,19 @@ declare global {
 declare namespace LocalJSX {
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
     'disabled'?: boolean;
+    'notFoundContent'?: string;
     'onChangeHandler'?: Function;
+    'onRenderItemHandler'?: Function;
     'onScrollHandler'?: Function;
     'onSearchHandler'?: Function;
     'onSelectChangeHandler'?: Function;
+    'operations'?: string[];
+    'searchPlaceholder'?: string;
     'showSearch'?: boolean;
     'showSelectAll'?: boolean;
     'titles'?: string[];
+    'unit'?: string;
+    'units'?: string;
   }
 
   interface IntrinsicElements {

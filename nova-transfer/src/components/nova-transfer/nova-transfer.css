@@ -17,7 +17,7 @@ button:hover {
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 260px;
+    height: 300px;
     padding: 20px 14px;
     color: #595959;
     font-family: 'Lato', sans-serif;
@@ -55,7 +55,7 @@ button:hover {
 }
 
 .transfer-buttons {
-    width: 30px;
+    min-width: 30px;
     margin: 0 10px;
     display: flex;
     flex-direction: column;
@@ -68,12 +68,12 @@ button:hover {
     border: solid 1px rgba(0,0,0,0.15);
     border-radius: 4px;
     color: #bdbdbd;
-    padding: 4px 0;
+    padding: 4px 5px;
     transition: all 0.2s linear;
 }
 
 .column {
-    width: 200px;
+    width: 270px;
     height: 100%;
     border: solid 1px rgba(0,0,0,0.15);
     border-radius: 5px;

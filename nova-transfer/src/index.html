@@ -31,6 +31,15 @@
       console.log('source', sourceSelectedKeys);
       console.log('target', targetSelectedKeys);
     }
+    transfer.operations = ['here', 'there'];
+
+    transfer.units = 'my-item';
+    transfer.units = 'my-items';
+
+    transfer.onRenderItemHandler = item => {
+      return item.title + ', ' + item.description;
+    }
+
   </script>
 </body>
 </html>

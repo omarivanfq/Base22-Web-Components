@@ -16,7 +16,13 @@ export class NovaTransfer {
   @State() targetKeys:string[] = [];
   @State() selected:string[] = [];
   @Prop({ mutable: true }) titles:string[] = ['source', 'target'];
+  @Prop() operations:string[] = ['',''];
+  @Prop() unit:string = 'item';
+  @Prop() units:string = 'items';
+  @Prop() notFoundContent:string = 'The list is empty';
+  @Prop() searchPlaceholder:string = 'Search here';
 
+  
   @Prop() showSearch:boolean;
   @Prop() disabled:boolean;
   @Prop() showSelectAll:boolean;
@@ -25,6 +31,7 @@ export class NovaTransfer {
   @Prop() onScrollHandler:Function;
   @Prop() onSearchHandler:Function;
   @Prop() onSelectChangeHandler:Function;
+  @Prop() onRenderItemHandler:Function;
 
   componentDidLoad() { 
     // dummy data 
@@ -142,7 +149,7 @@ export class NovaTransfer {
           <li>
             <span {...spanProps}>
               <input type='checkbox' {...checkboxProps}/>
-              {item.title}
+              { this.onRenderItemHandler(item) }
             </span>
           </li>
         );
@@ -161,13 +168,13 @@ export class NovaTransfer {
   getSourceCountSpan() {
     var selectedCount = this.getSourceSelected();
     var total = this.filteredDataSource.length - this.targetKeys.length;
-    return <span>{selectedCount != 0? selectedCount + '/': ''}{total} {total > 0? 'items' : 'item'}</span>;
+    return <span>{selectedCount != 0? selectedCount + '/': ''}{total} {total > 1? this.units : this.unit}</span>;
   }
 
   getTargetCountSpan() {
     var selectedCount = this.getTargetSelected();
     var total = this.targetKeys.length;
-    return <span>{selectedCount != 0? selectedCount + '/' : ''}{total} {total > 0? 'items' : 'item'}</span>;
+    return <span>{selectedCount != 0? selectedCount + '/' : ''}{total} {total > 1? this.units : this.unit}</span>;
   }
 
   handleSelectAll(fromSource:boolean) {
@@ -196,7 +203,6 @@ export class NovaTransfer {
   }
 
   getSelectAllCheckbox(direction:string) {
-
     var selectedCount = direction == LEFT? this.getSourceSelected() : this.getTargetSelected();
     var total = direction == LEFT? this.filteredDataSource.filter(item => !item.disabled).length - this.targetKeys.length : this.targetKeys.length;
     var props = {
@@ -287,10 +293,10 @@ export class NovaTransfer {
           <span class="transfer-buttons">
             <button 
               class={ this.getSourceSelected() > 0 ? "btn-active" : "" } 
-              onClick={ () => this.moveToTarget() }>{ ">" }</button>
+              onClick={ () => this.moveToTarget() }>{ ">" } <span>{this.operations[0]}</span></button>
             <button 
               class={ this.getTargetSelected() > 0 ? "btn-active" : "" } 
-              onClick={ () => this.moveToSource() }>{ "<" }</button>
+              onClick={ () => this.moveToSource() }>{ "<" } <span>{this.operations[1]}</span></button>
           </span>
           <div class="column">
             <div class="column-header">

@@ -18,6 +18,7 @@ export namespace Components {
     'onScrollHandler': Function;
     'onSearchHandler': Function;
     'onSelectChangeHandler': Function;
+    'operationStyle': any;
     'operations': string[];
     'searchPlaceholder': string;
     'showSearch': boolean;
@@ -52,6 +53,7 @@ declare namespace LocalJSX {
     'onScrollHandler'?: Function;
     'onSearchHandler'?: Function;
     'onSelectChangeHandler'?: Function;
+    'operationStyle'?: any;
     'operations'?: string[];
     'searchPlaceholder'?: string;
     'showSearch'?: boolean;

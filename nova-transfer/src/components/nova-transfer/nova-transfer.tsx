@@ -24,6 +24,7 @@ export class NovaTransfer {
 
   @Prop() columnStyle:any = {}
   @Prop() wrapperStyle:any = {}
+  @Prop() operationStyle:any = {}
 
   @Prop() showSearch:boolean;
   @Prop() disabled:boolean;
@@ -293,7 +294,7 @@ export class NovaTransfer {
               </div>
             </div>
           </div>
-          <span class="transfer-buttons">
+          <span class="operation-buttons" style={this.operationStyle}>
             <button 
               class={ this.getSourceSelected() > 0 ? "btn-active" : "" } 
               onClick={ () => this.moveToTarget() }>{ ">" } <span>{this.operations[0]}</span></button>

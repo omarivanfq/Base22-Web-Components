@@ -7,30 +7,37 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
   <script type="module" src="/build/nova-transfer.esm.js"></script>
   <script nomodule src="/build/nova-transfer.js"></script>
-
 </head>
 <body>
-  <nova-transfer id="nova-t" show-select-all show-search></nova-transfer>
+  <div>
+      <nova-transfer id="nova-t" show-select-all show-search></nova-transfer>
+  </div>
   <script>
     var transfer = document.querySelector("#nova-t");
+    
     transfer.titles = ["Source", "Target"];
+
     transfer.onChangeHandler = (nextTargetKeys, direction, moveKeys) => {
       console.log('targetKeys: ', nextTargetKeys);
       console.log('direction: ', direction);
       console.log('moveKeys: ', moveKeys);
     };
+
     transfer.onScrollHandler = (direction, event) => {
       console.log(direction);
       console.log(event);
     }
+
     transfer.onSearchHandler = (direction, value) => {
       console.log(direction);
       console.log(value);
     }
+    
     transfer.onSelectChangeHandler = (sourceSelectedKeys, targetSelectedKeys) => {
       console.log('source', sourceSelectedKeys);
       console.log('target', targetSelectedKeys);
     }
+    
     transfer.operations = ['here', 'there'];
 
     transfer.units = 'my-item';
@@ -38,6 +45,19 @@
 
     transfer.onRenderItemHandler = item => {
       return item.title + ', ' + item.description;
+    }
+
+    transfer.searchPlaceholder = "search placeholder";
+
+    transfer.columnStyle = {
+      width: "275px"
+    }
+
+    transfer.wrapperStyle = {
+      width: "75%",
+      margin: "0 auto",
+      borderRadius: "6px",
+      height: "340px"
     }
 
   </script>

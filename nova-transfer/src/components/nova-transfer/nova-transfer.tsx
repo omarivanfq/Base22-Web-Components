@@ -22,7 +22,9 @@ export class NovaTransfer {
   @Prop() notFoundContent:string = 'The list is empty';
   @Prop() searchPlaceholder:string = 'Search here';
 
-  
+  @Prop() columnStyle:any = {}
+  @Prop() wrapperStyle:any = {}
+
   @Prop() showSearch:boolean;
   @Prop() disabled:boolean;
   @Prop() showSelectAll:boolean;
@@ -255,7 +257,7 @@ export class NovaTransfer {
       <span class="search-container">
         <input 
           onKeyUp={ this.handleSourceQuery } 
-          placeholder='Search here'/>
+          placeholder={ this.searchPlaceholder }/>
       </span>
     );
   }
@@ -265,22 +267,23 @@ export class NovaTransfer {
       <span class="search-container">
         <input
           onKeyUp={ this.handleTargetQuery }
-          placeholder='Search here'/>
+          placeholder={ this.searchPlaceholder }/>
       </span>
     );
   }
 
   render() {
     return (
+      <div class="wrapper" style={ this.wrapperStyle }>
         <div class={"container" + (this.disabled? " disabled" : "")}>
-          <div class="column">
-            <div class="column-header">
-              <span class="items-count">
+          <div class="column" style={ this.columnStyle }>
+            <header class="column-header">
+              <span>
                 { this.showSelectAll? this.getSelectAllCheckbox(LEFT) : null }
                 { this.getSourceCountSpan() }
               </span>
-              <span class="column-title">{this.titles[0]}</span>      
-            </div>
+              <span> { this.titles[0] } </span>      
+            </header>
             <div class="items-container">
               { this.showSearch? this.getSourceSearchBox() : null }
               <div class="items" onScroll={ event => this.handleItemsScroll(LEFT, event) }>
@@ -298,14 +301,14 @@ export class NovaTransfer {
               class={ this.getTargetSelected() > 0 ? "btn-active" : "" } 
               onClick={ () => this.moveToSource() }>{ "<" } <span>{this.operations[1]}</span></button>
           </span>
-          <div class="column">
-            <div class="column-header">
-              <span class="items-count">
+          <div class="column" style={this.columnStyle}>
+            <header class="column-header">
+              <span>
                 { this.showSelectAll? this.getSelectAllCheckbox(RIGHT) : null }
                 { this.getTargetCountSpan() }
               </span>
-              <span class="column-title">{ this.titles[1] }</span>
-            </div>
+              <span>{ this.titles[1] }</span>
+            </header>
             <div class="items-container">
               { this.showSearch? this.getTargetSearchBox() : null }
               <div class="items" onScroll={ event => this.handleItemsScroll(RIGHT, event) }>
@@ -316,6 +319,7 @@ export class NovaTransfer {
             </div>
           </div>
         </div>
+      </div>
     );
   }
 }

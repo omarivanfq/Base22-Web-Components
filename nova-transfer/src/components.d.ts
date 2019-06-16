@@ -10,6 +10,7 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface NovaTransfer {
+    'columnStyle': any;
     'disabled': boolean;
     'notFoundContent': string;
     'onChangeHandler': Function;
@@ -24,6 +25,7 @@ export namespace Components {
     'titles': string[];
     'unit': string;
     'units': string;
+    'wrapperStyle': any;
   }
 }
 
@@ -42,6 +44,7 @@ declare global {
 
 declare namespace LocalJSX {
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
+    'columnStyle'?: any;
     'disabled'?: boolean;
     'notFoundContent'?: string;
     'onChangeHandler'?: Function;
@@ -56,6 +59,7 @@ declare namespace LocalJSX {
     'titles'?: string[];
     'unit'?: string;
     'units'?: string;
+    'wrapperStyle'?: any;
   }
 
   interface IntrinsicElements {

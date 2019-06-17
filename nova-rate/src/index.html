@@ -12,36 +12,25 @@
     <script nomodule src="/build/nova-rate.js"></script>
   </head>
   <body>
-    <nova-rate
-      allow-half
-      allow-clear
-      default-value="2.5"
-      count="10"
-    ></nova-rate>
+    <nova-rate allow-clear default-value="2.5" count="10"></nova-rate>
 
     <script>
       window.onload = function() {
-        let rating = document.querySelector("nova-rate");
-
-        rating.shadowRoot.children.item(1).focus();
-
+        // let rating = document.querySelector("nova-rate");
+        // rating.shadowRoot.children.item(1).focus();
         // rating.focusComponent();
-
         // rating.addEventListener("onChange", function(event) {
         //   console.log(event.detail);
         // });
-
         // rating.addEventListener("onBlur", function(event) {
         //   console.log(event);
         // });
         // rating.addEventListener("onKeyDown", function(event) {
         //   console.log(event);
         // });
-
         // rating.addEventListener("onFocus", function(event) {
         //   console.log(event);
         // });
-
         // rating.addEventListener("onHoverChange", function(event) {
         //   console.log(event);
         // });

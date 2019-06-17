@@ -3,15 +3,32 @@ ul {
   padding: 0;
   font-size: 20px;
   list-style: none;
+  display: inline-block;
+  outline: none;
+}
+
+ul * {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
 }
 
 li {
   position: relative;
   display: inline-block;
   margin-right: 8px;
+
   cursor: pointer;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+
+  // Unselectable
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+li:hover {
+  transform: scale(1.1);
 }
 
 li > span {

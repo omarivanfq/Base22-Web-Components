@@ -1,55 +1,131 @@
-import { Component, Prop, State, EventEmitter, Event, h } from "@stencil/core";
-// import * as icons from '@ant-design/icons';
+import {
+  Component,
+  Element,
+  Event,
+  EventEmitter,
+  h,
+  Method,
+  Prop,
+  State
+} from "@stencil/core";
 
 @Component({
   tag: "nova-rate",
   styleUrl: "nova-rate.scss",
   shadow: true
 })
-export class MyRatingComponent {
+export class NovaRate {
+  /**
+   * Element
+   */
+  @Element() private el: HTMLElement;
+  /**
+   * Props
+   */
+
+  /**
+   *  This property allow to clear by setting value to 0
+   */
   @Prop() allowClear: boolean = true;
+
+  /**
+   *  This property allow half values
+   */
   @Prop() allowHalf: boolean = false;
-  // autoFocus
+
+  /**
+   *  This property focus the ul when component is mounted
+   */
+  @Prop() autoFocus: boolean = false;
+
+  /**
+   *  This property sets the caracter to display as symbol
+   */
   @Prop() character: string = "\u2605";
+
+  /**
+   *  This property makes the component "read only"
+   */
   @Prop() disabled: boolean = false;
 
+  /**
+   *  This property sets the number of stars
+   */
   @Prop() count: number = 5;
-  @Prop({ mutable: true }) defaultValue: number = 0;
-  @Prop({ mutable: true }) value: number = this.defaultValue;
 
-  @State() mounted: boolean = false;
+  /**
+   *  This property sets the initial value
+   */
+  @Prop() defaultValue: number = 0;
+
+  /**
+   *  State
+   */
   @State() starList: Array<object> = [];
+  @State() value: number = this.defaultValue;
+  @State() isComponentReady: boolean = false;
 
-  @Event() onRatingUpdated: EventEmitter;
+  /**
+   *  Public API Events
+   */
+  @Event() onBlur: EventEmitter;
+  @Event() onChange: EventEmitter;
+  @Event() onFocus: EventEmitter;
+  @Event() onHoverChange: EventEmitter;
+  @Event() onKeyDown: EventEmitter;
 
-  componentWillLoad() {
-    this.createStarList(this.value);
-    this.mounted = true;
+  /**
+   *  Public API Methods
+   */
+  @Method()
+  async blurComponent() {
+    const ul: any = this.el.shadowRoot.children.item(1);
+    ul.blur();
   }
 
-  setValue(newValue) {
-    this.allowClear && this.value === newValue
-      ? (this.value = 0)
-      : (this.value = newValue);
-    this.createStarList(this.value);
-    // this.onRatingUpdated.emit({ defaultValue: this.defaultValue });
+  @Method()
+  async focusComponent() {
+    const ul: any = this.el.shadowRoot.children.item(1);
+    ul.focus();
   }
 
-  createStarList(numberOfStars: number) {
-    if (this.mounted && this.disabled) return; // disable changes
+  /**
+   * Event handlers
+   */
+  handleSetValue(newValue) {
+    let aux = this.value; // save initial value
 
-    if (!this.allowHalf) numberOfStars = Math.floor(numberOfStars); // Eliminate Reminder
+    if ((this.allowClear && this.value === newValue) || newValue <= 0) {
+      this.value = 0;
+    } else if (newValue >= this.count) {
+      this.value = this.count;
+    } else {
+      this.value = newValue;
+    }
+    // If value changes, generate new StarList and emit onChange
+    if (aux !== this.value) {
+      this.handleGenerateStarList(this.value);
+      this.onChange.emit(this.value);
+    }
+  }
+
+  handleGenerateStarList(numberOfStars: number) {
+    if (this.isComponentReady && this.disabled) return; // Disable Changes
+
+    // Eliminate Reminder if half stars are not allowed
+    if (!this.allowHalf) numberOfStars = Math.floor(numberOfStars);
 
     let starList = [];
 
-    let fill = i => {
+    // Fill Star (allowHalf is false)
+    let filledStar = i => {
       return (
         <li>
           <span
             class="on"
-            onMouseOver={() => this.createStarList(i)}
-            onMouseOut={() => this.createStarList(this.value)}
-            onClick={() => this.setValue(i)}
+            onMouseOver={() => this.handleOnHover(i)}
+            onMouseOut={() => this.handleOnHover(this.value)}
+            onClick={() => this.handleSetValue(i)}
           >
             {this.character}
           </span>
@@ -57,14 +133,15 @@ export class MyRatingComponent {
       );
     };
 
-    let empty = i => {
+    // Empty Star (allowHalf is false)
+    let emptyStar = i => {
       return (
         <li>
           <span
             class="off"
-            onMouseOver={() => this.createStarList(i)}
-            onMouseOut={() => this.createStarList(this.value)}
-            onClick={() => this.setValue(i)}
+            onMouseOver={() => this.handleOnHover(i)}
+            onMouseOut={() => this.handleOnHover(this.value)}
+            onClick={() => this.handleSetValue(i)}
           >
             {this.character}
           </span>
@@ -72,23 +149,24 @@ export class MyRatingComponent {
       );
     };
 
-    let fillHalf = i => {
+    // Filled Halves (allowHalf is true)
+    let filledHalves = i => {
       return (
         <li>
           <span class="background">{this.character}</span>
           <span
             class="on left"
-            onMouseOver={() => this.createStarList(i - 0.5)}
-            onMouseOut={() => this.createStarList(this.value)}
-            onClick={() => this.setValue(i - 0.5)}
+            onMouseOver={() => this.handleOnHover(i - 0.5)}
+            onMouseOut={() => this.handleOnHover(this.value)}
+            onClick={() => this.handleSetValue(i - 0.5)}
           >
             {this.character}
           </span>
           <span
             class="on right"
-            onMouseOver={() => this.createStarList(i)}
-            onMouseOut={() => this.createStarList(this.value)}
-            onClick={() => this.setValue(i)}
+            onMouseOver={() => this.handleOnHover(i)}
+            onMouseOut={() => this.handleOnHover(this.value)}
+            onClick={() => this.handleSetValue(i)}
           >
             {this.character}
           </span>
@@ -96,23 +174,24 @@ export class MyRatingComponent {
       );
     };
 
-    let emptyHalf = i => {
+    // Empty Halves (allowHalf is true)
+    let emptyHalves = i => {
       return (
         <li>
           <span class="background">{this.character}</span>
           <span
             class="left"
-            onMouseOver={() => this.createStarList(i - 0.5)}
-            onMouseOut={() => this.createStarList(this.value)}
-            onClick={() => this.setValue(i - 0.5)}
+            onMouseOver={() => this.handleOnHover(i - 0.5)}
+            onMouseOut={() => this.handleOnHover(this.value)}
+            onClick={() => this.handleSetValue(i - 0.5)}
           >
             {this.character}
           </span>
           <span
             class="right"
-            onMouseOver={() => this.createStarList(i)}
-            onMouseOut={() => this.createStarList(this.value)}
-            onClick={() => this.setValue(i)}
+            onMouseOver={() => this.handleOnHover(i)}
+            onMouseOut={() => this.handleOnHover(this.value)}
+            onClick={() => this.handleSetValue(i)}
           >
             {this.character}
           </span>
@@ -120,23 +199,24 @@ export class MyRatingComponent {
       );
     };
 
-    let half = i => {
+    // Left Half is filled and Right Half is empty (allowHalf is true)
+    let leftFilledRightEmpty = i => {
       return (
         <li>
           <span class="background">{this.character}</span>
           <span
             class="on left"
-            onMouseOver={() => this.createStarList(i - 0.5)}
-            onMouseOut={() => this.createStarList(this.value)}
-            onClick={() => this.setValue(i - 0.5)}
+            onMouseOver={() => this.handleOnHover(i - 0.5)}
+            onMouseOut={() => this.handleOnHover(this.value)}
+            onClick={() => this.handleSetValue(i - 0.5)}
           >
             {this.character}
           </span>
           <span
             class="right"
-            onMouseOver={() => this.createStarList(i)}
-            onMouseOut={() => this.createStarList(this.value)}
-            onClick={() => this.setValue(i)}
+            onMouseOver={() => this.handleOnHover(i)}
+            onMouseOut={() => this.handleOnHover(this.value)}
+            onClick={() => this.handleSetValue(i)}
           >
             {this.character}
           </span>
@@ -144,36 +224,75 @@ export class MyRatingComponent {
       );
     };
 
-    if (this.allowHalf) {
+    if (this.allowHalf)
       for (let i = 1; i <= this.count; i++) {
-        console.log("1");
         if (numberOfStars - i + 1 === 0.5) {
-          starList.push(half(i));
+          starList.push(leftFilledRightEmpty(i));
         } else if (i <= numberOfStars) {
-          starList.push(fillHalf(i));
+          starList.push(filledHalves(i));
         } else {
-          starList.push(emptyHalf(i));
+          starList.push(emptyHalves(i));
         }
       }
-    } else {
+    else
       for (let i = 1; i <= this.count; i++) {
-        console.log("2");
         if (i <= numberOfStars) {
-          starList.push(fill(i));
+          starList.push(filledStar(i));
         } else {
-          starList.push(empty(i));
+          starList.push(emptyStar(i));
         }
       }
-    }
 
     this.starList = starList;
   }
 
+  handleOnKeyPressed(e) {
+    this.onKeyDown.emit(e); // Emit Event
+    switch (e.keyCode) {
+      case 37:
+        this.allowHalf
+          ? this.handleSetValue(this.value - 0.5)
+          : this.handleSetValue(this.value - 1);
+        break;
+      case 39:
+        this.allowHalf
+          ? this.handleSetValue(this.value + 0.5)
+          : this.handleSetValue(this.value + 1);
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleOnHover(value) {
+    this.handleGenerateStarList(value);
+    this.onHoverChange.emit(value);
+  }
+
+  /**
+   * Lifecycle methods
+   */
+  componentWillLoad() {
+    this.handleGenerateStarList(this.value);
+    this.isComponentReady = true;
+  }
+
+  componentDidLoad() {
+    if (this.autoFocus) {
+      this.focusComponent(); // AutoFocus
+    }
+  }
+
   render() {
     return (
-      <div>
-        <ul>{this.starList}</ul>
-      </div>
+      <ul
+        tabindex="1"
+        onKeyDown={e => this.handleOnKeyPressed(e)}
+        onBlur={() => this.onBlur.emit()}
+        onFocus={() => this.onFocus.emit()}
+      >
+        {this.starList}
+      </ul>
     );
   }
 }

@@ -48,13 +48,12 @@ export class NovaTransfer {
       this.dataSource.push(data);
     }
     */
-//    this.titles = ["my","la"];
     this._init();
   }
 
   private _init() {
     this.filteredDataSource = [...this.data.items];
-    var DEFAULT_CONFIG = { labels: {titleSource: "_source", titleTarget: "_target", operationLeft: "_", operationRight: "_", unit: "_item", units: "_items", notFoundContent: "_the list is empty", searchPlaceholder: "_search here" }};
+    var DEFAULT_CONFIG = { labels: {titleSource: "_source", titleTarget: "_target", operationLeft: "", operationRight: "", unit: "item", units: "items", notFoundContent: "the list is empty", searchPlaceholder: "search here" }};
     this.configuration.labels = {...DEFAULT_CONFIG.labels, ...this.configuration.labels}
   }
 
@@ -142,19 +141,21 @@ export class NovaTransfer {
         direction === LEFT && !this.isItemInTarget(item.key)
         || direction === RIGHT && this.isItemInTarget(item.key))
       .map(item =>{
-        var checkboxProps = {
-            key: item.key,
+       var checkboxProps = {
+        //    key: item.key,
             checked: this.selected.indexOf(item.key) !== -1,
-            disabled: item.disabled
+            disabled: item.disabled,
+            handleClick: () => this.handleSelect(item),
+            styles: { marginRight: "5px" }
         }
         var spanProps = {
           onClick: () => this.handleSelect(item),
-          class: 'item ' + (item.disabled? 'disabled' : '')
+          class: 'item start ' + (item.disabled? 'disabled' : '')
         }
         return(
           <li>
             <span {...spanProps}>
-              <input type='checkbox' {...checkboxProps}/>
+               <nova-checkbox {...checkboxProps}></nova-checkbox> 
               { this.onRenderItemHandler(item) }
             </span>
           </li>
@@ -176,8 +177,8 @@ export class NovaTransfer {
     var total = this.filteredDataSource.length - this.data.targetKeys.length;
     return (
       <span>
-        { selectedCount != 0? selectedCount + '/': '' }{ total }
-        { total > 1? this.configuration.labels.unit : this.configuration.labels.units }
+        { selectedCount != 0? selectedCount + '/': '' }
+        { total } { total > 1? this.configuration.labels.unit : this.configuration.labels.units }
       </span>
     );
   }
@@ -187,18 +188,19 @@ export class NovaTransfer {
     var total = this.data.targetKeys.length;
     return (
       <span>
-        { selectedCount != 0? selectedCount + '/' : '' }{ total }
-        { total > 1? this.configuration.labels.unit : this.configuration.labels.units }
+        { selectedCount != 0? selectedCount + '/' : '' }
+        { total } { total > 1? this.configuration.labels.unit : this.configuration.labels.units }
       </span>
     );
   }
 
   handleSelectAll(direction:string) {
+    console.log("handleSelectAll");
     var selectedCount = direction === LEFT? this.getSourceSelected() : this.getTargetSelected();
-    var total = direction === LEFT? this.filteredDataSource.filter(item => !item.disabled).length - this.data.targetKeys.length : this.data.targetKeys.length;
     var itemsFromColumn = this.filteredDataSource
       .filter(item => direction === LEFT && !this.isItemInTarget(item.key) && !item.disabled
-        || direction === RIGHT && this.isItemInTarget(item.key));
+        || direction === RIGHT && this.isItemInTarget(item.key) && !item.disabled);
+    var total = itemsFromColumn.length;
 
     if (selectedCount < total) {
       itemsFromColumn.map(item => {
@@ -219,16 +221,16 @@ export class NovaTransfer {
   }
 
   getSelectAllCheckbox(direction:string) {
-    var selectedCount = direction == LEFT? this.getSourceSelected() : this.getTargetSelected();
-    var total = direction == LEFT? this.filteredDataSource.filter(item => !item.disabled).length - this.data.targetKeys.length : this.data.targetKeys.length;
+    var selectedCount = direction === LEFT? this.getSourceSelected() : this.getTargetSelected();
+    var total = this.filteredDataSource
+      .filter(item => direction === LEFT && !this.isItemInTarget(item.key) && !item.disabled
+        || direction === RIGHT && this.isItemInTarget(item.key) && !item.disabled).length;
     var props = {
-      onClick: () => this.handleSelectAll(direction),
+      handleClick: () => this.handleSelectAll(direction),
       checked: selectedCount === total && total > 0
     };
     return(
-      <input 
-        type='checkbox' 
-        {...props}/>
+       <nova-checkbox {...props}></nova-checkbox>
     );
   }
 

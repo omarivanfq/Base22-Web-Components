@@ -15,9 +15,8 @@
       </nova-transfer>
   </div>
   <script>
+
     var transfer = document.querySelector("nova-transfer");
-    
-    transfer.titles = ["Source", "Target"];
 
     transfer.onChangeHandler = (nextTargetKeys, direction, moveKeys) => {
       console.log('targetKeys: ', nextTargetKeys);
@@ -55,11 +54,14 @@
       width: "275px"
     }
 */
+/*
     transfer.wrapperStyle = {
       width: "55%",
       height: "340px",
       margin: "0 auto"    
     }
+
+    */
 
     transfer.data = {
 	"items": [
@@ -115,108 +117,5 @@
     }
 */
   </script>
-   <script>
-      var datatable = document.querySelector("nova-datatable");
-      console.log(datatable);
-      var conf = {
-      "data": {
-          "items": [
-          {
-              "Nombre": "Omar Iván",
-              "Edad": "22",
-              "Sexo": "M"
-          },
-          {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          },
-      {
-              "Nombre": "Karina",
-              "Edad": "28",
-              "Sexo": "F"
-          }],
-          "columns": [
-          {
-              "field": "Nombre",
-              "label": "Nombre(s)"
-          },
-          {
-              "field": "Edad"
-          },
-          {
-              "field": "Sexo",
-          }]
-      },
-      "configuration": {
-          "labels":
-          {
-              "title": "Data Table with Autocomplete",
-              "numberOfRows": "# of rows"
-          },
-          "pagination":
-          {
-              "limit": 10
-          },
-          "sort":
-          {
-              "direction": "asc",
-              "sortBy":
-              {
-                  "sortByField": "Edad"
-              }
-          },
-          "indexColumnDisabled": false
-      },
-      "styling": {
-          "colorScheme": "default"
-      }
-  }
-    datatable.data = conf.data
-    datatable.configuration = conf.configuration
-    datatable.styling = conf.styling
-    
-    console.log(conf);
-    </script>
 </body>
 </html>

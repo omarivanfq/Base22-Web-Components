@@ -9,6 +9,12 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
+  interface NovaCheckbox {
+    'checked': boolean;
+    'disabled': boolean;
+    'handleClick': Function;
+    'styles': any;
+  }
   interface NovaTransfer {
     'columnStyle': any;
     'configuration'?: any;
@@ -30,17 +36,30 @@ export namespace Components {
 declare global {
 
 
+  interface HTMLNovaCheckboxElement extends Components.NovaCheckbox, HTMLStencilElement {}
+  var HTMLNovaCheckboxElement: {
+    prototype: HTMLNovaCheckboxElement;
+    new (): HTMLNovaCheckboxElement;
+  };
+
   interface HTMLNovaTransferElement extends Components.NovaTransfer, HTMLStencilElement {}
   var HTMLNovaTransferElement: {
     prototype: HTMLNovaTransferElement;
     new (): HTMLNovaTransferElement;
   };
   interface HTMLElementTagNameMap {
+    'nova-checkbox': HTMLNovaCheckboxElement;
     'nova-transfer': HTMLNovaTransferElement;
   }
 }
 
 declare namespace LocalJSX {
+  interface NovaCheckbox extends JSXBase.HTMLAttributes<HTMLNovaCheckboxElement> {
+    'checked'?: boolean;
+    'disabled'?: boolean;
+    'handleClick'?: Function;
+    'styles'?: any;
+  }
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
     'columnStyle'?: any;
     'configuration'?: any;
@@ -59,6 +78,7 @@ declare namespace LocalJSX {
   }
 
   interface IntrinsicElements {
+    'nova-checkbox': NovaCheckbox;
     'nova-transfer': NovaTransfer;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Prop, h, State } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, h, State } from '@stencil/core';
 
 const RIGHT:string = 'right';
 const LEFT:string = 'left';
@@ -26,28 +26,14 @@ export class NovaTransfer {
   @Prop() disabled:boolean;
   @Prop() showSelectAll:boolean;
 
-  @Prop() onChangeHandler:Function;
-  @Prop() onScrollHandler:Function;
-  @Prop() onSearchHandler:Function;
-  @Prop() onSelectChangeHandler:Function;
-  @Prop() onRenderItemHandler:Function;
+  @Event() transferColumn: EventEmitter;
+  @Event() scrolling: EventEmitter;
+  @Event() search:EventEmitter;
+  @Event() select:EventEmitter;
 
+  @Prop() renderItem:Function;
+  
   async componentWillLoad() {
-    // dummy data 
-    /*for (let i = 0; i < 10; i++) {
-      var data = {
-        key: i.toString(),
-        title: `item${i + 1}`,
-        description: `description of content${i + 1}`,
-        disabled: i % 3 < 1, 
-        chosen: Math.random() * 2 > 1
-      };
-      if (data.chosen && !data.disabled) {
-        this.targetKeys.push(data.key);
-      }
-      this.dataSource.push(data);
-    }
-    */
     this._init();
   }
 
@@ -75,11 +61,8 @@ export class NovaTransfer {
         }
       });
       this.selected = [...alreadyInTarget];
-      this.onChangeHandler(
-        this.data.targetKeys,
-        RIGHT,
-        moveKeys
-      );
+      this.transferColumn.emit({targetkeys: this.data.targetKeys, direction: RIGHT, moveKeys });
+      
     }
   }
 
@@ -97,13 +80,9 @@ export class NovaTransfer {
         }
       });
       this.selected = [...alreadyInSource];
-      this.onChangeHandler(
-        this.data.items.
-          filter(item => this.data.targetKeys.indexOf(item.key) === -1)
-          .map(item => item.key),
-          LEFT,
-          moveKeys
-      );
+
+      this.transferColumn.emit({targetkeys: this.data.targetKeys, direction: LEFT, moveKeys });
+
     }
   }
 
@@ -120,7 +99,8 @@ export class NovaTransfer {
       }
     });
 
-    this.onSelectChangeHandler(sourceSelectedKeys, targetSelectedKeys);
+   // this.onSelectChangeHandler(sourceSelectedKeys, targetSelectedKeys);
+    this.select.emit({sourceSelectedKeys, targetSelectedKeys});
   }
 
   handleSelect(item:any) {
@@ -145,18 +125,20 @@ export class NovaTransfer {
         //    key: item.key,
             checked: this.selected.indexOf(item.key) !== -1,
             disabled: item.disabled,
-            handleClick: () => this.handleSelect(item),
             styles: { marginRight: "5px" }
         }
         var spanProps = {
-          onClick: () => this.handleSelect(item),
+          onClick: (e) => {
+            e.preventDefault();
+            this.handleSelect(item)
+          },
           class: 'item start ' + (item.disabled? 'disabled' : '')
         }
         return(
           <li>
             <span {...spanProps}>
                <nova-checkbox {...checkboxProps}></nova-checkbox> 
-              { this.onRenderItemHandler(item) }
+              { this.renderItem(item) }
             </span>
           </li>
         );
@@ -242,7 +224,7 @@ export class NovaTransfer {
           && item.title.indexOf(PATTERN) !== -1; }),
           ...this.data.items.filter(item => { return this.isItemInTarget(item.key)})
         ];
-        this.onSearchHandler(LEFT, PATTERN);
+        this.search.emit({direction: LEFT, value: PATTERN});
     }    
     else {
       this.filteredDataSource = [...this.data.items];
@@ -257,7 +239,7 @@ export class NovaTransfer {
           && item.title.indexOf(PATTERN) !== -1; }),
           ...this.data.items.filter(item => { return !this.isItemInTarget(item.key)})
         ];
-        this.onSearchHandler(RIGHT, PATTERN);
+        this.search.emit({direction: LEFT, value: PATTERN});
     }    
     else {
       this.filteredDataSource = [...this.data.items];
@@ -265,7 +247,7 @@ export class NovaTransfer {
   }
 
   handleItemsScroll(direction, event) {
-    this.onScrollHandler(direction, event);
+    this.scrolling.emit({direction, event});
   }
 
   getSourceSearchBox() {

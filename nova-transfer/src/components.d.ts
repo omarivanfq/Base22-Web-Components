@@ -12,7 +12,6 @@ export namespace Components {
   interface NovaCheckbox {
     'checked': boolean;
     'disabled': boolean;
-    'handleClick': Function;
     'styles': any;
   }
   interface NovaTransfer {
@@ -21,12 +20,8 @@ export namespace Components {
     'data'?: any;
     'disabled': boolean;
     'notFoundContent': string;
-    'onChangeHandler': Function;
-    'onRenderItemHandler': Function;
-    'onScrollHandler': Function;
-    'onSearchHandler': Function;
-    'onSelectChangeHandler': Function;
     'operationStyle': any;
+    'renderItem': Function;
     'showSearch': boolean;
     'showSelectAll': boolean;
     'wrapperStyle': any;
@@ -57,7 +52,7 @@ declare namespace LocalJSX {
   interface NovaCheckbox extends JSXBase.HTMLAttributes<HTMLNovaCheckboxElement> {
     'checked'?: boolean;
     'disabled'?: boolean;
-    'handleClick'?: Function;
+    'onClicked'?: (event: CustomEvent<any>) => void;
     'styles'?: any;
   }
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
@@ -66,12 +61,12 @@ declare namespace LocalJSX {
     'data'?: any;
     'disabled'?: boolean;
     'notFoundContent'?: string;
-    'onChangeHandler'?: Function;
-    'onRenderItemHandler'?: Function;
-    'onScrollHandler'?: Function;
-    'onSearchHandler'?: Function;
-    'onSelectChangeHandler'?: Function;
+    'onScrolling'?: (event: CustomEvent<any>) => void;
+    'onSearch'?: (event: CustomEvent<any>) => void;
+    'onSelect'?: (event: CustomEvent<any>) => void;
+    'onTransferColumn'?: (event: CustomEvent<any>) => void;
     'operationStyle'?: any;
+    'renderItem'?: Function;
     'showSearch'?: boolean;
     'showSelectAll'?: boolean;
     'wrapperStyle'?: any;

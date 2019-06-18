@@ -20,10 +20,12 @@ export namespace Components {
     'configuration'?: any;
     'data'?: any;
     'disabled': boolean;
+    'filterOption': Function;
     'operationStyle': any;
     'renderItem': Function;
     'showSearch': boolean;
     'showSelectAll': boolean;
+    'styling'?: any;
     'wrapperStyle': any;
   }
 }
@@ -61,6 +63,7 @@ declare namespace LocalJSX {
     'configuration'?: any;
     'data'?: any;
     'disabled'?: boolean;
+    'filterOption'?: Function;
     'onScrolling'?: (event: CustomEvent<any>) => void;
     'onSearch'?: (event: CustomEvent<any>) => void;
     'onSelect'?: (event: CustomEvent<any>) => void;
@@ -69,6 +72,7 @@ declare namespace LocalJSX {
     'renderItem'?: Function;
     'showSearch'?: boolean;
     'showSelectAll'?: boolean;
+    'styling'?: any;
     'wrapperStyle'?: any;
   }
 

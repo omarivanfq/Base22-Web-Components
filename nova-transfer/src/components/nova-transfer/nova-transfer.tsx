@@ -1,4 +1,5 @@
-import { Component, Element, Event, EventEmitter, Prop, h, State } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, h, State } from '@stencil/core';
+import { DEFAULT_CONFIGURATION } from "./default-configuration";
 
 const RIGHT:string = 'right';
 const LEFT:string = 'left';
@@ -11,130 +12,209 @@ const LEFT:string = 'left';
 
 export class NovaTransfer {
 
-  @Prop() data?: any = { items: [], targetKeys: [] };
+  /*
+    PROPS
+  */
+  // common attributes
+  @Prop() data?: any = { 
+    items: [], // items displayed in columns 
+    targetKeys: [] // keys of the items displayed in the target (right) column
+  };
   @Prop({ mutable: true }) configuration?: any;
-
-  @Element() el: HTMLElement;
-
-  @State() filteredItems:any[] = [];
-  @State() selected:string[] = [];
-  @State() transfered:string[] = [];
-
+  @Prop() styling?: any = {};
+  // Transfer attributes
+  /*
+    custom CSS style used for rendering the transfer columns
+  */
   @Prop() columnStyle:any = {};
-  @Prop() wrapperStyle:any = {};
+  /*
+    custom CSS style used for rendering the operations column (left, right buttons)
+  */
   @Prop() operationStyle:any = {};
-
+  /*
+    custom CSS style used for rendering wrapper element
+  */
+  @Prop() wrapperStyle:any = {};
+  /*
+    function to generate the item shown on a column
+  */
+  @Prop() renderItem:Function;
+  /*
+    function to determine whether an item should show in search result list
+  */
+  @Prop() filterOption:Function;
+  /*
+    if included, a search box is shown on each column
+  */
   @Prop() showSearch:boolean;
+  /*
+    whether disabled transfer
+  */
   @Prop() disabled:boolean;
+  /*
+    show select all checkbox on the header
+  */
   @Prop() showSelectAll:boolean;
 
-  @Event() transferColumn: EventEmitter;
-  @Event() scrolling: EventEmitter;
+  /*
+    EVENTS
+  */
+  /*
+    event that is emmited when search field are changed
+  */
   @Event() search:EventEmitter;
+  /*
+    event that is emitted when the transfer between columns is complete
+  */
+  @Event() transferColumn: EventEmitter;
+  /* 
+    event that is emitted when scroll options list
+  */
+  @Event() scrolling: EventEmitter;
+  /*
+    event that is emitted when selected items are changed
+  */
   @Event() select:EventEmitter;
   
-  @Prop() renderItem:Function;
-  
-  async componentWillLoad() {
+  /*
+    STATES
+  */
+  /*
+    items that match the pattern in search box
+  */
+  @State() filteredItems:any[] = [];
+  /*
+    items that are currently selected
+  */
+  @State() selected:string[] = [];
+  /*
+    items that are currently being transfered from one column to another
+  */
+  @State() transfered:string[] = [];
+
+  componentWillLoad() {
     this._init();
   }
 
-  private _init() {
-    this.filteredItems = [...this.data.items];
-    var DEFAULT_CONFIG = { labels: {titleSource: "_source", titleTarget: "_target", operationLeft: "", operationRight: "", unit: "item", units: "items", notFoundContent: "the list is empty", searchPlaceholder: "search here" }};
-    this.configuration.labels = {...DEFAULT_CONFIG.labels, ...this.configuration.labels}
-  }
-
-  isItemInTarget(key:string) {
-    return this.data.targetKeys.indexOf(key) !== -1;
-  }
-
-  moveToTarget() {
-    if (!this.disabled) {
-      var alreadyInTarget = []
-      var moveKeys = [];
-      this.selected.forEach((key) => {
-        if (!this.isItemInTarget(key)) {
-          this.data.targetKeys.push(key);
-          moveKeys.push(key);
-        }
-        else {
-          alreadyInTarget.push(key);
-        }
-      });
-      this.selected = [...alreadyInTarget];
-      this.transferColumn.emit({ targetkeys: this.data.targetKeys, direction: RIGHT, moveKeys });
-      this.transfered = [...moveKeys];
-    }
-    this.highlightTransfered();
-  }
-
-  moveToSource() {
-    if (!this.disabled) {
-      var alreadyInSource = []
-      var moveKeys = [];
-      this.selected.forEach((key) => {
-        if (this.isItemInTarget(key)) {
-          this.data.targetKeys.splice(this.data.targetKeys.indexOf(key), 1);
-          moveKeys.push(key);
-        }
-        else {
-          alreadyInSource.push(key);
-        }
-      });
-      this.selected = [...alreadyInSource];
-      this.transferColumn.emit({ targetkeys: this.data.targetKeys, direction: LEFT, moveKeys });
-      this.transfered = [...moveKeys];
-    }
-    this.highlightTransfered();
-  }
-
-  handleOnSelectCallback() {
-    var sourceSelectedKeys = [];
-    var targetSelectedKeys = [];
-
-    this.selected.map(key => {
-      if (this.isItemInTarget(key)) {
-        targetSelectedKeys.push(key);
-      }
-      else {
-        sourceSelectedKeys.push(key);
-      }
-    });
-    this.select.emit({sourceSelectedKeys, targetSelectedKeys});
-  }
-
-  handleSelect(item:any) {
+  /* 
+    HANDLERS
+  */
+  private _handleSelect(item:any) {
     if (!this.disabled && !item.disabled) {
-      if (this.selected.indexOf(item.key) !== -1) {
-        this.selected.splice(this.selected.indexOf(item.key), 1);
+      if (this.selected.indexOf(item.key) !== -1) { // the item is already on the selected array
+        this.selected.splice(this.selected.indexOf(item.key), 1); // remove the item from the array
       }
       else {
-        this.selected.push(item.key);
+        this.selected.push(item.key); // add the item to the array
       }
     }
-    this.handleOnSelectCallback();
+    this._emitSelectEvent(); 
     this.selected = [...this.selected]; // to force re-rendering
   }
 
-  getItems(direction:string) {
+  private _handleSelectAll(direction:string) {
+    if (!this.disabled) {
+      
+      // number of items selected in the column 
+      var selectedCount = direction === LEFT? this._getSourceSelected() : this._getTargetSelected();
+      
+      // all the items in the column 
+      var itemsFromColumn = this.filteredItems
+        .filter(item => direction === LEFT && !this._isItemInTarget(item.key) && !item.disabled
+          || direction === RIGHT && this._isItemInTarget(item.key) && !item.disabled);
+      
+      // number of total items in the column 
+      var total = itemsFromColumn.length;
+  
+      if (selectedCount < total) { // there are items yet to be selected
+        itemsFromColumn.map(item => {
+          if (this.selected.indexOf(item.key) === -1) {
+            this.selected.push(item.key);
+          }
+        });
+      }
+      else { // all the items are already selected
+        itemsFromColumn.map(item => {
+          if (this.selected.indexOf(item.key) !== -1) {
+            this.selected.splice(this.selected.indexOf(item.key), 1);
+          }
+        });
+      }
+      this._emitSelectEvent();
+      this.selected = [...this.selected]; // to force re-rendering
+    }
+  }
+
+  private _handleSourceQuery = (event) => {
+    if (!this.disabled) {
+      var PATTERN = event.target.value; // input from user
+      if (!/^ *$/.test(PATTERN)) { // validating it isnt an empty string
+        this.filteredItems = 
+          [...this.data.items
+            .filter(item =>  
+                { return !this._isItemInTarget(item.key) 
+                && this.filterOption(PATTERN, item); }
+            ),  // all the items from source that match the input from user
+            ...this.data.items
+              .filter(item => 
+                { return this._isItemInTarget(item.key) }
+              ) // all the items from target
+          ];
+          this.search.emit({direction: LEFT, value: PATTERN});
+      }    
+      else {
+        this.filteredItems = [...this.data.items]; // restore filtered items array to initial state
+      }
+    }
+  }
+
+  private _handleTargetQuery = (e) => {
+    if (!this.disabled) {
+      var PATTERN = e.target.value;
+      if (!/^ *$/.test(PATTERN)) {
+        this.filteredItems = 
+          [...this.data.items
+            .filter(item => 
+              { return this._isItemInTarget(item.key) 
+              && this.filterOption(PATTERN, item); }
+            ), // all the items from target that match the input from user
+            ...this.data.items
+            .filter(item => 
+              { return !this._isItemInTarget(item.key)}
+            ) // all the items from source
+          ];
+          this.search.emit({direction: RIGHT, value: PATTERN});
+      }    
+      else {
+        this.filteredItems = [...this.data.items];
+      }
+    }
+  }
+
+  /*
+    FUNCTIONS THAT RETURN JSX
+  */
+
+  private _getItems(direction:string) {
     return this.filteredItems.filter(item => 
-        direction === LEFT && !this.isItemInTarget(item.key)
-        || direction === RIGHT && this.isItemInTarget(item.key))
+        direction === LEFT && !this._isItemInTarget(item.key)
+        || direction === RIGHT && this._isItemInTarget(item.key)) 
+        // querying all the items from the indicated direction
       .map(item =>{
+        // props for the checkbox
        var checkboxProps = {
-            checked: this.selected.indexOf(item.key) !== -1,
+            checked: this.selected.indexOf(item.key) !== -1, 
             disabled: item.disabled,
             styles: { marginRight: "5px" }
         }
+        // props for the item in the column
         var spanProps = {
-          id: item.key,
           onClick: (e) => {
             e.preventDefault();
-            this.handleSelect(item)
+            this._handleSelect(item)
           },
           class: 'item ' + (item.disabled? 'disabled' : '') 
-            + (this.transfered.indexOf(item.key) !== -1? ' start' : '')
+            + (this.transfered.indexOf(item.key) !== -1? ' highlight' : '') // animation tha highlights items that were just transfered
         }
         return(
           <li>
@@ -147,71 +227,41 @@ export class NovaTransfer {
       })
   }
 
-  getSourceSelected() {
-    return this.selected.filter(key => !this.isItemInTarget(key) 
-      && !this.filteredItems.find(item => item.key === key).disabled).length;
-  }
-
-  getTargetSelected() {
-    return this.selected.filter(key => this.isItemInTarget(key)).length;
-  }
-
-  getSourceCountSpan() {
-    var selectedCount = this.getSourceSelected();
+  private _getSourceCountSpan() {
+    // number of items selected in the source column
+    var selectedCount = this._getSourceSelected();
+    // number of all the items in the source column
     var total = this.filteredItems.length - this.data.targetKeys.length;
     return (
       <span>
         { selectedCount != 0 ? selectedCount + '/': '' }
-        { total } { total > 1 ? this.configuration.labels.unit : this.configuration.labels.units }
+        { total } { total > 1 ? this.configuration.labels.units : this.configuration.labels.unit }
       </span>
     );
   }
   
-  getTargetCountSpan() {
-    var selectedCount = this.getTargetSelected();
+  private _getTargetCountSpan() {
+    // number of items selected in the target column
+    var selectedCount = this._getTargetSelected();
+    // number of all the items in the target column
     var total = this.data.targetKeys.length;
     return (
       <span>
-        { selectedCount != 0? selectedCount + '/' : '' }
-        { total } { total > 1? this.configuration.labels.unit : this.configuration.labels.units }
+        { selectedCount != 0 ? selectedCount + '/' : '' }
+        { total } { total > 1 ? this.configuration.labels.units : this.configuration.labels.unit }
       </span>
     );
   }
 
-  handleSelectAll(direction:string) {
-    if (!this.disabled) {
-      var selectedCount = direction === LEFT? this.getSourceSelected() : this.getTargetSelected();
-      var itemsFromColumn = this.filteredItems
-        .filter(item => direction === LEFT && !this.isItemInTarget(item.key) && !item.disabled
-          || direction === RIGHT && this.isItemInTarget(item.key) && !item.disabled);
-      var total = itemsFromColumn.length;
-  
-      if (selectedCount < total) {
-        itemsFromColumn.map(item => {
-          if (this.selected.indexOf(item.key) === -1) {
-            this.selected.push(item.key);
-          }
-        });
-      }
-      else {
-        itemsFromColumn.map(item => {
-          if (this.selected.indexOf(item.key) !== -1) {
-            this.selected.splice(this.selected.indexOf(item.key), 1);
-          }
-        });
-      }
-      this.handleOnSelectCallback();
-      this.selected = [...this.selected]; // to force re-rendering
-    }
-  }
-
-  getSelectAllCheckbox(direction:string) {
-    var selectedCount = direction === LEFT? this.getSourceSelected() : this.getTargetSelected();
+  private _getSelectAllCheckbox(direction:string) {
+    // number of items selected in the indicated column
+    var selectedCount = direction === LEFT? this._getSourceSelected() : this._getTargetSelected();
+    // number of non disabled items in the indicated column
     var total = this.filteredItems
-      .filter(item => direction === LEFT && !this.isItemInTarget(item.key) && !item.disabled
-        || direction === RIGHT && this.isItemInTarget(item.key) && !item.disabled).length;
+      .filter(item => direction === LEFT && !this._isItemInTarget(item.key) && !item.disabled
+        || direction === RIGHT && this._isItemInTarget(item.key) && !item.disabled).length;
     var props = {
-      handleClick: () => this.handleSelectAll(direction),
+      handleClick: () => this._handleSelectAll(direction),
       checked: selectedCount === total && total > 0,
       disabled: this.disabled
     };
@@ -220,81 +270,23 @@ export class NovaTransfer {
     );
   }
 
-  handleSourceQuery = (event) => {
-    if (!this.disabled) {
-      var PATTERN = event.target.value;
-      if (!/^ *$/.test(PATTERN)) {
-        this.filteredItems = 
-          [...this.data.items.filter(item => { return !this.isItemInTarget(item.key) 
-            && item.title.indexOf(PATTERN) !== -1; }),
-            ...this.data.items.filter(item => { return this.isItemInTarget(item.key)})
-          ];
-          this.search.emit({direction: LEFT, value: PATTERN});
-      }    
-      else {
-        this.filteredItems = [...this.data.items];
-      }
-    }
-  }
-
-  handleTargetQuery = (e) => {
-    if (!this.disabled) {
-      var PATTERN = e.target.value;
-      if (!/^ *$/.test(PATTERN)) {
-        this.filteredItems = 
-          [...this.data.items.filter(item => { return this.isItemInTarget(item.key) 
-            && item.title.indexOf(PATTERN) !== -1; }),
-            ...this.data.items.filter(item => { return !this.isItemInTarget(item.key)})
-          ];
-          this.search.emit({direction: LEFT, value: PATTERN});
-      }    
-      else {
-        this.filteredItems = [...this.data.items];
-      }
-    }
-  }
-
-  handleItemsScroll(direction, event) {
+  private _handleItemsScroll(direction, event) {
     this.scrolling.emit({direction, event});
   }
 
-  getSourceSearchBox() {
+  private _getSearchBox(direction:string) {
     return (
       <span class="search-container">
         <input 
-          disabled={this.disabled}
-          onKeyUp={ this.handleSourceQuery } 
+          disabled={ this.disabled }
+          onKeyUp={ direction === LEFT? this._handleSourceQuery : this._handleTargetQuery } 
           placeholder={ this.configuration.labels.searchPlaceholder}/>
       </span>
     );
   }
 
-  getTargetSearchBox() {
-    return(
-      <span class="search-container">
-        <input
-          disabled={this.disabled}
-          onKeyUp={ this.handleTargetQuery }
-          placeholder={ this.configuration.labels.searchPlaceholder }/>
-      </span>
-    );
-  }
-
-  highlightTransfered() {
-    console.log("transfered: ", this.transfered);
-    this.el.shadowRoot.querySelectorAll(".item")
-    .forEach(i => {
-        i.classList.remove("start")
-    });
-
-    this.el.shadowRoot.querySelectorAll(".item")
-    .forEach(i => {
-      if (this.transfered.indexOf(i.id) !== -1)
-        i.classList.add("start")
-    });
-  }
-
-  getTable() {
+/*
+  private _getTable() {
     return (
       <table>
         <thead>
@@ -316,7 +308,7 @@ export class NovaTransfer {
       </table>
     );
   }
-
+*/
   render() {
     return (
       <div class="wrapper" style={ this.wrapperStyle }>
@@ -324,42 +316,46 @@ export class NovaTransfer {
           <div class="column" style={ this.columnStyle }>
             <header class="column-header">
               <span>
-                { this.showSelectAll ? this.getSelectAllCheckbox(LEFT) : null }
-                { this.getSourceCountSpan() }
+                { this.showSelectAll ? this._getSelectAllCheckbox(LEFT) : null }
+                { this._getSourceCountSpan() }
               </span>
               <span> { this.configuration.labels.titleSource } </span>      
             </header>
             <div class="items-container">
-              { this.showSearch? this.getSourceSearchBox() : null }
-              <div class="items" onScroll={ event => this.handleItemsScroll(LEFT, event) }>
+              { this.showSearch? this._getSearchBox(LEFT) : null }
+              <div class="items" onScroll={ event => this._handleItemsScroll(LEFT, event) }>
                 <ul>
-                  { this.getItems(LEFT) }
+                  { this._getItems(LEFT) }
                 </ul>
               </div>
             </div>
           </div>
           <span class="operation-buttons" style={ this.operationStyle }>
             <button 
-              class={ this.getSourceSelected() > 0 ? "btn-active" : "" } 
-              onClick={ () => this.moveToTarget() }>{ ">" } <span>{ this.configuration.labels.operationLeft }</span></button>
+              class={ this._getSourceSelected() > 0 ? "btn-active" : "" } 
+              onClick={ () => this._moveToTarget() }>{ ">" } 
+              <span>{ this.configuration.labels.operationLeft }</span>
+            </button>
             <button 
-              class={ this.getTargetSelected() > 0 ? "btn-active" : "" } 
-              onClick={ () => this.moveToSource() }>{ "<" } <span>{ this.configuration.labels.operationRight }</span></button>
+              class={ this._getTargetSelected() > 0 ? "btn-active" : "" } 
+              onClick={ () => this._moveToSource() }>{ "<" } 
+              <span>{ this.configuration.labels.operationRight }</span>
+            </button>
           </span>
           <div class="column" style={ this.columnStyle }>
             <header class="column-header">
               <span>
-                { this.showSelectAll ? this.getSelectAllCheckbox(RIGHT) : null }
-                { this.getTargetCountSpan() }
+                { this.showSelectAll ? this._getSelectAllCheckbox(RIGHT) : null }
+                { this._getTargetCountSpan() }
               </span>
               <span>{ this.configuration.labels.titleTarget }</span>
             </header>
             <div class="items-container">
-              { this.showSearch ? this.getTargetSearchBox() : null }
-              <div class="items" onScroll={ event => this.handleItemsScroll(RIGHT, event) }>
+              { this.showSearch ? this._getSearchBox(RIGHT) : null }
+              <div class="items" onScroll={ event => this._handleItemsScroll(RIGHT, event) }>
                 <ul>
                   <slot>
-                  { this.getItems(RIGHT) /*this.getTable() */ }
+                  { this._getItems(RIGHT) /*this.getTable() */ }
                   </slot>
                 </ul>
               </div>
@@ -369,4 +365,90 @@ export class NovaTransfer {
       </div>
     );
   }
+
+  /*
+    Local methods
+  */
+  private _init() {
+    this.filteredItems = [...this.data.items];
+    this.configuration.labels = {...DEFAULT_CONFIGURATION.labels, ...this.configuration.labels}
+    this.filterOption = 
+      this.filterOption
+      ? this.filterOption 
+      : DEFAULT_CONFIGURATION.functions.filterOption;
+    this.renderItem = 
+      this.renderItem
+      ? this.renderItem
+      : DEFAULT_CONFIGURATION.functions.renderItem;
+  }
+
+  // return the number of items selected from source column
+  private _getSourceSelected() {
+    return this.selected.filter(key => !this._isItemInTarget(key) 
+      && !this.filteredItems.find(item => item.key === key).disabled).length;
+  }
+
+  // return the number of items selected from target column
+  private _getTargetSelected() {
+    return this.selected.filter(key => this._isItemInTarget(key)
+      && !this.filteredItems.find(item => item.key === key).disabled).length;
+  }
+
+  // transfers the selected items to the target (right)
+  private _moveToTarget() {
+    if (!this.disabled) {
+      var alreadyInTarget = [];
+      var moveKeys = []; // items that are transfering
+      this.selected.forEach((key) => {
+        if (!this._isItemInTarget(key)) {
+          this.data.targetKeys.push(key);
+          moveKeys.push(key);
+        }
+        else {
+          alreadyInTarget.push(key);
+        }
+      });
+      this.selected = [...alreadyInTarget]; // the ones that were already on the target are now the only selected
+      this.transferColumn.emit({ targetkeys: this.data.targetKeys, direction: RIGHT, moveKeys });
+      this.transfered = [...moveKeys];
+    }
+  }
+
+  private _moveToSource() {
+    if (!this.disabled) {
+      var alreadyInSource = []
+      var moveKeys = []; // items that are transfering
+      this.selected.forEach((key) => {
+        if (this._isItemInTarget(key)) {
+          this.data.targetKeys.splice(this.data.targetKeys.indexOf(key), 1);
+          moveKeys.push(key);
+        }
+        else {
+          alreadyInSource.push(key);
+        }
+      });
+      this.selected = [...alreadyInSource]; // the ones that were already on the source are now the only selected
+      this.transferColumn.emit({ targetkeys: this.data.targetKeys, direction: LEFT, moveKeys });
+      this.transfered = [...moveKeys];
+    }
+  }
+
+  private _isItemInTarget(key:string) {
+    return this.data.targetKeys.indexOf(key) !== -1;
+  }
+
+  private _emitSelectEvent() {
+    var sourceSelectedKeys = [];
+    var targetSelectedKeys = [];
+    this.selected.map(key => {
+      if (this._isItemInTarget(key)) {
+        targetSelectedKeys.push(key);
+      }
+      else {
+        sourceSelectedKeys.push(key);
+      }
+    });
+    this.select.emit({sourceSelectedKeys, targetSelectedKeys});
+  }
+
 }

@@ -359,9 +359,7 @@ export class NovaTransfer {
               { this.showSearch ? this._getSearchBox(RIGHT) : null }
               <div class="items" onScroll={ event => this._handleItemsScroll(RIGHT, event) }>
                 <ul>
-                  <slot>
                   { this._getItems(RIGHT) /*this.getTable() */ }
-                  </slot>
                 </ul>
               </div>
               <span class="empty-msg">{this.configuration.labels.notFoundContent}</span>

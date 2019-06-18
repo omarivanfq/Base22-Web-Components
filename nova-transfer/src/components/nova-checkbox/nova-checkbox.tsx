@@ -15,7 +15,7 @@ export class NovaCheckbox {
     render() {
         return (
             <div class="wrapper" style={this.styles}>
-                <label class="container">
+                <label class={ "container " + (this.disabled? "disabled" : "")}>
                     <input 
                         type="checkbox" 
                         {...{checked: this.checked, disabled: this.disabled}} 

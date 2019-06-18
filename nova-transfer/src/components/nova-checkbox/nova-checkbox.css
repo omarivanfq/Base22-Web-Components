@@ -18,6 +18,10 @@
   transition: all 0.2s ease-in;
 }
 
+.container.disabled {
+  cursor: not-allowed;
+}
+
 /* Hide the browser's default checkbox */
 .container input {
   position: absolute;

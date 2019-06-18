@@ -32,8 +32,11 @@ button:hover {
     font-size: 14px;
 }
 
-.container.disabled .item {
+.container.disabled .items-container {
     background-color: #f5f5f5;
+}
+
+.container.disabled .item {
     opacity: 1;
 }
 
@@ -128,6 +131,18 @@ button.btn-active {
 
 .search-container {
     width: 100%;
+}
+
+.container.disabled .search-container {
+    background-color: #f5f5f5;
+}
+
+.container.disabled .search-container input {
+    background-color: #f5f5f5;
+}
+
+.container.disabled .search-container input:hover {
+    cursor: not-allowed;
 }
 
 .search-container input {

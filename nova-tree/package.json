@@ -34,5 +34,9 @@
     "stencil-fragment": "^1.0.1"
   },
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "antd": "^3.19.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
 }

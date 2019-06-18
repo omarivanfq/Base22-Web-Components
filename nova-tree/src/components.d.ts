@@ -9,6 +9,12 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
+  interface NovaCheckbox {
+    'checked': boolean;
+    'disabled': boolean;
+    'handleClick': Function;
+    'styles': any;
+  }
   interface NovaTree {
     'autoExpandParent': boolean;
   }
@@ -20,6 +26,12 @@ export namespace Components {
 
 declare global {
 
+
+  interface HTMLNovaCheckboxElement extends Components.NovaCheckbox, HTMLStencilElement {}
+  var HTMLNovaCheckboxElement: {
+    prototype: HTMLNovaCheckboxElement;
+    new (): HTMLNovaCheckboxElement;
+  };
 
   interface HTMLNovaTreeElement extends Components.NovaTree, HTMLStencilElement {}
   var HTMLNovaTreeElement: {
@@ -33,12 +45,20 @@ declare global {
     new (): HTMLNovaTreeNodeElement;
   };
   interface HTMLElementTagNameMap {
+    'nova-checkbox': HTMLNovaCheckboxElement;
     'nova-tree': HTMLNovaTreeElement;
     'nova-tree-node': HTMLNovaTreeNodeElement;
   }
 }
 
 declare namespace LocalJSX {
+  interface NovaCheckbox extends JSXBase.HTMLAttributes<HTMLNovaCheckboxElement> {
+    'checked'?: boolean;
+    'disabled'?: boolean;
+    'handleClick'?: Function;
+    'onClicked'?: (event: CustomEvent<any>) => void;
+    'styles'?: any;
+  }
   interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
     'autoExpandParent'?: boolean;
   }
@@ -48,6 +68,7 @@ declare namespace LocalJSX {
   }
 
   interface IntrinsicElements {
+    'nova-checkbox': NovaCheckbox;
     'nova-tree': NovaTree;
     'nova-tree-node': NovaTreeNode;
   }

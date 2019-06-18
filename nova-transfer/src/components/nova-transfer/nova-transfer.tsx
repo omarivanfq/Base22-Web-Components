@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Prop, h, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, h, State } from '@stencil/core';
 
 const RIGHT:string = 'right';
 const LEFT:string = 'left';
@@ -14,13 +14,15 @@ export class NovaTransfer {
   @Prop() data?: any = { items: [], targetKeys: [] };
   @Prop({ mutable: true }) configuration?: any;
 
-  @State() filteredDataSource:any[] = [];
-  @State() selected:string[] = [];
-  @Prop() notFoundContent:string = 'The list is empty';
+  @Element() el: HTMLElement;
 
-  @Prop() columnStyle:any = {}
-  @Prop() wrapperStyle:any = {}
-  @Prop() operationStyle:any = {}
+  @State() filteredItems:any[] = [];
+  @State() selected:string[] = [];
+  @State() transfered:string[] = [];
+
+  @Prop() columnStyle:any = {};
+  @Prop() wrapperStyle:any = {};
+  @Prop() operationStyle:any = {};
 
   @Prop() showSearch:boolean;
   @Prop() disabled:boolean;
@@ -30,15 +32,23 @@ export class NovaTransfer {
   @Event() scrolling: EventEmitter;
   @Event() search:EventEmitter;
   @Event() select:EventEmitter;
-
+  
   @Prop() renderItem:Function;
   
   async componentWillLoad() {
     this._init();
   }
 
+  componentDidLoad() {
+    console.log(this.el); // outputs HTMLElement <my-component ...
+
+    // loop over NodeList as per https://css-tricks.com/snippets/javascript/loop-queryselectorall-matches/
+   // const list = this.el.querySelectorAll('li.my-list');
+ //   [].forEach.call(list, li => li.style.color = 'red');
+  }
+
   private _init() {
-    this.filteredDataSource = [...this.data.items];
+    this.filteredItems = [...this.data.items];
     var DEFAULT_CONFIG = { labels: {titleSource: "_source", titleTarget: "_target", operationLeft: "", operationRight: "", unit: "item", units: "items", notFoundContent: "the list is empty", searchPlaceholder: "search here" }};
     this.configuration.labels = {...DEFAULT_CONFIG.labels, ...this.configuration.labels}
   }
@@ -61,9 +71,10 @@ export class NovaTransfer {
         }
       });
       this.selected = [...alreadyInTarget];
-      this.transferColumn.emit({targetkeys: this.data.targetKeys, direction: RIGHT, moveKeys });
-      
+      this.transferColumn.emit({ targetkeys: this.data.targetKeys, direction: RIGHT, moveKeys });
+      this.transfered = [...moveKeys];
     }
+    this.highlightTransfered();
   }
 
   moveToSource() {
@@ -80,10 +91,10 @@ export class NovaTransfer {
         }
       });
       this.selected = [...alreadyInSource];
-
-      this.transferColumn.emit({targetkeys: this.data.targetKeys, direction: LEFT, moveKeys });
-
+      this.transferColumn.emit({ targetkeys: this.data.targetKeys, direction: LEFT, moveKeys });
+      this.transfered = [...moveKeys];
     }
+    this.highlightTransfered();
   }
 
   handleOnSelectCallback() {
@@ -98,8 +109,6 @@ export class NovaTransfer {
         sourceSelectedKeys.push(key);
       }
     });
-
-   // this.onSelectChangeHandler(sourceSelectedKeys, targetSelectedKeys);
     this.select.emit({sourceSelectedKeys, targetSelectedKeys});
   }
 
@@ -117,22 +126,25 @@ export class NovaTransfer {
   }
 
   getItems(direction:string) {
-    return this.filteredDataSource.filter(item => 
+    return this.filteredItems.filter(item => 
         direction === LEFT && !this.isItemInTarget(item.key)
         || direction === RIGHT && this.isItemInTarget(item.key))
       .map(item =>{
        var checkboxProps = {
-        //    key: item.key,
+//            key: item.key,
             checked: this.selected.indexOf(item.key) !== -1,
             disabled: item.disabled,
             styles: { marginRight: "5px" }
         }
         var spanProps = {
+        //  key: item.key,
+          id: item.key,
           onClick: (e) => {
             e.preventDefault();
             this.handleSelect(item)
           },
-          class: 'item start ' + (item.disabled? 'disabled' : '')
+          class: 'item ' + (item.disabled? 'disabled' : '') 
+            + (this.transfered.indexOf(item.key) !== -1? ' start' : '')
         }
         return(
           <li>
@@ -147,7 +159,7 @@ export class NovaTransfer {
 
   getSourceSelected() {
     return this.selected.filter(key => !this.isItemInTarget(key) 
-      && !this.filteredDataSource.find(item => item.key === key).disabled).length;
+      && !this.filteredItems.find(item => item.key === key).disabled).length;
   }
 
   getTargetSelected() {
@@ -156,11 +168,11 @@ export class NovaTransfer {
 
   getSourceCountSpan() {
     var selectedCount = this.getSourceSelected();
-    var total = this.filteredDataSource.length - this.data.targetKeys.length;
+    var total = this.filteredItems.length - this.data.targetKeys.length;
     return (
       <span>
-        { selectedCount != 0? selectedCount + '/': '' }
-        { total } { total > 1? this.configuration.labels.unit : this.configuration.labels.units }
+        { selectedCount != 0 ? selectedCount + '/': '' }
+        { total } { total > 1 ? this.configuration.labels.unit : this.configuration.labels.units }
       </span>
     );
   }
@@ -177,9 +189,8 @@ export class NovaTransfer {
   }
 
   handleSelectAll(direction:string) {
-    console.log("handleSelectAll");
     var selectedCount = direction === LEFT? this.getSourceSelected() : this.getTargetSelected();
-    var itemsFromColumn = this.filteredDataSource
+    var itemsFromColumn = this.filteredItems
       .filter(item => direction === LEFT && !this.isItemInTarget(item.key) && !item.disabled
         || direction === RIGHT && this.isItemInTarget(item.key) && !item.disabled);
     var total = itemsFromColumn.length;
@@ -204,7 +215,7 @@ export class NovaTransfer {
 
   getSelectAllCheckbox(direction:string) {
     var selectedCount = direction === LEFT? this.getSourceSelected() : this.getTargetSelected();
-    var total = this.filteredDataSource
+    var total = this.filteredItems
       .filter(item => direction === LEFT && !this.isItemInTarget(item.key) && !item.disabled
         || direction === RIGHT && this.isItemInTarget(item.key) && !item.disabled).length;
     var props = {
@@ -219,7 +230,7 @@ export class NovaTransfer {
   handleSourceQuery = (event) => {
     var PATTERN = event.target.value;
     if (!/^ *$/.test(PATTERN)) {
-      this.filteredDataSource = 
+      this.filteredItems = 
         [...this.data.items.filter(item => { return !this.isItemInTarget(item.key) 
           && item.title.indexOf(PATTERN) !== -1; }),
           ...this.data.items.filter(item => { return this.isItemInTarget(item.key)})
@@ -227,14 +238,14 @@ export class NovaTransfer {
         this.search.emit({direction: LEFT, value: PATTERN});
     }    
     else {
-      this.filteredDataSource = [...this.data.items];
+      this.filteredItems = [...this.data.items];
     }
   }
 
   handleTargetQuery = (e) => {
     var PATTERN = e.target.value;
     if (!/^ *$/.test(PATTERN)) {
-      this.filteredDataSource = 
+      this.filteredItems = 
         [...this.data.items.filter(item => { return this.isItemInTarget(item.key) 
           && item.title.indexOf(PATTERN) !== -1; }),
           ...this.data.items.filter(item => { return !this.isItemInTarget(item.key)})
@@ -242,7 +253,7 @@ export class NovaTransfer {
         this.search.emit({direction: LEFT, value: PATTERN});
     }    
     else {
-      this.filteredDataSource = [...this.data.items];
+      this.filteredItems = [...this.data.items];
     }
   }
 
@@ -258,6 +269,20 @@ export class NovaTransfer {
           placeholder={ this.configuration.labels.searchPlaceholder}/>
       </span>
     );
+  }
+
+  highlightTransfered() {
+    console.log("transfered: ", this.transfered);
+    this.el.shadowRoot.querySelectorAll(".item")
+    .forEach(i => {
+        i.classList.remove("start")
+    });
+
+    this.el.shadowRoot.querySelectorAll(".item")
+    .forEach(i => {
+      if (this.transfered.indexOf(i.id) !== -1)
+        i.classList.add("start")
+    });
   }
 
   getTargetSearchBox() {
@@ -300,7 +325,7 @@ export class NovaTransfer {
           <div class="column" style={ this.columnStyle }>
             <header class="column-header">
               <span>
-                { this.showSelectAll? this.getSelectAllCheckbox(LEFT) : null }
+                { this.showSelectAll ? this.getSelectAllCheckbox(LEFT) : null }
                 { this.getSourceCountSpan() }
               </span>
               <span> { this.configuration.labels.titleSource } </span>      
@@ -325,13 +350,13 @@ export class NovaTransfer {
           <div class="column" style={this.columnStyle}>
             <header class="column-header">
               <span>
-                { this.showSelectAll? this.getSelectAllCheckbox(RIGHT) : null }
+                { this.showSelectAll ? this.getSelectAllCheckbox(RIGHT) : null }
                 { this.getTargetCountSpan() }
               </span>
               <span>{ this.configuration.labels.titleTarget }</span>
             </header>
             <div class="items-container">
-              { this.showSearch? this.getTargetSearchBox() : null }
+              { this.showSearch ? this.getTargetSearchBox() : null }
               <div class="items" onScroll={ event => this.handleItemsScroll(RIGHT, event) }>
                 <ul>
                   <slot>

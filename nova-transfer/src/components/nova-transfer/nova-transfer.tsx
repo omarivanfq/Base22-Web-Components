@@ -321,13 +321,14 @@ export class NovaTransfer {
               </span>
               <span> { this.configuration.labels.titleSource } </span>      
             </header>
-            <div class="items-container">
+            <div class={ "items-container " + (this._sourceIsEmpty() ? "empty" : "")}>
               { this.showSearch? this._getSearchBox(LEFT) : null }
               <div class="items" onScroll={ event => this._handleItemsScroll(LEFT, event) }>
                 <ul>
                   { this._getItems(LEFT) }
                 </ul>
               </div>
+              <span class="empty-msg">{this.configuration.labels.notFoundContent}</span>
             </div>
           </div>
           <span class="operation-buttons" style={ this.operationStyle }>
@@ -350,7 +351,7 @@ export class NovaTransfer {
               </span>
               <span>{ this.configuration.labels.titleTarget }</span>
             </header>
-            <div class="items-container">
+            <div class={ "items-container " + (this._targetIsEmpty()? "empty" : "")}>
               { this.showSearch ? this._getSearchBox(RIGHT) : null }
               <div class="items" onScroll={ event => this._handleItemsScroll(RIGHT, event) }>
                 <ul>
@@ -359,6 +360,7 @@ export class NovaTransfer {
                   </slot>
                 </ul>
               </div>
+              <span class="empty-msg">{this.configuration.labels.notFoundContent}</span>
             </div>
           </div>
         </div>
@@ -449,6 +451,14 @@ export class NovaTransfer {
       }
     });
     this.select.emit({sourceSelectedKeys, targetSelectedKeys});
+  }
+
+  private _sourceIsEmpty() {
+    return this.filteredItems.length === this.data.targetKeys.length;
+  } 
+
+  private _targetIsEmpty() {
+    return this.data.targetKeys.length === 0;
   }
 
 }

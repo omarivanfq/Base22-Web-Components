@@ -59,7 +59,7 @@
 	    "key": "key2",
       "title": "Title2",
       "description": "Description2",
-      "disabled": true
+      "disabled": false
 	  },
 	  {
 	    "key": "key3",
@@ -77,7 +77,7 @@
 	    "key": "key5",
       "title": "Title5",
       "description": "Description5",
-      "disabled": true
+      "disabled": false
     },
     {
 	    "key": "key6",
@@ -89,7 +89,7 @@
 	    "key": "key7",
       "title": "Title7",
       "description": "Description7",
-      "disabled": true
+      "disabled": false
     },
     {
 	    "key": "key9",
@@ -111,11 +111,11 @@
     }
 	],
 	"targetKeys": [
-		"key5", "key6", "key11"
-	]
+	    "key6", "key11"
+	  ]
   }
 
-  transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target" } };
+  transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target", notFoundContent: "No Data"} };
   transfer.addEventListener('transferColumn', event => { console.log(event.detail) })
 
 /*

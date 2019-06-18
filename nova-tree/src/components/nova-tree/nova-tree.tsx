@@ -13,7 +13,7 @@ export class MyComponent {
   @Element() private element: HTMLElement;
 
 
-
+//este de abajo es de stencil
   componentDidLoad() {
       let ul = this.element.shadowRoot.children.item(1);
       this.autoExpandParent ? this.handleAutoExpand(ul) : undefined;
@@ -38,6 +38,8 @@ export class MyComponent {
  };
 
 
+
+
 //componentDidLoad(){
 //  this.handleAutoExpand();
 //}
@@ -55,6 +57,12 @@ export class MyComponent {
 
   render() {
     return (
+      //en teoria aqui deberia de alar todo en una sola linea
+      //desde el json que nos entreguen con la informacion
+      //solo para que lo tomes en cuenta
+      //checalo en ratetsx de eddy
+      //esto es con la intencino de quemetas el WILL load, arapra que no haga tnto overhead
+      
       <ul id="myUL">
         <li>
           <span class="caret" onClick={e => this.handleToggle(e)}>

@@ -8,10 +8,22 @@
   <script type="module" src="/build/nova-transfer.esm.js"></script>
   <script nomodule src="/build/nova-transfer.js"></script>
   <script src="https://unpkg.com/@bentoboxes/nova-web-components@latest/dist/nova-web-components.js"></script>
+  <style>
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
 </head>
 <body>
   <div>
       <nova-transfer show-select-all show-search>
+          <span slot="footer-source">
+            <p>footer 1</p>
+          </span>
+          <span slot="footer-target">
+            <p>footer 2</p>
+          </span>
       </nova-transfer>
   </div>
   <script>
@@ -42,9 +54,10 @@
 
     transfer.wrapperStyle = {
       width: "60%",
-      maxWidth: "600px",
-      margin: "0 auto"
-     /* height: "340px",
+      maxWidth: "480px",
+      margin: "0 auto",
+      height: "350px",
+      /*border: "2px solid gray"
       margin: "0 auto"    */
     }
     transfer.data = {
@@ -115,8 +128,8 @@
 	  ]
   }
 
-  transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target", notFoundContent: "No Data"} };
-  transfer.addEventListener('transferColumn', event => { console.log(event.detail) })
+    transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target", notFoundContent: "No Data"} };
+    transfer.addEventListener('transferColumn', event => { console.log(event.detail) })
 
 /*
     transfer.operationStyle = {

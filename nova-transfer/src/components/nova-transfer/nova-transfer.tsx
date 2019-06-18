@@ -330,6 +330,10 @@ export class NovaTransfer {
               </div>
               <span class="empty-msg">{this.configuration.labels.notFoundContent}</span>
             </div>
+            <footer class="column-footer">
+              <slot name="footer-source">
+              </slot>
+            </footer>
           </div>
           <span class="operation-buttons" style={ this.operationStyle }>
             <button 
@@ -362,6 +366,10 @@ export class NovaTransfer {
               </div>
               <span class="empty-msg">{this.configuration.labels.notFoundContent}</span>
             </div>
+            <footer class="column-footer">
+              <slot name="footer-target">
+              </slot>
+            </footer>
           </div>
         </div>
       </div>

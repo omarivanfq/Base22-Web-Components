@@ -6,7 +6,7 @@ const LEFT:string = 'left';
 
 @Component({
   tag: 'nova-transfer',
-  styleUrl: 'nova-transfer.css',
+  styleUrl: 'nova-transfer.scss',
   shadow: true
 })
 
@@ -94,6 +94,8 @@ export class NovaTransfer {
   @State() sourceFooter:boolean;
   @State() targetFooter:boolean;
 
+  @State() ready:boolean = false;
+
   @Element() el: HTMLElement;
 
   componentWillLoad() {
@@ -103,6 +105,7 @@ export class NovaTransfer {
   componentDidLoad() {
     this.sourceFooter = this._isThereSourceFooter();
     this.targetFooter = this._isThereTargetFooter();
+    this.ready = true;
   }
 
   /* 

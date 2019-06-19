@@ -9,32 +9,48 @@
   <script nomodule src="/build/nova-transfer.js"></script>
   <script src="https://unpkg.com/@bentoboxes/nova-web-components@latest/dist/nova-web-components.js"></script>
   <style>
+    body {
+      font-family: sans-serif;
+    }
     p {
       margin: 0;
       padding: 0;
+    }
+    ul {
+      list-style: none;
+      width: 100%;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    ul li {
+      margin: 7px 0;
+      padding: 4px 0;
+      color: white;
+      background-color: #acd639;
+      user-select: none;
     }
   </style>
 </head>
 <body>
   <div>
       <nova-transfer show-select-all show-search>
-          <span slot="footer-source">
-              <p>footer 1</p>
-          </span>
-          <span slot="footer-target">
-              <p>footer 2</p>
-          </span>
+        <span slot="footer-source">
+          <p style="text-align:center; padding: 10px 0;">footer 1</p>
+        </span>
+        <span slot="footer-target">
+          <p style="text-align:center; padding: 10px 0;">footer 2</p>
+        </span>
       </nova-transfer>
+      <ul>
+      </ul>
   </div>
+
   <script>
     var transfer = document.querySelector("nova-transfer");
-
     transfer.addEventListener('scrolling', e => console.log(e.detail));
     transfer.addEventListener('search', event => console.log(event.detail));
     transfer.addEventListener('select', e => console.log(e.detail));
-
-    transfer.unit = 'my-item';
-    transfer.units = 'my-items';
 
    // transfer.filterOption = (value, option) => true;
 
@@ -42,8 +58,6 @@
       return item.title + ', ' + item.description;
     }
 */
-    transfer.searchPlaceholder = "search placeholder";
-
     transfer.columnStyle = {
       width: "49%",
     } 
@@ -57,9 +71,10 @@
       maxWidth: "480px",
       margin: "0 auto",
       height: "350px",
-      /*border: "2px solid gray"
+   /*   border: "2px solid gray"
       margin: "0 auto"    */
     }
+
     transfer.data = {
 	"items": [
 	  {
@@ -72,7 +87,7 @@
 	    "key": "key2",
       "title": "Title2",
       "description": "Description2",
-      "disabled": false
+      "disabled": true
 	  },
 	  {
 	    "key": "key3",
@@ -96,7 +111,7 @@
 	    "key": "key6",
       "title": "Title6",
       "description": "Description6",
-      "disabled": false
+      "disabled": true
     },
     {
 	    "key": "key7",
@@ -128,8 +143,19 @@
 	  ]
   }
 
-    transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target", notFoundContent: "No Data"} };
-    transfer.addEventListener('transferColumn', event => { console.log(event.detail) })
+    transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target", notFoundContent: "No Data" } };
+    
+    transfer.addEventListener('transferColumn', event => { 
+      var list = document.querySelector("ul");
+      list.innerHTML = "";
+      console.log(event.detail.targetkeys);
+      event.detail.targetkeys.forEach(key => {
+        var node = document.createElement("LI");               
+        var textnode = document.createTextNode(key);      
+        node.appendChild(textnode);                             
+        list.appendChild(node);
+      });    
+    })
 
 /*
     transfer.operationStyle = {

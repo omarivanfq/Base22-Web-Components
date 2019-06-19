@@ -146,9 +146,9 @@ footer {
     display: block;
     z-index: 999;
     top: 73%;
-    transform: translateX(50%);
     color: #dcdcdc;
     width: 100%;
+    text-align: center;
 }
 
 .items {

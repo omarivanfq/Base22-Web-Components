@@ -11,7 +11,6 @@ const LEFT:string = 'left';
 })
 
 export class NovaTransfer {
-
   /*
     PROPS
   */
@@ -155,7 +154,7 @@ export class NovaTransfer {
                 { return !this._isItemInTarget(item.key) 
                 && this.filterOption(PATTERN, item); }
             ),  // all the items from source that match the input from user
-            ...this.data.items
+            ...this.filteredItems
               .filter(item => 
                 { return this._isItemInTarget(item.key) }
               ) // all the items from target
@@ -163,7 +162,10 @@ export class NovaTransfer {
           this.search.emit({direction: LEFT, value: PATTERN});
       }    
       else {
-        this.filteredItems = [...this.data.items]; // restore filtered items array to initial state
+        this.filteredItems =  [
+          ...this.data.items.filter(i => !this._isItemInTarget(i.key)),
+          ...this.filteredItems.filter(i => this._isItemInTarget(i.key))
+        ]; //[...this.data.items]; // restore filtered items array
       }
     }
   }
@@ -178,7 +180,7 @@ export class NovaTransfer {
               { return this._isItemInTarget(item.key) 
               && this.filterOption(PATTERN, item); }
             ), // all the items from target that match the input from user
-            ...this.data.items
+            ...this.filteredItems
             .filter(item => 
               { return !this._isItemInTarget(item.key)}
             ) // all the items from source
@@ -186,7 +188,11 @@ export class NovaTransfer {
           this.search.emit({direction: RIGHT, value: PATTERN});
       }    
       else {
-        this.filteredItems = [...this.data.items];
+      //  this.filteredItems = [...this.data.items]; // restore filtered items
+        this.filteredItems =  [
+          ...this.data.items.filter(i => this._isItemInTarget(i.key)),
+          ...this.filteredItems.filter(i => !this._isItemInTarget(i.key))
+        ]; //[...this.data.items]; // restore filtered items array
       }
     }
   }
@@ -362,7 +368,7 @@ export class NovaTransfer {
                   { this._getItems(RIGHT) /*this.getTable() */ }
                 </ul>
               </div>
-              <span class="empty-msg">{this.configuration.labels.notFoundContent}</span>
+              <span class="empty-msg">{ this.configuration.labels.notFoundContent }</span>
             </div>
             <footer class="column-footer">
               <slot name="footer-target">
@@ -460,11 +466,23 @@ export class NovaTransfer {
   }
 
   private _sourceIsEmpty() {
-    return this.filteredItems.length === this.data.targetKeys.length;
-  } 
+    for (var i = 0; i < this.filteredItems.length; i ++) {
+      var item = this.filteredItems[i];
+      if (!this._isItemInTarget(item.key)) {
+        return false;
+      }
+    } 
+    return true; 
+   } 
 
   private _targetIsEmpty() {
-    return this.data.targetKeys.length === 0;
+    for (var i = 0; i < this.filteredItems.length; i ++) {
+      var item = this.filteredItems[i];
+      if (this._isItemInTarget(item.key)) {
+        return false;
+      }
+    } 
+    return true;
   }
 
 }

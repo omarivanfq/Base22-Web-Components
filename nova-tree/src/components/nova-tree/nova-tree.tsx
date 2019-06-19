@@ -12,7 +12,25 @@ import { Component, Prop, Element, Event, EventEmitter, h } from "@stencil/core"
 export class MyComponent {
   @Element() private element: HTMLElement;
 
+//este de abajo es de stencil corregido despues de meterlo dentro del wrapper 
+  componentDidLoad() {
+     let ul = this.element.shadowRoot.children.item(1);
+     this.autoExpandParent ? this.handleAutoExpand(ul) : undefined;
+   }
 
+   handleAutoExpand = e => {
+     let uls = e.getElementsByTagName("ul");
+
+     for (var i = 0; i < uls.length; i++) {
+       uls.item(i).classList.add("active");
+     }
+   };
+
+   handleToggle = e => {
+     e.target.classList.toggle("caret-down");
+     e.target.nextElementSibling.classList.toggle("active");
+   };
+/*
 //este de abajo es de stencil
   componentDidLoad() {
       let ul = this.element.shadowRoot.children.item(1);
@@ -23,10 +41,10 @@ export class MyComponent {
       e.target.nextElementSibling.classList.toggle("active");
     };
 
-  handleExpandLi = e => {
-   e.children[0].classList.toggle("caret-down");
-   e.children[0].nextElementSibling.classList.toggle("active");
- };
+    handleExpandLi = e => {
+     e.children[0].classList.toggle("caret-down");
+     e.children[0].nextElementSibling.classList.toggle("active");
+    };
 
  handleAutoExpand = e => {
    for (var i = 0; i < e.children.length; i++) {
@@ -35,14 +53,14 @@ export class MyComponent {
        this.handleAutoExpand(e.children[i].children[1]);
      }
    }
- };
+ };*/
 
  @Prop() checked:boolean;
  @Prop() disabled:boolean;
  @Prop() styles:any = {};
  @Event() clicked:EventEmitter;
  @Prop() handleClick:Function = () => {};
-  @Prop() autoExpandParent: boolean = true ;
+ @Prop() autoExpandParent: boolean = true ;
 
 
   render() {
@@ -395,51 +413,3 @@ export class MyComponent {
     );
     }
     }
-
-    //debajo del </spann directo
-    /*<ul class="nested">
-      <li>Water</li>
-      <li>Coffee</li>
-    </ul>*/
-
-
-
-/*
-Este es el codigo correcto
-
-
-
-      <ul id="myUL">
-        <li>
-          <span class="caret" onClick={e => this.handleToggle(e)}>
-            Beverages
-          </span>
-          <ul class="nested">
-            <li>Water</li>
-            <li>Coffee</li>
-            <li>
-              <span class="caret" onClick={e => this.handleToggle(e)}>
-                Tea
-              </span>
-              <ul class="nested">
-                <li>Black Tea</li>
-                <li>White Tea</li>
-                <li>
-                  <span class="caret" onClick={e => this.handleToggle(e)}>
-                  Green Tea</span>
-                  <ul class="nested">
-                    <li>Sencha</li>
-                    <li>Gyokuro</li>
-                    <li>Matcha</li>
-                    <li>Pi Lo Chun</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    );
-  }
-}
-*/

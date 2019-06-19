@@ -1,0 +1,19 @@
+{
+  "name": "c",
+  "version": "1.0.0",
+  "description": "- Rate\r - Tree Select\r - Transfer\r - Tree",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eddyhdzg/Base22-TeamHortons.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eddyhdzg/Base22-TeamHortons/issues"
+  },
+  "homepage": "https://github.com/eddyhdzg/Base22-TeamHortons#readme"
+}

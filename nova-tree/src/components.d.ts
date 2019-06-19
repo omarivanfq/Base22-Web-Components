@@ -17,6 +17,10 @@ export namespace Components {
   }
   interface NovaTree {
     'autoExpandParent': boolean;
+    'checked': boolean;
+    'disabled': boolean;
+    'handleClick': Function;
+    'styles': any;
   }
   interface NovaTreeNode {
     'checked': boolean;
@@ -61,6 +65,11 @@ declare namespace LocalJSX {
   }
   interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
     'autoExpandParent'?: boolean;
+    'checked'?: boolean;
+    'disabled'?: boolean;
+    'handleClick'?: Function;
+    'onClicked'?: (event: CustomEvent<any>) => void;
+    'styles'?: any;
   }
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
     'checked'?: boolean;

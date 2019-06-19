@@ -19,6 +19,10 @@ ul, #myUL {
   padding: 0;
 }
 
+.caretsecret{
+  padding-left: 20px;
+  background: none;
+}
 /* Style the caret/arrow */
 .caret {
   cursor: pointer;
@@ -41,9 +45,121 @@ ul, #myUL {
 /* Hide the nested list */
 .nested {
   display: none;
+
 }
 
 /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
 .active {
   display: block;
 }
+/*---------------------------------------------------------------*/
+/*---------------------------------------------------------------*/
+/*---------------------------------------------------------------*/
+/*---------------------------------------------------------------*/
+
+.wrapper {
+  display: inline-block;
+
+}
+
+.textcontainer{
+  padding-left: 18px;
+  white-space: nowrap;
+  //quitar en caso de no ser necesario
+
+}
+.container {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  width: 15px;
+  height: 15px;
+  margin: -2px 6px;
+  transition: all 0.2s ease-in;
+}
+
+.container.disabled {
+  cursor: not-allowed;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 3px;
+  transition: all 0.2s linear;
+  border: 1px solid #ddd;
+}
+
+.checkmark::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: -1;
+  transition: all 0.2s linear;
+  border: 1px solid #1890ff;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  border: 1px solid #1890ff;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+
+  background-color: #1890ff;
+}
+
+.container input:checked ~ .checkmark::before {
+  transform: scale(1.7);
+  opacity: 0;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 43%;
+  top: 25%;
+  width: 14%;
+  height: 29%;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/*
+  https://www.w3schools.com/howto/howto_css_custom_checkbox.asp
+*/

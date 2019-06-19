@@ -294,17 +294,6 @@ export class NovaTransfer {
     this.scrolling.emit({direction, event});
   }
 
-  // private _getSearchBox(direction:string) {
-  //   return (
-  //     <span class="search-container">
-  //       <input 
-  //         disabled={ this.disabled }
-  //         onKeyUp={ direction === LEFT? this._handleSourceQuery : this._handleTargetQuery } 
-  //         placeholder={ this.configuration.labels.searchPlaceholder}/>
-  //     </span>
-  //   );
-  // }
-
 /*
   private _getTable() {
     return (

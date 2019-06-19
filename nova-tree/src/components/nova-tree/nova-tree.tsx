@@ -25,7 +25,12 @@ export class MyComponent {
    };
    handleToggle = e => {
      e.target.classList.toggle("caret-down");
-     e.target.nextElementSibling.classList.toggle("active");
+     //e.target.nextElementSibling.classList.toggle("active");
+     //e.target.children[1].classList.toggle("active");
+     //es primero el 0 checbkos y despues el 1 porque ya es el ul
+     //tiene que ser un child element de li
+     e.target.parentNode.lastChild.classList.toggle("active");
+     console.log(e.target.parentNode);
    };
    /*handleClick(){
      console.log("itworked");
@@ -51,343 +56,43 @@ export class MyComponent {
 
       <ul id="myUL">
       <li>
-      <div class="wrapper" style={this.styles}>
-      <span class="caretsecret"></span>
-          <label class={ "container " + (this.disabled? "disabled" : "")}>
-          <span class = "textcontainer">TEST</span>
-              <input
-                  type="checkbox"
-                  {...{checked: this.checked, disabled: this.disabled}}
-                  onClick={() => {
-                      this.clicked.emit();
-                      this.handleClick();
-                      console.log("itworked");
+       <span class = "caret" onClick={e =>{ this.handleToggle(e);  console.log("una")}}></span>
+            <nova-checkbox></nova-checkbox>happy
+             <ul class="nested">
+                 <li class = "caretsecret"><nova-checkbox></nova-checkbox>Water
+                 </li>
 
-                  }}/>
-              <span class="checkmark"></span>
-           </label>
-      </div>
+                 <li>
+                 <span class = "caret" onClick={e =>{ this.handleToggle(e);  console.log("una")}}></span>
+                 <nova-checkbox></nova-checkbox>Coffee
+                      <ul class ="nested">
+                          <li class ="caretsecret"><nova-checkbox></nova-checkbox>Coffe
+                          </li>
+                          <li><span class = "caret" onClick={e =>{ this.handleToggle(e);  console.log("una")}}></span>
+                          <nova-checkbox></nova-checkbox>Whatever
+                          </li>
+                      </ul>
+                    </li>
+                </ul>
       </li>
-        <li>
-        <div class="wrapper" style={this.styles}>
-        <span class="caret" onClick={e => this.handleToggle(e)}>
-            <label class={ "container " + (this.disabled? "disabled" : "")}>
-                <span class = "textcontainer">Beverages</span>
-                    <input
-                        type="checkbox"
-                        {...{checked: this.checked, disabled: this.disabled}}
-                        //disabled: true y se disablea
-                        onClick={() => {
-                            this.clicked.emit();
-                            this.handleClick();
-                    }}/>
-                <span class="checkmark"></span>
-             </label>
-        </span>
+
+        <li> <span class = "caret" onClick={e =>{ this.handleToggle(e);  console.log("una")}}></span><nova-checkbox></nova-checkbox>Beverages
              <ul class="nested">
-                 <li>
-                     <div class="wrapper" style={this.styles}>
-                     <span class="caretsecret">
-                         <label class={ "container " + (this.disabled? "disabled" : "")}>
-                          <span class = "textcontainer">Water</span>
-                                <input
-                                     type="checkbox"
-                                     {...{checked: this.checked, disabled: this.disabled}}
-                                     onClick={() => {
-                                         this.clicked.emit();
-                                         this.handleClick();
-                                 }}/>
-                             <span class="checkmark"></span>
-                          </label>
-                     </span>
-                     </div>
+                 <li class="caretsecret">
+                 <nova-checkbox></nova-checkbox>Water
                  </li>
-                 <li>
-                 <div class="wrapper" style={this.styles}>
-                 <span class="caretsecret"></span>
-                     <label class={ "container " + (this.disabled? "disabled" : "")}>
-                      <span class = "textcontainer">Coffee</span>
-                             <input
-                                 type="checkbox"
-                                 {...{checked: this.checked, disabled: this.disabled}}
-                                 onClick={() => {
-                                     this.clicked.emit();
-                                     this.handleClick();
-                             }}/>
-                         <span class="checkmark"></span>
-                      </label>
-                 </div>
+
+                 <li class="caretsecret">
+                 <nova-checkbox></nova-checkbox>Coffee
                  </li>
-               <li>
-               <div class="wrapper" style={this.styles}>
-               <span class="caret" onClick={e => this.handleToggle(e)}>
-                   <label class={ "container " + (this.disabled? "disabled" : "")}>
-                       <span class = "textcontainer">Tea </span>
-                           <input
-                               type="checkbox"
-                               {...{checked: this.checked, disabled: this.disabled}}
-                               onClick={() => {
-                                   this.clicked.emit();
-                                   this.handleClick();
-                           }}/>
-                       <span class="checkmark"></span>
-                    </label>
-               </span>
-                 <ul class="nested">
-                   <li>
-                     <div class="wrapper" style={this.styles}>
-                     <span class="caretsecret"></span>
-                         <label class={ "container " + (this.disabled? "disabled" : "")}>
-                         <span class = "textcontainer">Black Tea</span>
-                             <input
-                                 type="checkbox"
-                                 {...{checked: this.checked, disabled: this.disabled}}
-                                 onClick={() => {
-                                     this.clicked.emit();
-                                     this.handleClick();
-                                 }}/>
-                             <span class="checkmark"></span>
-                          </label>
-                     </div>
-                   </li>
-                   <li>
-                   <div class="wrapper" style={this.styles}>
-                   <span class="caretsecret"></span>
-                       <label class={ "container " + (this.disabled? "disabled" : "")}>
-                       <span class = "textcontainer">White Tea</span>
-                           <input
-                               type="checkbox"
-                               {...{checked: this.checked, disabled: this.disabled}}
-                               onClick={() => {
-                                   this.clicked.emit();
-                                   this.handleClick();
-                               }}/>
-                           <span class="checkmark"></span>
-                        </label>
-                   </div>
-                   </li>
-                   <li>
-                   <div class="wrapper" style={this.styles}>
 
-                      <span class="caret" onClick={e => this.handleToggle(e)}>
-                           <label class={ "container " + (this.disabled? "disabled" : "")}>
-                               <span class = "textcontainer">Green Tea</span>
-                                      <input
-                                           type="checkbox"
-                                           {...{checked: this.checked, disabled: this.disabled}}
-                                           onClick={() => {
-                                               this.clicked.emit();
-                                               this.handleClick();
-                                       }}/>
-                               <span class="checkmark"></span>
-                            </label>
-                        </span>
-                     <ul class="nested">
-                       <li>
-                       <div class="wrapper" style={this.styles}>
-                       <span class="caretsecret"></span>
-                           <label class={ "container " + (this.disabled? "disabled" : "")}>
-                           <span class = "textcontainer">Sencha</span>
-                               <input
-                                   type="checkbox"
-                                   {...{checked: this.checked, disabled: this.disabled}}
-                                   onClick={() => {
-                                       this.clicked.emit();
-                                       this.handleClick();
-                                   }}/>
-                               <span class="checkmark"></span>
-                            </label>
-                       </div>
-                       </li>
-                       <li>
-                       <div class="wrapper" style={this.styles}>
-                       <span class="caretsecret"></span>
-                           <label class={ "container " + (this.disabled? "disabled" : "")}>
-                           <span class = "textcontainer">Gyokuro</span>
-                               <input
-                                   type="checkbox"
-                                   {...{checked: this.checked, disabled: this.disabled}}
-                                   onClick={() => {
-                                       this.clicked.emit();
-                                       this.handleClick();
-                                   }}/>
-                               <span class="checkmark"></span>
-                            </label>
-                       </div>
-                       </li>
-                       <li>
-                       <div class="wrapper" style={this.styles}>
-                       <span class="caretsecret"></span>
-                           <label class={ "container " + (this.disabled? "disabled" : "")}>
-                           <span class = "textcontainer">Matcha</span>
-                               <input
-                                   type="checkbox"
-                                   {...{checked: this.checked, disabled: this.disabled}}
-                                   onClick={() => {
-                                       this.clicked.emit();
-                                       this.handleClick();
-                                   }}/>
-                               <span class="checkmark"></span>
-                            </label>
-                       </div>
-                       </li>
-                       <li>
-                       <div class="wrapper" style={this.styles}>
-                       <span class="caretsecret"></span>
-                           <label class={ "container " + (this.disabled? "disabled" : "")}>
-                           <span class = "textcontainer">Pi Lo Chun</span>
-                               <input
-                                   type="checkbox"
-                                   {...{checked: this.checked, disabled: this.disabled}}
-                                   onClick={() => {
-                                       this.clicked.emit();
-                                       this.handleClick();
-                                   }}/>
-                               <span class="checkmark"></span>
-                            </label>
-                       </div>
-                       </li>
-                       <li>
-                       <div class="wrapper" style={this.styles}>
-                       <span class="caretsecret"></span>
-                           <label class={ "container " + (this.disabled? "disabled" : "")}>
-                           <span class = "textcontainer">TEST</span>
-                               <input
-                                   type="checkbox"
-                                   {...{checked: this.checked, disabled: this.disabled}}
-                                   onClick={() => {
-                                       this.clicked.emit();
-                                       this.handleClick();
-                                   }}/>
-                               <span class="checkmark"></span>
-                            </label>
-                       </div>
-                       </li>
+                 <li >
+                  <span class = "caret" onClick={e =>{ this.handleToggle(e);  console.log("una")}}></span>
+                 <nova-checkbox></nova-checkbox>Tea
 
-
-                     </ul>
-                     </div>
-                     </li>
-
-                 </ul>
-               </div>
-               </li>
-
-
-
-        </ul>
-        </div>
-        </li>
-
-        <li>
-        <div class="wrapper" style={this.styles}>
-        <span class="caretsecret"></span>
-            <label class={ "container " + (this.disabled? "disabled" : "")}>
-            <span class = "textcontainer">TEST</span>
-                <input
-                    type="checkbox"
-                    {...{checked: this.checked, disabled: this.disabled}}
-                    onClick={() => {
-                        this.clicked.emit();
-                        this.handleClick();
-                    }}/>
-                <span class="checkmark"></span>
-             </label>
-        </div>
-        </li>
-
-        <li>
-        <div class="wrapper" style={this.styles}>
-
-           <span class="caret" onClick={e => this.handleToggle(e)}>
-                <label class={ "container " + (this.disabled? "disabled" : "")}>
-                    <span class = "textcontainer">Green Tea</span>
-                           <input
-                                type="checkbox"
-                                {...{checked: this.checked, disabled: this.disabled}}
-                                onClick={() => {
-                                    this.clicked.emit();
-                                    this.handleClick();
-                            }}/>
-                    <span class="checkmark"></span>
-                 </label>
-             </span>
-          <ul class="nested">
-            <li>
-            <div class="wrapper" style={this.styles}>
-            <span class="caretsecret"></span>
-                <label class={ "container " + (this.disabled? "disabled" : "")}>
-                <span class = "textcontainer">Sencha</span>
-                    <input
-                        type="checkbox"
-                        {...{checked: this.checked, disabled: this.disabled}}
-                        onClick={() => {
-                            this.clicked.emit();
-                            this.handleClick();
-                        }}/>
-                    <span class="checkmark"></span>
-                 </label>
-            </div>
-            </li>
-            <li>
-            <div class="wrapper" style={this.styles}>
-            <span class="caretsecret"></span>
-                <label class={ "container " + (this.disabled? "disabled" : "")}>
-                <span class = "textcontainer">Gyokuro</span>
-                    <input
-                        type="checkbox"
-                        {...{checked: this.checked, disabled: this.disabled}}
-                        onClick={() => {
-                            this.clicked.emit();
-                            this.handleClick();
-                        }}/>
-                    <span class="checkmark"></span>
-                 </label>
-            </div>
-            </li>
-            <li>
-            <div class="wrapper" style={this.styles}>
-            <span class="caretsecret"></span>
-                <label class={ "container " + (this.disabled? "disabled" : "")}>
-                <span class = "textcontainer">Matcha</span>
-                    <input
-                        type="checkbox"
-                        {...{checked: this.checked, disabled: this.disabled}}
-                        onClick={() => {
-                            this.clicked.emit();
-                            this.handleClick();
-                        }}/>
-                    <span class="checkmark"></span>
-                 </label>
-            </div>
-            </li>
-            <li>
-            <div class="wrapper" style={this.styles}>
-            <span class="caretsecret"></span>
-                <label class={ "container " + (this.disabled? "disabled" : "")}>
-                <span class = "textcontainer">Pi Lo Chun</span>
-                    <input
-                        type="checkbox"
-                        {...{checked: this.checked, disabled: this.disabled}}
-                        onClick={() => {
-                            this.clicked.emit();
-                            this.handleClick();
-                        }}/>
-                    <span class="checkmark"></span>
-                 </label>
-            </div>
-            </li>
-          </ul>
-          </div>
-          </li>
-          <li class = "caret" onClick={e => this.handleToggle(e)}>
-            <nova-checkbox></nova-checkbox>happy</li>
-
-             <ul class="nested">
-               <li class = "caretsecret"><nova-checkbox></nova-checkbox>Water</li>
-               <li class = "caret" onClick={e => this.handleToggle(e)}><nova-checkbox></nova-checkbox>Coffee</li>
+                 </li>
              </ul>
-
+        </li>
 
       </ul>
 

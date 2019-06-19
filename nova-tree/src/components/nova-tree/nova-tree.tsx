@@ -62,6 +62,7 @@ export class MyComponent {
                     <input
                         type="checkbox"
                         {...{checked: this.checked, disabled: this.disabled}}
+                        //disabled: true y se disablea
                         onClick={() => {
                             this.clicked.emit();
                             this.handleClick();

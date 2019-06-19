@@ -54,6 +54,22 @@ export class MyComponent {
       //esto es con la intencino de quemetas el WILL load, arapra que no haga tnto overhead
 
       <ul id="myUL">
+      <li>
+      <div class="wrapper" style={this.styles}>
+      <span class="caretsecret"></span>
+          <label class={ "container " + (this.disabled? "disabled" : "")}>
+          <span class = "textcontainer">TEST</span>
+              <input
+                  type="checkbox"
+                  {...{checked: this.checked, disabled: this.disabled}}
+                  onClick={() => {
+                      this.clicked.emit();
+                      this.handleClick();
+                  }}/>
+              <span class="checkmark"></span>
+           </label>
+      </div>
+      </li>
         <li>
         <div class="wrapper" style={this.styles}>
         <span class="caret" onClick={e => this.handleToggle(e)}>
@@ -233,6 +249,24 @@ export class MyComponent {
                             </label>
                        </div>
                        </li>
+                       <li>
+                       <div class="wrapper" style={this.styles}>
+                       <span class="caretsecret"></span>
+                           <label class={ "container " + (this.disabled? "disabled" : "")}>
+                           <span class = "textcontainer">TEST</span>
+                               <input
+                                   type="checkbox"
+                                   {...{checked: this.checked, disabled: this.disabled}}
+                                   onClick={() => {
+                                       this.clicked.emit();
+                                       this.handleClick();
+                                   }}/>
+                               <span class="checkmark"></span>
+                            </label>
+                       </div>
+                       </li>
+
+
                      </ul>
                      </div>
                      </li>
@@ -241,9 +275,116 @@ export class MyComponent {
                </div>
                </li>
 
+
+
         </ul>
         </div>
         </li>
+
+        <li>
+        <div class="wrapper" style={this.styles}>
+        <span class="caretsecret"></span>
+            <label class={ "container " + (this.disabled? "disabled" : "")}>
+            <span class = "textcontainer">TEST</span>
+                <input
+                    type="checkbox"
+                    {...{checked: this.checked, disabled: this.disabled}}
+                    onClick={() => {
+                        this.clicked.emit();
+                        this.handleClick();
+                    }}/>
+                <span class="checkmark"></span>
+             </label>
+        </div>
+        </li>
+
+        <li>
+        <div class="wrapper" style={this.styles}>
+
+           <span class="caret" onClick={e => this.handleToggle(e)}>
+                <label class={ "container " + (this.disabled? "disabled" : "")}>
+                    <span class = "textcontainer">Green Tea</span>
+                           <input
+                                type="checkbox"
+                                {...{checked: this.checked, disabled: this.disabled}}
+                                onClick={() => {
+                                    this.clicked.emit();
+                                    this.handleClick();
+                            }}/>
+                    <span class="checkmark"></span>
+                 </label>
+             </span>
+          <ul class="nested">
+            <li>
+            <div class="wrapper" style={this.styles}>
+            <span class="caretsecret"></span>
+                <label class={ "container " + (this.disabled? "disabled" : "")}>
+                <span class = "textcontainer">Sencha</span>
+                    <input
+                        type="checkbox"
+                        {...{checked: this.checked, disabled: this.disabled}}
+                        onClick={() => {
+                            this.clicked.emit();
+                            this.handleClick();
+                        }}/>
+                    <span class="checkmark"></span>
+                 </label>
+            </div>
+            </li>
+            <li>
+            <div class="wrapper" style={this.styles}>
+            <span class="caretsecret"></span>
+                <label class={ "container " + (this.disabled? "disabled" : "")}>
+                <span class = "textcontainer">Gyokuro</span>
+                    <input
+                        type="checkbox"
+                        {...{checked: this.checked, disabled: this.disabled}}
+                        onClick={() => {
+                            this.clicked.emit();
+                            this.handleClick();
+                        }}/>
+                    <span class="checkmark"></span>
+                 </label>
+            </div>
+            </li>
+            <li>
+            <div class="wrapper" style={this.styles}>
+            <span class="caretsecret"></span>
+                <label class={ "container " + (this.disabled? "disabled" : "")}>
+                <span class = "textcontainer">Matcha</span>
+                    <input
+                        type="checkbox"
+                        {...{checked: this.checked, disabled: this.disabled}}
+                        onClick={() => {
+                            this.clicked.emit();
+                            this.handleClick();
+                        }}/>
+                    <span class="checkmark"></span>
+                 </label>
+            </div>
+            </li>
+            <li>
+            <div class="wrapper" style={this.styles}>
+            <span class="caretsecret"></span>
+                <label class={ "container " + (this.disabled? "disabled" : "")}>
+                <span class = "textcontainer">Pi Lo Chun</span>
+                    <input
+                        type="checkbox"
+                        {...{checked: this.checked, disabled: this.disabled}}
+                        onClick={() => {
+                            this.clicked.emit();
+                            this.handleClick();
+                        }}/>
+                    <span class="checkmark"></span>
+                 </label>
+            </div>
+            </li>
+          </ul>
+          </div>
+          </li>
+
+
+
       </ul>
 
 

@@ -12,55 +12,33 @@ import { Component, Prop, Element, Event, EventEmitter, h } from "@stencil/core"
 export class MyComponent {
   @Element() private element: HTMLElement;
 
-//este de abajo es de stencil corregido despues de meterlo dentro del wrapper 
+//este de abajo es de stencil corregido despues de meterlo dentro del wrapper
   componentDidLoad() {
      let ul = this.element.shadowRoot.children.item(1);
      this.autoExpandParent ? this.handleAutoExpand(ul) : undefined;
    }
-
    handleAutoExpand = e => {
      let uls = e.getElementsByTagName("ul");
-
      for (var i = 0; i < uls.length; i++) {
        uls.item(i).classList.add("active");
      }
    };
-
    handleToggle = e => {
      e.target.classList.toggle("caret-down");
      e.target.nextElementSibling.classList.toggle("active");
    };
-/*
-//este de abajo es de stencil
-  componentDidLoad() {
-      let ul = this.element.shadowRoot.children.item(1);
-      this.autoExpandParent ? this.handleAutoExpand(ul) : undefined;
-    }
-    handleToggle = e => {
-      e.target.classList.toggle("caret-down");
-      e.target.nextElementSibling.classList.toggle("active");
-    };
-
-    handleExpandLi = e => {
-     e.children[0].classList.toggle("caret-down");
-     e.children[0].nextElementSibling.classList.toggle("active");
-    };
-
- handleAutoExpand = e => {
-   for (var i = 0; i < e.children.length; i++) {
-     if (e.children[i].children.length) {
-       this.handleExpandLi(e.children[i]);
-       this.handleAutoExpand(e.children[i].children[1]);
-     }
-   }
- };*/
+   /*handleClick(){
+     console.log("itworked");
+   }*/
 
  @Prop() checked:boolean;
  @Prop() disabled:boolean;
  @Prop() styles:any = {};
  @Event() clicked:EventEmitter;
- @Prop() handleClick:Function = () => {};
+ @Prop() handleClick:Function = () => {console.log("itworked");};
  @Prop() autoExpandParent: boolean = true ;
+ @Prop() checkStrictly: boolean = true;
+ //checkStrictly debe ser false
 
 
   render() {
@@ -83,6 +61,8 @@ export class MyComponent {
                   onClick={() => {
                       this.clicked.emit();
                       this.handleClick();
+                      console.log("itworked");
+
                   }}/>
               <span class="checkmark"></span>
            </label>
@@ -400,7 +380,13 @@ export class MyComponent {
           </ul>
           </div>
           </li>
+          <li class = "caret" onClick={e => this.handleToggle(e)}>
+            <nova-checkbox></nova-checkbox>happy</li>
 
+             <ul class="nested">
+               <li class = "caretsecret"><nova-checkbox></nova-checkbox>Water</li>
+               <li class = "caret" onClick={e => this.handleToggle(e)}><nova-checkbox></nova-checkbox>Coffee</li>
+             </ul>
 
 
       </ul>

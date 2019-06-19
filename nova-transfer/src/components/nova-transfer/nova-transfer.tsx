@@ -1,5 +1,6 @@
 import { Component, Element, Event, EventEmitter, Prop, h, State } from '@stencil/core';
 import { DEFAULT_CONFIGURATION } from "./default-configuration";
+import { TransferSearchBox } from "./FunctionalComponents/nova-transfer-search-box"
 
 const RIGHT:string = 'right';
 const LEFT:string = 'left';
@@ -293,16 +294,16 @@ export class NovaTransfer {
     this.scrolling.emit({direction, event});
   }
 
-  private _getSearchBox(direction:string) {
-    return (
-      <span class="search-container">
-        <input 
-          disabled={ this.disabled }
-          onKeyUp={ direction === LEFT? this._handleSourceQuery : this._handleTargetQuery } 
-          placeholder={ this.configuration.labels.searchPlaceholder}/>
-      </span>
-    );
-  }
+  // private _getSearchBox(direction:string) {
+  //   return (
+  //     <span class="search-container">
+  //       <input 
+  //         disabled={ this.disabled }
+  //         onKeyUp={ direction === LEFT? this._handleSourceQuery : this._handleTargetQuery } 
+  //         placeholder={ this.configuration.labels.searchPlaceholder}/>
+  //     </span>
+  //   );
+  // }
 
 /*
   private _getTable() {
@@ -334,6 +335,7 @@ export class NovaTransfer {
     return (
       <div class="wrapper" style={ this.wrapperStyle }>
         <div class={ "container" + (this.disabled? " disabled" : "") }>
+
           <div class="column" style={ this.columnStyle }>
             <header class="column-header">
               <span>
@@ -343,7 +345,12 @@ export class NovaTransfer {
               <span> { this.configuration.labels.titleSource } </span>      
             </header>
             <div class={ "items-container " + (this._sourceIsEmpty() ? "empty" : "")}>
-              { this.showSearch? this._getSearchBox(LEFT) : null }
+              {/* { this.showSearch? this._getSearchBox(LEFT) : null } */}
+              <TransferSearchBox
+                placeholder={ "search" }
+                handleQuery={ this._handleSourceQuery }
+                disabled={ this.disabled }
+              />
               <div class="items" onScroll={ event => this._handleItemsScroll(LEFT, event) }>
                 <ul>
                   { this._getItems(LEFT) }
@@ -356,6 +363,7 @@ export class NovaTransfer {
               </slot>
             </footer>
           </div>
+
           <span class="operation-buttons" style={ this.operationStyle }>
             <button 
               class={ this._getSourceSelected() > 0 ? "btn-active" : "" } 
@@ -368,6 +376,7 @@ export class NovaTransfer {
               <span>{ this.configuration.labels.operationRight }</span>
             </button>
           </span>
+
           <div class="column" style={ this.columnStyle }>
             <header class="column-header">
               <span>
@@ -377,7 +386,11 @@ export class NovaTransfer {
               <span>{ this.configuration.labels.titleTarget }</span>
             </header>
             <div class={ "items-container " + (this._targetIsEmpty()? "empty" : "")}>
-              { this.showSearch ? this._getSearchBox(RIGHT) : null }
+              <TransferSearchBox
+                  placeholder={ "search" }
+                  handleQuery={ this._handleTargetQuery }
+                  disabled={ this.disabled }
+              />
               <div class="items" onScroll={ event => this._handleItemsScroll(RIGHT, event) }>
                 <ul>
                   { this._getItems(RIGHT) /*this.getTable() */ }
@@ -390,6 +403,7 @@ export class NovaTransfer {
               </slot>
             </footer>
           </div>
+
         </div>
       </div>
     );

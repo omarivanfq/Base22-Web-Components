@@ -334,12 +334,11 @@ export class NovaTransfer {
               <span> { this.configuration.labels.titleSource } </span>      
             </header>
             <div class={ "items-container " + (this._sourceIsEmpty() ? "empty" : "")}>
-              {/* { this.showSearch? this._getSearchBox(LEFT) : null } */}
-              <TransferSearchBox
+              { this.showSearch? <TransferSearchBox
                 placeholder={ "search" }
                 handleQuery={ this._handleSourceQuery }
-                disabled={ this.disabled }
-              />
+                disabled={ this.disabled } /> 
+                : null } 
               <div class="items" onScroll={ event => this._handleItemsScroll(LEFT, event) }>
                 <ul>
                   { this._getItems(LEFT) }
@@ -375,11 +374,11 @@ export class NovaTransfer {
               <span>{ this.configuration.labels.titleTarget }</span>
             </header>
             <div class={ "items-container " + (this._targetIsEmpty()? "empty" : "")}>
-              <TransferSearchBox
+              { this.showSearch? <TransferSearchBox
                   placeholder={ "search" }
                   handleQuery={ this._handleTargetQuery }
-                  disabled={ this.disabled }
-              />
+                  disabled={ this.disabled } /> 
+                  : null } 
               <div class="items" onScroll={ event => this._handleItemsScroll(RIGHT, event) }>
                 <ul>
                   { this._getItems(RIGHT) /*this.getTable() */ }

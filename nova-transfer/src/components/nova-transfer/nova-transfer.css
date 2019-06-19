@@ -137,8 +137,13 @@ button:hover {
     background-position: center center; 
 }
 
-footer {
-    border: 1px solid rgba(0,0,0,0.1);
+.column-footer {
+    border-top: 1px solid rgba(0,0,0,0.15);
+ /*   border-radius: 0 0 5px 5px; */
+}
+
+.column-footer.no-footer {
+    border: none; 
 }
 
 .items-container.empty .empty-msg {

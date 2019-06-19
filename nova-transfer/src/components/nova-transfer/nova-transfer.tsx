@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Prop, h, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, h, State } from '@stencil/core';
 import { DEFAULT_CONFIGURATION } from "./default-configuration";
 
 const RIGHT:string = 'right';
@@ -91,8 +91,18 @@ export class NovaTransfer {
   */
   @State() transfered:string[] = [];
 
+  @State() sourceFooter:boolean;
+  @State() targetFooter:boolean;
+
+  @Element() el: HTMLElement;
+
   componentWillLoad() {
     this._init();
+  }
+
+  componentDidLoad() {
+    this.sourceFooter = this._isThereSourceFooter();
+    this.targetFooter = this._isThereTargetFooter();
   }
 
   /* 
@@ -316,6 +326,8 @@ export class NovaTransfer {
   }
 */
   render() {
+    this.sourceFooter = this._isThereSourceFooter();
+    this.targetFooter = this._isThereTargetFooter();
     return (
       <div class="wrapper" style={ this.wrapperStyle }>
         <div class={ "container" + (this.disabled? " disabled" : "") }>
@@ -336,7 +348,7 @@ export class NovaTransfer {
               </div>
               <span class="empty-msg">{this.configuration.labels.notFoundContent}</span>
             </div>
-            <footer class="column-footer">
+            <footer class={"column-footer " + (this.sourceFooter ? "" : "no-footer")}>
               <slot name="footer-source">
               </slot>
             </footer>
@@ -370,7 +382,7 @@ export class NovaTransfer {
               </div>
               <span class="empty-msg">{ this.configuration.labels.notFoundContent }</span>
             </div>
-            <footer class="column-footer">
+            <footer class={"column-footer " + (this.targetFooter ? "" : "no-footer")}>
               <slot name="footer-target">
               </slot>
             </footer>
@@ -379,6 +391,19 @@ export class NovaTransfer {
       </div>
     );
   }
+
+  private _isThereSourceFooter() {
+    if (this.el.shadowRoot.querySelectorAll("slot").length !== 0) {
+      return this.el.shadowRoot.querySelectorAll("slot")[0].assignedNodes().length > 0;
+    }
+    return false;
+  }
+
+  private _isThereTargetFooter() {
+    if (this.el.shadowRoot.querySelectorAll("slot").length !== 0) {
+      return this.el.shadowRoot.querySelectorAll("slot")[1].assignedNodes().length > 0;
+    }
+    return false;  }
 
   /*
     Local methods

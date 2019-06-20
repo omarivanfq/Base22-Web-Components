@@ -3,11 +3,15 @@ import {
   Element,
   Event,
   EventEmitter,
-  h,
   Method,
   Prop,
-  State
+  State,
+  h
 } from "@stencil/core";
+
+// import { addCustomStyle, populateConfiguration } from "../../../utils/utils";
+
+// import { DEFAULT_CONFIGURATION } from "./default-configuration";
 
 @Component({
   tag: "nova-rate",
@@ -44,9 +48,15 @@ export class NovaRate {
   @Prop() character: string = "\u2605";
 
   /**
+   *  This property replaces character for an icon
+   */
+  @Prop() icon: string = "";
+
+  /**
    *  This property makes the component "read only"
    */
-  @Prop() disabled: boolean = false;
+  @Prop()
+  disabled: boolean = false;
 
   /**
    *  This property sets the number of stars
@@ -77,6 +87,14 @@ export class NovaRate {
   /**
    *  Public API Methods
    */
+
+  // @Method()
+  // async renderComponent() {
+  //   await this._init();
+  //   this._populateTableVariants();
+  //   this.isComponentReady = true;
+  // }
+
   @Method()
   async blurComponent() {
     const ul: any = this.el.shadowRoot.children.item(1);
@@ -88,6 +106,29 @@ export class NovaRate {
     const ul: any = this.el.shadowRoot.children.item(1);
     ul.focus();
   }
+
+  /**
+   * Lifecycle methods
+   */
+  componentWillLoad() {
+    // this._init();
+    this.handleGenerateStarList(this.value);
+    this.isComponentReady = true;
+  }
+
+  componentDidLoad() {
+    if (this.autoFocus) {
+      this.focusComponent(); // AutoFocus
+    }
+  }
+
+  getCharacterOrIcon = () => {
+    return this.icon !== "" ? (
+      <nova-font-awesome iconName={this.icon} />
+    ) : (
+      this.character
+    );
+  };
 
   /**
    * Event handlers
@@ -127,7 +168,7 @@ export class NovaRate {
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
           >
-            {this.character}
+            {this.getCharacterOrIcon()}
           </span>
         </li>
       );
@@ -143,7 +184,7 @@ export class NovaRate {
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
           >
-            {this.character}
+            {this.getCharacterOrIcon()}
           </span>
         </li>
       );
@@ -153,14 +194,14 @@ export class NovaRate {
     let filledHalves = i => {
       return (
         <li>
-          <span class="background">{this.character}</span>
+          <span class="background"> {this.getCharacterOrIcon()}</span>
           <span
             class="on left"
             onMouseOver={() => this.handleOnHover(i - 0.5)}
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i - 0.5)}
           >
-            {this.character}
+            {this.getCharacterOrIcon()}
           </span>
           <span
             class="on right"
@@ -168,7 +209,7 @@ export class NovaRate {
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
           >
-            {this.character}
+            {this.getCharacterOrIcon()}
           </span>
         </li>
       );
@@ -178,14 +219,14 @@ export class NovaRate {
     let emptyHalves = i => {
       return (
         <li>
-          <span class="background">{this.character}</span>
+          <span class="background"> {this.getCharacterOrIcon()}</span>
           <span
             class="left"
             onMouseOver={() => this.handleOnHover(i - 0.5)}
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i - 0.5)}
           >
-            {this.character}
+            {this.getCharacterOrIcon()}
           </span>
           <span
             class="right"
@@ -193,7 +234,7 @@ export class NovaRate {
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
           >
-            {this.character}
+            {this.getCharacterOrIcon()}
           </span>
         </li>
       );
@@ -203,14 +244,14 @@ export class NovaRate {
     let leftFilledRightEmpty = i => {
       return (
         <li>
-          <span class="background">{this.character}</span>
+          <span class="background">{this.getCharacterOrIcon()}</span>
           <span
             class="on left"
             onMouseOver={() => this.handleOnHover(i - 0.5)}
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i - 0.5)}
           >
-            {this.character}
+            {this.getCharacterOrIcon()}
           </span>
           <span
             class="right"
@@ -218,7 +259,7 @@ export class NovaRate {
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
           >
-            {this.character}
+            {this.getCharacterOrIcon()}
           </span>
         </li>
       );
@@ -269,24 +310,10 @@ export class NovaRate {
     this.onHoverChange.emit(value);
   }
 
-  /**
-   * Lifecycle methods
-   */
-  componentWillLoad() {
-    this.handleGenerateStarList(this.value);
-    this.isComponentReady = true;
-  }
-
-  componentDidLoad() {
-    if (this.autoFocus) {
-      this.focusComponent(); // AutoFocus
-    }
-  }
-
   render() {
     return (
       <ul
-        tabindex="1"
+        tabindex="0"
         onKeyDown={e => this.handleOnKeyPressed(e)}
         onBlur={() => this.onBlur.emit()}
         onFocus={() => this.onFocus.emit()}

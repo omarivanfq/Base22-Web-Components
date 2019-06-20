@@ -43,6 +43,10 @@ export namespace Components {
     */
     'disabled': boolean;
     'focusComponent': () => Promise<void>;
+    /**
+    * This property replaces character for an icon
+    */
+    'icon': string;
   }
 }
 
@@ -89,6 +93,10 @@ declare namespace LocalJSX {
     * This property makes the component "read only"
     */
     'disabled'?: boolean;
+    /**
+    * This property replaces character for an icon
+    */
+    'icon'?: string;
     /**
     * Public API Events
     */

@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, State, Prop, Watch } from "@stencil/core";
+import { Component, Host, h, State, Prop, Watch } from "@stencil/core";
 
 @Component({
   tag: "nova-tree-node",
@@ -10,10 +10,9 @@ export class NovaTreeNode {
   @Prop() public checkable: boolean = false;
   @Prop() public disableCheckbox: boolean = false;
   @Prop() public disabled: boolean = false;
-  @Prop() public checked: boolean = false;
+  @Prop({ mutable: true }) public checked: boolean = false;
+  @Prop({ mutable: true }) public expanded?: boolean = false;
   @Prop({ mutable: true }) public subnodes: NovaTreeNode[] = [];
-
-  @Element() private el: HTMLElement;
 
   @State() private isLeaf: boolean = true;
 
@@ -32,9 +31,8 @@ export class NovaTreeNode {
     this.isLeaf = !newValue.length;
   }
 
-  private handleToggle(e): void {
-    e.target.classList.toggle("caret-down");
-    this.el.lastElementChild.classList.toggle("active");
+  private handleToggle(_): void {
+    this.expanded = !this.expanded;
   }
 
   private handleChild(child: NovaTreeNode): HTMLLIElement {
@@ -63,21 +61,41 @@ export class NovaTreeNode {
           </Host>
         );
       } else {
-        return (
-          <Host>
-            <span
-              class="caret caret-down"
-              onClick={(e): void => this.handleToggle(e)}
-            ></span>
-            <nova-checkbox />
-            <span>{this.text}</span>
-            <ul class="nested active">
-              {this.subnodes.map(
-                (child: NovaTreeNode): HTMLLIElement => this.handleChild(child)
-              )}
-            </ul>
-          </Host>
-        );
+        if (this.expanded) {
+          return (
+            <Host>
+              <span
+                class="caret caret-down"
+                onClick={(e): void => this.handleToggle(e)}
+              ></span>
+              <nova-checkbox />
+              <span>{this.text}</span>
+              <ul class="nested active">
+                {this.subnodes.map(
+                  (child: NovaTreeNode): HTMLLIElement =>
+                    this.handleChild(child)
+                )}
+              </ul>
+            </Host>
+          );
+        } else {
+          return (
+            <Host>
+              <span
+                class="caret"
+                onClick={(e): void => this.handleToggle(e)}
+              ></span>
+              <nova-checkbox />
+              <span>{this.text}</span>
+              <ul class="nested">
+                {this.subnodes.map(
+                  (child: NovaTreeNode): HTMLLIElement =>
+                    this.handleChild(child)
+                )}
+              </ul>
+            </Host>
+          );
+        }
       }
     } else {
       if (this.isLeaf) {
@@ -88,20 +106,39 @@ export class NovaTreeNode {
           </Host>
         );
       } else {
-        return (
-          <Host>
-            <span
-              class="caret caret-down"
-              onClick={(e: MouseEvent): void => this.handleToggle(e)}
-            />
-            <span>{this.text}</span>
-            <ul class="nested active">
-              {this.subnodes.map(
-                (child: NovaTreeNode): HTMLLIElement => this.handleChild(child)
-              )}
-            </ul>
-          </Host>
-        );
+        if (this.expanded) {
+          return (
+            <Host>
+              <span
+                class="caret caret-down"
+                onClick={(e: MouseEvent): void => this.handleToggle(e)}
+              />
+              <span>{this.text}</span>
+              <ul class="nested active">
+                {this.subnodes.map(
+                  (child: NovaTreeNode): HTMLLIElement =>
+                    this.handleChild(child)
+                )}
+              </ul>
+            </Host>
+          );
+        } else {
+          return (
+            <Host>
+              <span
+                class="caret caret-down"
+                onClick={(e: MouseEvent): void => this.handleToggle(e)}
+              />
+              <span>{this.text}</span>
+              <ul class="nested active">
+                {this.subnodes.map(
+                  (child: NovaTreeNode): HTMLLIElement =>
+                    this.handleChild(child)
+                )}
+              </ul>
+            </Host>
+          );
+        }
       }
     }
   }

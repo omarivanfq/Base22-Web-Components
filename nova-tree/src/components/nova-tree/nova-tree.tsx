@@ -19,10 +19,22 @@ import {
 export class MyComponent {
   @Element() private element: HTMLElement;
 
+  @Prop() public autoExpandTopLevel: boolean = true;
+  @Prop() public blockNode: boolean = false;
+  @Prop() public checkable: boolean = false;
+  @Prop() public checkStricly: boolean = false;
+  @Prop() public defaultExpandAll: boolean = false;
+  @Prop() public checked: boolean;
+  @Prop() public disabled: boolean;
+  @Prop() public styles: object = {};
+  @Event() public clicked: EventEmitter;
+  @Prop() public checkStrictly: boolean = true;
+  //checkStrictly debe ser false
+
   //este de abajo es de stencil corregido despues de meterlo dentro del wrapper
   public componentDidLoad(): void {
     const ul = this.element.shadowRoot.children.item(1);
-    this.autoExpandParent ? this.handleAutoExpand(ul) : undefined;
+    this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
   }
 
   private handleAutoExpand(e): void {
@@ -31,14 +43,6 @@ export class MyComponent {
       uls.item(i).classList.add("active");
     }
   }
-
-  @Prop() public checked: boolean;
-  @Prop() public disabled: boolean;
-  @Prop() public styles: object = {};
-  @Event() public clicked: EventEmitter;
-  @Prop() public autoExpandParent: boolean = true;
-  @Prop() public checkStrictly: boolean = true;
-  //checkStrictly debe ser false
 
   private treeData = [
     {

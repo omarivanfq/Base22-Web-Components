@@ -30,5 +30,10 @@ module.exports = {
     }
   },
   plugins: ["@typescript-eslint", "stencil"],
-  rules: {}
+  rules: {
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { varsIgnorePattern: "(h|Host|Fragment)" }
+    ]
+  }
 };

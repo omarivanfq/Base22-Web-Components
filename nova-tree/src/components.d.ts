@@ -20,11 +20,14 @@ export namespace Components {
     'checkStrictly': boolean;
     'checked': boolean;
     'disabled': boolean;
-    'handleClick': Function;
-    'styles': any;
+    'styles': object;
   }
   interface NovaTreeNode {
+    'checkable': boolean;
     'checked': boolean;
+    'disableCheckbox': boolean;
+    'disabled': boolean;
+    'subnodes': NovaTreeNode[];
     'text': string;
   }
 }
@@ -69,13 +72,16 @@ declare namespace LocalJSX {
     'checkStrictly'?: boolean;
     'checked'?: boolean;
     'disabled'?: boolean;
-    'handleClick'?: Function;
     'onClicked'?: (event: CustomEvent<any>) => void;
-    'styles'?: any;
+    'styles'?: object;
   }
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
+    'checkable'?: boolean;
     'checked'?: boolean;
-    'text'?: string;
+    'disableCheckbox'?: boolean;
+    'disabled'?: boolean;
+    'subnodes'?: NovaTreeNode[];
+    'text': string;
   }
 
   interface IntrinsicElements {

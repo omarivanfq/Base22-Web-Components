@@ -36,15 +36,12 @@ export class MyComponent {
     //e.target.children[1].classList.toggle("active");
     //es primero el 0 checbkos y despues el 1 porque ya es el ul
     //tiene que ser un child element de li
+    console.log(e.target.parentNode.lastChild);
     e.target.parentNode.lastChild.classList.toggle("active");
 
-    //console.log(e.target.parentNode);
     //console.log("el de abajo es el que buscas");
     //console.log(e.target.parentNode.lastChild.classList);
   };
-  /*handleClick(){
-     console.log("itworked");
-   }*/
 
   @Prop() checked: boolean;
   @Prop() disabled: boolean;
@@ -64,7 +61,6 @@ export class MyComponent {
       //solo para que lo tomes en cuenta
       //checalo en ratetsx de eddy
       //esto es con la intencino de quemetas el WILL load, arapra que no haga tnto overhead
-
       <ul id="myUL">
         <li>
           <span class="caret" onClick={e => this.handleToggle(e)}></span>
@@ -86,9 +82,15 @@ export class MyComponent {
                     class="caret"
                     onClick={e => this.handleToggle(e)}
                   ></span>
-                  <nova-checkbox></nova-checkbox>Whatever
+                  <nova-checkbox checked></nova-checkbox>Whatever
+                </li>
+                <li class="caretsecret">
+                  <nova-checkbox></nova-checkbox>Coffe Two
                 </li>
               </ul>
+            </li>
+            <li class="caretsecret">
+              <nova-checkbox></nova-checkbox>Coffe Two
             </li>
           </ul>
         </li>

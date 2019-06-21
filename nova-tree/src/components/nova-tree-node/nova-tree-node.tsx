@@ -66,7 +66,7 @@ export class NovaTreeNode {
             <Host>
               <span
                 class="caret caret-down"
-                onClick={(e): void => this.handleToggle(e)}
+                onClick={(): void => this.handleToggle()}
               ></span>
               <nova-checkbox />
               <span>{this.text}</span>
@@ -83,7 +83,7 @@ export class NovaTreeNode {
             <Host>
               <span
                 class="caret"
-                onClick={(e): void => this.handleToggle(e)}
+                onClick={(): void => this.handleToggle()}
               ></span>
               <nova-checkbox />
               <span>{this.text}</span>
@@ -127,7 +127,7 @@ export class NovaTreeNode {
             <Host>
               <span
                 class="caret caret-down"
-                onClick={(e: MouseEvent): void => this.handleToggle(e)}
+                onClick={(): void => this.handleToggle()}
               />
               <span>{this.text}</span>
               <ul class="nested active">

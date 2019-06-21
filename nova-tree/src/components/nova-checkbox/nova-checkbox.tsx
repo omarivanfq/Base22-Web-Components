@@ -6,11 +6,11 @@ import { Component, Event, EventEmitter, h, Prop } from "@stencil/core";
   shadow: true
 })
 export class NovaCheckbox {
-  @Prop({ mutable: true }) checked: boolean;
-  @Prop() disabled: boolean;
-  @Prop() styles: any = {};
-  @Event() clicked: EventEmitter;
-  @Prop() handleClick: Function = () => {};
+  @Prop({ mutable: true }) public checked: boolean;
+  @Prop() public disabled: boolean;
+  @Prop() public styles: any = {};
+  @Event() public clicked: EventEmitter;
+  @Prop() public handleClick: Function = () => {};
   //  @Prop() autoSelectChildren: boolean = true;
 
   //handleAutoChildren = c =>{
@@ -20,7 +20,7 @@ export class NovaCheckbox {
   //}
   //}
 
-  handleToggle = c => {
+  handleToggle = () => {
     this.checked = !this.checked;
   };
 
@@ -31,7 +31,7 @@ export class NovaCheckbox {
           <input
             type="checkbox"
             {...{ checked: this.checked, disabled: this.disabled }}
-            onClick={c => this.handleToggle(c)}
+            onClick={() => this.handleToggle()}
             //{
             //      this.clicked.emit();
             //    this.handleClick();

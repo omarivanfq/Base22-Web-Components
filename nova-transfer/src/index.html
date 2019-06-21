@@ -39,6 +39,15 @@
       <span slot="source-footer">
           <p style="text-align:center; padding: 10px 0;">footer 1</p>
         </span>
+        <div slot ="source-column">
+          <table id="source-table">
+          </table>
+        </div>
+        <div slot ="target-column">
+          <table id="target-table">
+          </table>
+        </div>
+
         <span slot="target-footer">
           <p style="text-align:center; padding: 10px 0;">footer 2</p>
         </span>
@@ -111,18 +120,20 @@
     src="https://unpkg.com/axios/dist/axios.min.js"
   ></script>
   <script>
-     
+
     var data;
+    var configuration;
     // JSON load
     axios
     .get("/assets/data.json")
     .then(function(response) {
-      data = response
+      console.log(response.data.configuration)
+      data = response.data.data;
       transfer.data = data;
-      console.log(response)
-      transfer.configuration = data.configuration;
-      // fillSourceTable(data.items.filter(item => data.targetKeys.indexOf(item.key) === -1));
-      // fillTargetTable(data.items.filter(item => data.targetKeys.indexOf(item.key) !== -1));   
+      configuration = response.data.configuration;
+      transfer.configuration = configuration;
+      fillSourceTable(data.items.filter(item => data.targetKeys.indexOf(item.key) === -1));
+      fillTargetTable(data.items.filter(item => data.targetKeys.indexOf(item.key) !== -1));   
     })
     .catch(console.error); 
   </script>

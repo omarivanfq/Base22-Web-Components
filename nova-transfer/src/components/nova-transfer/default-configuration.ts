@@ -10,7 +10,7 @@ const DEFAULT_LABELS = {
 };
   
 const DEFAULT_FUNCTIONS = {
-    filterOption:(value, option) => option.title.indexOf(value) !== -1,
+    filterOption: (value, option) => option.title.indexOf(value) !== -1,
     renderItem: (item) => item.title
 }
 

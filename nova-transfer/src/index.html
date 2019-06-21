@@ -35,6 +35,11 @@
 <body>
   <div>
       <nova-transfer show-select-all show-search>
+        <div slot="source-column">
+          <table id="source-table">
+            
+          </table>
+        </div>
         <span slot="footer-source">
           <p style="text-align:center; padding: 10px 0;">footer 1</p>
         </span>
@@ -47,108 +52,116 @@
   </div>
 
   <script>
+        var data = 
+    {"items": [
+      {
+        "key": "key1",
+        "title": "Title1",
+        "description": "Description1",
+        "disabled": false
+      },
+      {
+        "key": "key2",
+        "title": "Title2",
+        "description": "Description2",
+        "disabled": false
+      },
+      {
+        "key": "key3",
+        "title": "Title3",
+        "description": "Description3",
+        "disabled": false
+      },
+      {
+        "key": "key4",
+        "title": "Title4",
+        "description": "Description4",
+        "disabled": false
+      },
+      {
+        "key": "key5",
+        "title": "Title5",
+        "description": "Description5",
+        "disabled": false
+      },
+      {
+        "key": "key6",
+        "title": "Title6",
+        "description": "Description6",
+        "disabled": false
+      },
+      {
+        "key": "key7",
+        "title": "Title7",
+        "description": "Description7",
+        "disabled": false
+      },
+      {
+        "key": "key9",
+        "title": "Title9",
+        "description": "Description9",
+        "disabled": false
+      },
+      {
+        "key": "key10",
+        "title": "Title10",
+        "description": "Description10",
+        "disabled": false
+      },
+      {
+        "key": "key11",
+        "title": "Title11",
+        "description": "Description11",
+        "disabled": false
+      }
+    ],
+    "targetKeys": [
+       // "key6", "key11"
+      ]
+    };
+  </script>
+
+  <script>
     var transfer = document.querySelector("nova-transfer");
     transfer.addEventListener('scrolling', e => console.log(e.detail));
     transfer.addEventListener('search', event => console.log(event.detail));
     transfer.addEventListener('select', e => console.log(e.detail));
 
-   // transfer.filterOption = (value, option) => true;
+   /*
+   transfer.filterOption = (value, option) => true;
 
- /*   transfer.renderItem = item => {
+   transfer.renderItem = item => {
       return item.title + ', ' + item.description;
     }
-*/
-    transfer.columnStyle = {
-      width: "49%",
-    } 
 
-    transfer.operationStyle = {
+   transfer.operationStyle = {
       width:"2%"
     }
 
+    transfer.operationStyle = {
+      backgroundColor: "rgba(0,0,0,0.05)",
+      padding: "7px",
+      margin: 0
+    }
+
+    */
+
+    transfer.columnStyle = {
+      width: "49%",
+    } 
+ 
     transfer.wrapperStyle = {
       width: "60%",
-      maxWidth: "480px",
       margin: "0 auto",
       height: "350px",
-   /*   border: "2px solid gray"
-      margin: "0 auto"    */
     }
 
-    transfer.data = {
-	"items": [
-	  {
-	    "key": "key1",
-      "title": "Title1",
-      "description": "Description1",
-      "disabled": false
-	  },
-	  {
-	    "key": "key2",
-      "title": "Title2",
-      "description": "Description2",
-      "disabled": true
-	  },
-	  {
-	    "key": "key3",
-      "title": "Title3",
-      "description": "Description3",
-      "disabled": false
-    },
-    {
-	    "key": "key4",
-      "title": "Title4",
-      "description": "Description4",
-      "disabled": false
-    },
-    {
-	    "key": "key5",
-      "title": "Title5",
-      "description": "Description5",
-      "disabled": false
-    },
-    {
-	    "key": "key6",
-      "title": "Title6",
-      "description": "Description6",
-      "disabled": true
-    },
-    {
-	    "key": "key7",
-      "title": "Title7",
-      "description": "Description7",
-      "disabled": false
-    },
-    {
-	    "key": "key9",
-      "title": "Title9",
-      "description": "Description9",
-      "disabled": false
-    },
-    {
-	    "key": "key10",
-      "title": "Title10",
-      "description": "Description10",
-      "disabled": false
-    },
-    {
-	    "key": "key11",
-      "title": "Title11",
-      "description": "Description11",
-      "disabled": false
-    }
-	],
-	"targetKeys": [
-	    "key6", "key11"
-	  ]
-  }
-
+    transfer.data = data;
     transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target", notFoundContent: "No Data" } };
     
     transfer.addEventListener('transferColumn', event => { 
       var list = document.querySelector("ul");
       list.innerHTML = "";
-      console.log(event.detail.targetkeys);
       event.detail.targetkeys.forEach(key => {
         var node = document.createElement("LI");               
         var textnode = document.createTextNode(key);      
@@ -156,14 +169,35 @@
         list.appendChild(node);
       });    
     })
-
-/*
-    transfer.operationStyle = {
-      backgroundColor: "rgba(0,0,0,0.05)",
-      padding: "7px",
-      margin: 0
-    }
-*/
   </script>
+
+<script>
+  // filling table with data
+    var table = document.querySelector("#source-table");
+    var tableBody = document.createElement("tbody");
+    var keys = Object.keys(data.items[0]);
+    var noAttributes = keys.length;
+    for (var i = 0; i < data.items.length; i++) {
+      var row = document.createElement("tr");
+      var checkbox = document.createElement("input");
+      checkbox.setAttribute("type", "checkbox");
+      const item = data.items[i];
+      checkbox.addEventListener('change', () => {
+        transfer.handleSelect(item);
+      });
+      var cell = document.createElement("td");
+      cell.appendChild(checkbox);
+      row.append(cell);
+      for (var j = 0; j < noAttributes; j++) {
+        var cell = document.createElement("td");
+        var cellText = document.createTextNode(data.items[i][keys[j]]);
+        cell.appendChild(cellText);
+        row.appendChild(cell);
+      }
+      tableBody.appendChild(row);
+    }
+    table.appendChild(tableBody);
+  </script>
+
 </body>
 </html>

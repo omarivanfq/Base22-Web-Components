@@ -5,7 +5,8 @@ import {
   EventEmitter,
   Prop,
   h,
-  State
+  State,
+  Method
 } from "@stencil/core";
 import { DEFAULT_CONFIGURATION } from "./default-configuration";
 import { TransferSearchBox } from "./FunctionalComponents/nova-transfer-search-box";
@@ -116,6 +117,15 @@ export class NovaTransfer {
   /* 
     HANDLERS
   */
+
+  @Method()
+  handleSelect(item:any) {
+    console.log("item", item);
+    console.log("1.selected", this.selected);
+    this._handleSelect(item);
+    console.log("2.selected", this.selected);
+  }
+
   private _handleSelect(item: any) {
     if (!this.disabled && !item.disabled) {
       if (this.selected.indexOf(item.key) !== -1) {
@@ -379,7 +389,7 @@ export class NovaTransfer {
                 class="items"
                 onScroll={event => this._handleItemsScroll(LEFT, event)}
               >
-                <ul>{this._getItems(LEFT)}</ul>
+                <slot name="source-column"><ul>{this._getItems(LEFT)}</ul></slot>
               </div>
               <span class="empty-msg">
                 {this.configuration.labels.notFoundContent}
@@ -388,7 +398,7 @@ export class NovaTransfer {
             <footer
               class={"column-footer " + (this.sourceFooter ? "" : "no-footer")}
             >
-              <slot name="footer-source"></slot>
+              <slot name="source-footer"></slot>
             </footer>
           </div>
 
@@ -442,7 +452,7 @@ export class NovaTransfer {
             <footer
               class={"column-footer " + (this.targetFooter ? "" : "no-footer")}
             >
-              <slot name="footer-target"></slot>
+              <slot name="target-footer"></slot>
             </footer>
           </div>
         </div>
@@ -452,20 +462,18 @@ export class NovaTransfer {
 
   private _isThereSourceFooter() {
     if (this.el.shadowRoot.querySelectorAll("slot").length !== 0) {
-      return (
-        this.el.shadowRoot.querySelectorAll("slot")[0].assignedNodes().length >
-        0
-      );
+      var slots = this.el.shadowRoot.querySelectorAll("slot");
+      var slotsArr = Array.prototype.slice.call(slots);
+      return slotsArr.find(s => s.name === "source-footer").assignedNodes().length > 0;
     }
-    return false;
+    return false;  
   }
 
   private _isThereTargetFooter() {
     if (this.el.shadowRoot.querySelectorAll("slot").length !== 0) {
-      return (
-        this.el.shadowRoot.querySelectorAll("slot")[1].assignedNodes().length >
-        0
-      );
+      var slots = this.el.shadowRoot.querySelectorAll("slot");
+      var slotsArr = Array.prototype.slice.call(slots);
+      return slotsArr.find(s => s.name === "target-footer").assignedNodes().length > 0
     }
     return false;
   }
@@ -528,8 +536,14 @@ export class NovaTransfer {
     }
   }
 
+  @Method()
+  async moveToT() {
+    this._moveToTarget();
+  }
+
   private _moveToSource() {
     if (!this.disabled) {
+      console.log("selected", this.selected);
       var alreadyInSource = [];
       var moveKeys = []; // items that are transfering
       this.selected.forEach(key => {
@@ -547,6 +561,7 @@ export class NovaTransfer {
         moveKeys
       });
       this.transfered = [...moveKeys];
+      console.log("transfered", this.transfered);
     }
   }
 

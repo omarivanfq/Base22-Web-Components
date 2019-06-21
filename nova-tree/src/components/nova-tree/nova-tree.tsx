@@ -43,18 +43,6 @@ export class MyComponent {
       uls.item(i).classList.add("active");
     }
   }
-  handleToggle = e => {
-    e.target.classList.toggle("caret-down");
-    //e.target.nextElementSibling.classList.toggle("active");
-    //e.target.children[1].classList.toggle("active");
-    //es primero el 0 checbkos y despues el 1 porque ya es el ul
-    //tiene que ser un child element de li
-    console.log(e.target.parentNode.lastChild);
-    e.target.parentNode.lastChild.classList.toggle("active");
-
-    //console.log("el de abajo es el que buscas");
-    //console.log(e.target.parentNode.lastChild.classList);
-  };
 
   private treeData = [
     {
@@ -156,7 +144,10 @@ export class MyComponent {
       //solo para que lo tomes en cuenta
       //checalo en ratetsx de eddy
       //esto es con la intencino de quemetas el WILL load, arapra que no haga tnto overhead
-      <ul id="myUL"></ul>
+
+      <ul id="myUL">
+        {this.treeData.map((child): HTMLLIElement => this.handleChild(child))}
+      </ul>
     );
   }
 }

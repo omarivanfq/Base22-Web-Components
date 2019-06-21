@@ -31,7 +31,7 @@ export class NovaTreeNode {
     this.isLeaf = !newValue.length;
   }
 
-  private handleToggle(_): void {
+  private handleToggle(): void {
     this.expanded = !this.expanded;
   }
 
@@ -111,7 +111,7 @@ export class NovaTreeNode {
             <Host>
               <span
                 class="caret caret-down"
-                onClick={(e: MouseEvent): void => this.handleToggle(e)}
+                onClick={(): void => this.handleToggle()}
               />
               <span>{this.text}</span>
               <ul class="nested active">

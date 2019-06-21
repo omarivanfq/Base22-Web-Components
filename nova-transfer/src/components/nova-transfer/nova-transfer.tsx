@@ -80,9 +80,13 @@ export class NovaTransfer {
   */
   @Event() scrolling: EventEmitter;
   /*
-    event that is emitted when selected items are changed
+    event that is emitted when items are selected
   */
   @Event() select: EventEmitter;
+    /*
+      event that is emitted when items are filtered
+    */
+  @Event() filter: EventEmitter;
 
   /*
     STATES
@@ -120,10 +124,7 @@ export class NovaTransfer {
 
   @Method()
   handleSelect(item:any) {
-    console.log("item", item);
-    console.log("1.selected", this.selected);
     this._handleSelect(item);
-    console.log("2.selected", this.selected);
   }
 
   private _handleSelect(item: any) {
@@ -204,6 +205,10 @@ export class NovaTransfer {
           ...this.filteredItems.filter(i => this._isItemInTarget(i.key))
         ]; //[...this.data.items]; // restore filtered items array
       }
+      this.filter.emit({ direction: LEFT, 
+        filteredKeys: this.filteredItems
+        .filter(item => this.data.targetKeys.indexOf(item.key) === -1)
+        .map(item => item.key)});
     }
   };
 
@@ -229,6 +234,10 @@ export class NovaTransfer {
           ...this.filteredItems.filter(i => !this._isItemInTarget(i.key))
         ]; //[...this.data.items]; // restore filtered items array
       }
+      this.filter.emit({ direction: RIGHT, 
+        filteredKeys: this.filteredItems
+        .filter(item => this.data.targetKeys.indexOf(item.key) !== -1)
+        .map(item => item.key)});
     }
   };
 
@@ -443,7 +452,7 @@ export class NovaTransfer {
                 class="items"
                 onScroll={event => this._handleItemsScroll(RIGHT, event)}
               >
-                <ul>{this._getItems(RIGHT) /*this.getTable() */}</ul>
+                <slot name="target-column"><ul>{this._getItems(RIGHT) /*this.getTable() */}</ul></slot>
               </div>
               <span class="empty-msg">
                 {this.configuration.labels.notFoundContent}
@@ -528,7 +537,7 @@ export class NovaTransfer {
       });
       this.selected = [...alreadyInTarget]; // the ones that were already on the target are now the only selected
       this.transferColumn.emit({
-        targetkeys: this.data.targetKeys,
+        targetKeys: this.data.targetKeys,
         direction: RIGHT,
         moveKeys
       });
@@ -556,7 +565,7 @@ export class NovaTransfer {
       });
       this.selected = [...alreadyInSource]; // the ones that were already on the source are now the only selected
       this.transferColumn.emit({
-        targetkeys: this.data.targetKeys,
+        targetKeys: this.data.targetKeys,
         direction: LEFT,
         moveKeys
       });

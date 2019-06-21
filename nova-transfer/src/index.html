@@ -34,21 +34,24 @@
 </head>
 <body>
   <div>
-      <nova-transfer show-select-all show-search>
-        <div slot="source-column">
-          <table id="source-table">
-            
-          </table>
-        </div>
-        <span slot="footer-source">
+    <nova-transfer show-select-all show-search>
+      <div slot="source-column">
+        <table id="source-table">
+        </table>
+      </div>
+      <div slot="target-column">
+        <table id="target-table">
+        </table>
+      </div>
+      <span slot="source-footer">
           <p style="text-align:center; padding: 10px 0;">footer 1</p>
         </span>
-        <span slot="footer-target">
+        <span slot="target-footer">
           <p style="text-align:center; padding: 10px 0;">footer 2</p>
         </span>
-      </nova-transfer>
-      <ul>
-      </ul>
+    </nova-transfer>
+    <ul>
+    </ul>
   </div>
 
   <script>
@@ -116,16 +119,36 @@
       }
     ],
     "targetKeys": [
-       // "key6", "key11"
+        "key6", "key11"
       ]
     };
+    var configuration = { labels: { titleSource: "Source", titleTarget: "Target", notFoundContent: "No Data" } };
   </script>
 
   <script>
     var transfer = document.querySelector("nova-transfer");
-    transfer.addEventListener('scrolling', e => console.log(e.detail));
-    transfer.addEventListener('search', event => console.log(event.detail));
-    transfer.addEventListener('select', e => console.log(e.detail));
+   // transfer.addEventListener('scrolling', e => console.log(e.detail));
+   // transfer.addEventListener('search', event => console.log(event.detail));
+
+    transfer.addEventListener('filter', event => {
+      var { direction, filteredKeys } = event.detail
+      if (direction === 'left') {
+        fillSourceTable(data.items.filter(item => filteredKeys.indexOf(item.key) !== -1));
+      }
+      else {
+        fillTargetTable(data.items.filter(item => filteredKeys.indexOf(item.key) !== -1));
+      }
+    });
+
+    transfer.addEventListener('select', event => {
+      updateCheckboxes(event.detail.sourceSelectedKeys);
+    });
+
+    transfer.addEventListener('transferColumn', event => { 
+      var { targetKeys } = event.detail;
+      fillSourceTable(data.items.filter(item => targetKeys.indexOf(item.key) === -1));
+      fillTargetTable(data.items.filter(item => targetKeys.indexOf(item.key) !== -1));
+    });
 
    /*
    transfer.filterOption = (value, option) => true;
@@ -143,7 +166,6 @@
       padding: "7px",
       margin: 0
     }
-
     */
 
     transfer.columnStyle = {
@@ -157,46 +179,73 @@
     }
 
     transfer.data = data;
-    transfer.configuration = { labels: { titleSource: "Source", titleTarget: "Target", notFoundContent: "No Data" } };
-    
-    transfer.addEventListener('transferColumn', event => { 
-      var list = document.querySelector("ul");
-      list.innerHTML = "";
-      event.detail.targetkeys.forEach(key => {
-        var node = document.createElement("LI");               
-        var textnode = document.createTextNode(key);      
-        node.appendChild(textnode);                             
-        list.appendChild(node);
-      });    
-    })
+    transfer.configuration = configuration;
+
   </script>
 
 <script>
-  // filling table with data
-    var table = document.querySelector("#source-table");
-    var tableBody = document.createElement("tbody");
-    var keys = Object.keys(data.items[0]);
-    var noAttributes = keys.length;
-    for (var i = 0; i < data.items.length; i++) {
-      var row = document.createElement("tr");
-      var checkbox = document.createElement("input");
-      checkbox.setAttribute("type", "checkbox");
-      const item = data.items[i];
-      checkbox.addEventListener('change', () => {
-        transfer.handleSelect(item);
-      });
-      var cell = document.createElement("td");
-      cell.appendChild(checkbox);
-      row.append(cell);
-      for (var j = 0; j < noAttributes; j++) {
-        var cell = document.createElement("td");
-        var cellText = document.createTextNode(data.items[i][keys[j]]);
-        cell.appendChild(cellText);
-        row.appendChild(cell);
-      }
-      tableBody.appendChild(row);
+    fillSourceTable = (items) => {
+      fillTable("#source-table", items);
     }
-    table.appendChild(tableBody);
+
+    fillTargetTable = (items) => {
+      fillTable("#target-table", items);
+    }
+    
+    fillTable = (id, items) => {
+      var table = document.querySelector(id);
+      if (items.length > 0 && table) {
+        table.innerHTML = ''
+        var tableBody = document.createElement("tbody");
+        var keys = Object.keys(items[0]);
+        var noAttributes = keys.length;
+        for (var i = 0; i < items.length; i++) {
+          const item = items[i];
+          var row = document.createElement("tr");
+          row.setAttribute("id", item.key);
+          row.classList.add("test");
+          var checkbox = document.createElement("input");
+          checkbox.setAttribute("type", "checkbox");
+          checkbox.addEventListener('change', () => {
+            transfer.handleSelect(item);
+          });
+          var cell = document.createElement("td");
+          cell.appendChild(checkbox);
+          row.append(cell);
+          for (var j = 0; j < noAttributes; j++) {
+            var cell = document.createElement("td");
+            var cellText = document.createTextNode(items[i][keys[j]]);
+            cell.appendChild(cellText);
+            row.appendChild(cell);
+          }
+          tableBody.appendChild(row);
+        }
+        table.appendChild(tableBody);
+      }
+    }
+
+    updateCheckboxes = (keys) => {
+      console.log(keys);
+      var table = document.querySelector("#source-table");
+      if (table) {
+        table.querySelectorAll("tr")
+        .forEach(tr => {
+          var checkbox = tr.querySelector("input[type='checkbox']");
+          if (keys.indexOf(tr.getAttribute("id")) !== -1) {
+            checkbox.checked = true;
+          }
+          else {
+            checkbox.checked = false;
+          }
+        });
+      }
+    }
+ 
+  </script>
+
+  <script>
+    fillSourceTable(data.items.filter(item => data.targetKeys.indexOf(item.key) === -1));
+    fillTargetTable(data.items.filter(item => data.targetKeys.indexOf(item.key) !== -1));      
   </script>
 
 </body>

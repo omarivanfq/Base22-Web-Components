@@ -66,6 +66,7 @@ declare namespace LocalJSX {
     'data'?: any;
     'disabled'?: boolean;
     'filterOption'?: Function;
+    'onFilter'?: (event: CustomEvent<any>) => void;
     'onScrolling'?: (event: CustomEvent<any>) => void;
     'onSearch'?: (event: CustomEvent<any>) => void;
     'onSelect'?: (event: CustomEvent<any>) => void;

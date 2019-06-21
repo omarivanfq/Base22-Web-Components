@@ -4,6 +4,9 @@ import { sass } from '@stencil/sass';
 
 
 export const config: Config = {
+  copy: [
+    { src: 'assets'}
+  ],
   plugins: [
     sass()
   ],

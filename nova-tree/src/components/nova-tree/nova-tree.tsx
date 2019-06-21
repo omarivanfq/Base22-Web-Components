@@ -20,44 +20,120 @@ export class MyComponent {
   @Element() private element: HTMLElement;
 
   //este de abajo es de stencil corregido despues de meterlo dentro del wrapper
-  componentDidLoad() {
-    let ul = this.element.shadowRoot.children.item(1);
+  public componentDidLoad(): void {
+    const ul = this.element.shadowRoot.children.item(1);
     this.autoExpandParent ? this.handleAutoExpand(ul) : undefined;
   }
-  handleAutoExpand = e => {
-    let uls = e.getElementsByTagName("ul");
-    for (var i = 0; i < uls.length; i++) {
+
+  private handleAutoExpand(e): void {
+    const uls = e.getElementsByTagName("ul");
+    for (let i = 0; i < uls.length; i++) {
       uls.item(i).classList.add("active");
     }
-  };
-  handleToggle = e => {
-    e.target.classList.toggle("caret-down");
-    //e.target.nextElementSibling.classList.toggle("active");
-    //e.target.children[1].classList.toggle("active");
-    //es primero el 0 checbkos y despues el 1 porque ya es el ul
-    //tiene que ser un child element de li
-    e.target.parentNode.lastChild.classList.toggle("active");
+  }
 
-    //console.log(e.target.parentNode);
-    //console.log("el de abajo es el que buscas");
-    //console.log(e.target.parentNode.lastChild.classList);
-  };
-  /*handleClick(){
-     console.log("itworked");
-   }*/
-
-  @Prop() checked: boolean;
-  @Prop() disabled: boolean;
-  @Prop() styles: any = {};
-  @Event() clicked: EventEmitter;
-  @Prop() handleClick: Function = () => {
-    console.log("itworked");
-  };
-  @Prop() autoExpandParent: boolean = true;
-  @Prop() checkStrictly: boolean = true;
+  @Prop() public checked: boolean;
+  @Prop() public disabled: boolean;
+  @Prop() public styles: object = {};
+  @Event() public clicked: EventEmitter;
+  @Prop() public autoExpandParent: boolean = true;
+  @Prop() public checkStrictly: boolean = true;
   //checkStrictly debe ser false
 
-  render() {
+  private treeData = [
+    {
+      text: "happy",
+      checkable: true,
+      disableCheckbox: false,
+      disabled: false,
+      checked: false,
+      subnodes: [
+        {
+          text: "Water",
+          checkable: true,
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          subnodes: []
+        },
+        {
+          text: "Coffee",
+          checkable: true,
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          subnodes: [
+            {
+              text: "Coffee",
+              checkable: true,
+              disableCheckbox: false,
+              disabled: false,
+              checked: false,
+              subnodes: []
+            },
+            {
+              text: "Whatever",
+              checkable: true,
+              disableCheckbox: false,
+              disabled: false,
+              checked: false,
+              subnodes: []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      text: "Beverages",
+      checkable: true,
+      disableCheckbox: false,
+      disabled: false,
+      checked: false,
+      subnodes: [
+        {
+          text: "Water",
+          checkable: true,
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          subnodes: []
+        },
+        {
+          text: "Coffee",
+          checkable: true,
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          subnodes: []
+        },
+        {
+          text: "Tea",
+          checkable: true,
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          subnodes: []
+        }
+      ]
+    }
+  ];
+
+  private handleChild(child): HTMLLIElement {
+    return (
+      <li>
+        <nova-tree-node
+          text={child.text}
+          checkable={child.checkable}
+          disableCheckbox={child.disableCheckbox}
+          disabled={child.disabled}
+          checked={child.checked}
+          subnodes={child.subnodes}
+        ></nova-tree-node>
+      </li>
+    );
+  }
+
+  public render(): HTMLNovaTreeElement {
     return (
       //en teoria aqui deberia de alar todo en una sola linea
       //desde el json que nos entreguen con la informacion
@@ -66,54 +142,8 @@ export class MyComponent {
       //esto es con la intencino de quemetas el WILL load, arapra que no haga tnto overhead
 
       <ul id="myUL">
-        <li>
-          <span class="caret" onClick={e => this.handleToggle(e)}></span>
-          <nova-checkbox></nova-checkbox>happy
-          <ul class="nested">
-            <li class="caretsecret">
-              <nova-checkbox></nova-checkbox>Water
-            </li>
-
-            <li>
-              <span class="caret" onClick={e => this.handleToggle(e)}></span>
-              <nova-checkbox></nova-checkbox>Coffee
-              <ul class="nested">
-                <li class="caretsecret">
-                  <nova-checkbox></nova-checkbox>Coffe
-                </li>
-                <li>
-                  <span
-                    class="caret"
-                    onClick={e => this.handleToggle(e)}
-                  ></span>
-                  <nova-checkbox></nova-checkbox>Whatever
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-
-        <li>
-          <span class="caret" onClick={e => this.handleToggle(e)}></span>
-          <nova-checkbox></nova-checkbox>Beverages
-          <ul class="nested">
-            <li class="caretsecret">
-              <nova-checkbox></nova-checkbox>Water
-            </li>
-
-            <li class="caretsecret">
-              <nova-checkbox></nova-checkbox>Coffee
-            </li>
-
-            <li>
-              <span class="caret" onClick={e => this.handleToggle(e)}></span>
-              <nova-checkbox></nova-checkbox>Tea
-            </li>
-          </ul>
-        </li>
+        {this.treeData.map((child): HTMLLIElement => this.handleChild(child))}
       </ul>
-
-      //no toques aqui abajo
     );
   }
 }

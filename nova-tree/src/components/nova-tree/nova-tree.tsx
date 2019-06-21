@@ -47,40 +47,45 @@ export class MyComponent {
   private treeData = [
     {
       text: "happy",
-      checkable: true,
+
       disableCheckbox: false,
       disabled: false,
       checked: false,
+      expanded: true,
       subnodes: [
         {
           text: "Water",
-          checkable: true,
+
           disableCheckbox: false,
           disabled: false,
           checked: false,
+          expanded: true,
           subnodes: []
         },
         {
           text: "Coffee",
-          checkable: true,
+
           disableCheckbox: false,
           disabled: false,
           checked: false,
+          expanded: true,
           subnodes: [
             {
               text: "Coffee",
-              checkable: true,
+
               disableCheckbox: false,
               disabled: false,
               checked: false,
+              expanded: true,
               subnodes: []
             },
             {
               text: "Whatever",
-              checkable: true,
+
               disableCheckbox: false,
               disabled: false,
               checked: false,
+              expanded: true,
               subnodes: []
             }
           ]
@@ -89,33 +94,37 @@ export class MyComponent {
     },
     {
       text: "Beverages",
-      checkable: true,
+
       disableCheckbox: false,
       disabled: false,
       checked: false,
+      expanded: true,
       subnodes: [
         {
           text: "Water",
-          checkable: true,
+
           disableCheckbox: false,
           disabled: false,
           checked: false,
+          expanded: true,
           subnodes: []
         },
         {
           text: "Coffee",
-          checkable: true,
+
           disableCheckbox: false,
           disabled: false,
           checked: false,
+          expanded: true,
           subnodes: []
         },
         {
           text: "Tea",
-          checkable: true,
+
           disableCheckbox: false,
           disabled: false,
           checked: false,
+          expanded: true,
           subnodes: []
         }
       ]
@@ -127,10 +136,11 @@ export class MyComponent {
       <li>
         <nova-tree-node
           text={child.text}
-          checkable={child.checkable}
+          checkable={this.checkable}
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}
           checked={child.checked}
+          expanded={child.expanded}
           subnodes={child.subnodes}
         ></nova-tree-node>
       </li>

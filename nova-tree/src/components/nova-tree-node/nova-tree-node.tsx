@@ -11,7 +11,7 @@ export class NovaTreeNode {
   @Prop() public disableCheckbox: boolean = false;
   @Prop() public disabled: boolean = false;
   @Prop({ mutable: true }) public checked: boolean = false;
-  @Prop({ mutable: true }) public expanded?: boolean = false;
+  @Prop({ mutable: true }) public expanded: boolean = false;
   @Prop({ mutable: true }) public subnodes: NovaTreeNode[] = [];
 
   @State() private isLeaf: boolean = true;
@@ -35,6 +35,10 @@ export class NovaTreeNode {
     this.expanded = !this.expanded;
   }
 
+  private handleCheck(e): void {
+    this.checked = e.target.checked;
+  }
+
   private handleChild(child: NovaTreeNode): HTMLLIElement {
     return (
       <li>
@@ -44,6 +48,7 @@ export class NovaTreeNode {
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}
           checked={child.checked}
+          expanded={child.expanded}
           subnodes={child.subnodes}
         ></nova-tree-node>
       </li>
@@ -56,7 +61,10 @@ export class NovaTreeNode {
         return (
           <Host>
             <span class="caretsecret"></span>
-            <nova-checkbox />
+            <nova-checkbox
+              checked={this.checked}
+              onClick={(e): void => this.handleCheck(e)}
+            />
             <span>{this.text}</span>
           </Host>
         );
@@ -68,7 +76,10 @@ export class NovaTreeNode {
                 class="caret caret-down"
                 onClick={(): void => this.handleToggle()}
               ></span>
-              <nova-checkbox />
+              <nova-checkbox
+                checked={this.checked}
+                onClick={(e): void => this.handleCheck(e)}
+              />
               <span>{this.text}</span>
               <ul class="nested active">
                 {this.subnodes.map(
@@ -85,7 +96,10 @@ export class NovaTreeNode {
                 class="caret"
                 onClick={(): void => this.handleToggle()}
               ></span>
-              <nova-checkbox />
+              <nova-checkbox
+                checked={this.checked}
+                onClick={(e): void => this.handleCheck(e)}
+              />
               <span>{this.text}</span>
               <ul class="nested">
                 {this.subnodes.map(

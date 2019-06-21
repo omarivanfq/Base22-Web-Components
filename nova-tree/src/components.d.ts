@@ -31,7 +31,7 @@ export namespace Components {
     'checked': boolean;
     'disableCheckbox': boolean;
     'disabled': boolean;
-    'expanded'?: boolean;
+    'expanded': boolean;
     'subnodes': NovaTreeNode[];
     'text': string;
   }

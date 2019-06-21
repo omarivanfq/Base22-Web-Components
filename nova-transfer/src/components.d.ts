@@ -67,7 +67,7 @@ declare namespace LocalJSX {
     'disabled'?: boolean;
     'filterOption'?: Function;
     'onFilter'?: (event: CustomEvent<any>) => void;
-    'onScrolling'?: (event: CustomEvent<any>) => void;
+    'onScrollColumn'?: (event: CustomEvent<any>) => void;
     'onSearch'?: (event: CustomEvent<any>) => void;
     'onSelect'?: (event: CustomEvent<any>) => void;
     'onTransferColumn'?: (event: CustomEvent<any>) => void;

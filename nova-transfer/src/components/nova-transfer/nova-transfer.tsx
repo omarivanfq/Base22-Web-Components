@@ -28,7 +28,9 @@ export class NovaTransfer {
     items: [], // items displayed in columns
     targetKeys: [] // keys of the items displayed in the target (right) column
   };
-  @Prop({ mutable: true }) configuration?: any;
+  @Prop({ mutable: true }) configuration?: any = {
+    labels: {}
+  };
   @Prop() styling?: any = {};
   // Transfer attributes
   /*
@@ -78,7 +80,7 @@ export class NovaTransfer {
   /* 
     event that is emitted when scroll options list
   */
-  @Event() scrolling: EventEmitter;
+  @Event() scrollColumn: EventEmitter;
   /*
     event that is emitted when items are selected
   */
@@ -105,6 +107,7 @@ export class NovaTransfer {
   @State() transfered: string[] = [];
 
   @State() sourceFooter: boolean;
+
   @State() targetFooter: boolean;
 
   @Element() el: HTMLElement;
@@ -123,7 +126,7 @@ export class NovaTransfer {
   */
 
   @Method()
-  handleSelect(item:any) {
+  async handleSelect(item:any) {
     this._handleSelect(item);
   }
 
@@ -341,7 +344,7 @@ export class NovaTransfer {
   }
 
   private _handleItemsScroll(direction, event) {
-    this.scrolling.emit({ direction, event });
+    this.scrollColumn.emit({ direction, event });
   }
 
   /*
@@ -417,14 +420,14 @@ export class NovaTransfer {
               onClick={() => this._moveToTarget()}
             >
               {">"}
-              <span>{this.configuration.labels.operationLeft}</span>
+              <span> {this.configuration.labels.operationRight}</span>
             </button>
             <button
               class={this._getTargetSelected() > 0 ? "btn-active" : ""}
               onClick={() => this._moveToSource()}
             >
               {"<"}
-              <span>{this.configuration.labels.operationRight}</span>
+              <span> {this.configuration.labels.operationLeft}</span>
             </button>
           </span>
 
@@ -507,18 +510,26 @@ export class NovaTransfer {
   // return the number of items selected from source column
   private _getSourceSelected() {
     return this.selected.filter(
-      key =>
-        !this._isItemInTarget(key) &&
-        !this.filteredItems.find(item => item.key === key).disabled
+      key => {
+        var item = this.filteredItems.find(item => item.key === key);
+        if (!item) {
+          return false;
+        }
+        return !this._isItemInTarget(key) && !item.disabled
+      }
     ).length;
   }
 
   // return the number of items selected from target column
   private _getTargetSelected() {
     return this.selected.filter(
-      key =>
-        this._isItemInTarget(key) &&
-        !this.filteredItems.find(item => item.key === key).disabled
+      key => {
+        var item = this.filteredItems.find(item => item.key === key);
+        if (!item) {
+          return false;
+        }
+        return this._isItemInTarget(key) && !item.disabled
+      }
     ).length;
   }
 

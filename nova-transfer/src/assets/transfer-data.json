@@ -1,6 +1,5 @@
 {
-    "data": 
-    {
+    "data": {
         "items": [
         {
         "key": "key1",
@@ -61,6 +60,42 @@
         "title": "Title11",
         "description": "Description11",
         "disabled": false
+        },
+        {
+        "key": "key12",
+        "title": "Title12",
+        "description": "Description12",
+        "disabled": false
+        },
+        {
+        "key": "key13",
+        "title": "Title13",
+        "description": "Description13",
+        "disabled": false
+        },     
+        {
+        "key": "key14",
+        "title": "Title14",
+        "description": "Description14",
+        "disabled": false
+        }, 
+        {
+        "key": "key15",
+        "title": "Title15",
+        "description": "Description15",
+        "disabled": false
+        },  
+        {
+        "key": "key16",
+        "title": "Title16",
+        "description": "Description16",
+        "disabled": false
+        },
+        {
+        "key": "key17",
+        "title": "Title17",
+        "description": "Description17",
+        "disabled": false
         }
     ],
     "targetKeys": [
@@ -68,12 +103,13 @@
         ]
     },
     "configuration": {
-        "labels": [ 
-            {"titleSource": "Source", 
+        "labels": {
+            "titleSource": "Source", 
             "titleTarget": "Target", 
-            "notFoundContent": "No Data" 
-            } 
-        ]
+            "notFoundContent": "No Data",
+            "operationLeft": "Left",
+            "operationRight": "Right"
+        } 
     },
     "styling": {
     }

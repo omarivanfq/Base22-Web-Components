@@ -31,17 +31,14 @@
   </nova-transfer>
   <script>
     var transfer = document.querySelector("nova-transfer");
-
     transfer.addEventListener('transferColumn', event => { 
       var { targetKeys } = event.detail;
       fillSourceTable(data.items.filter(item => targetKeys.indexOf(item.key) === -1));
       fillTargetTable(data.items.filter(item => targetKeys.indexOf(item.key) !== -1));
     });
-
     transfer.addEventListener('select', event => {
       updateCheckboxes([...event.detail.sourceSelectedKeys, ...event.detail.targetSelectedKeys]);
     });
-
     transfer.addEventListener('filter', event => {
       var { direction, filteredKeys } = event.detail
       if (direction === 'left') {
@@ -51,7 +48,6 @@
         fillTargetTable(data.items.filter(item => filteredKeys.indexOf(item.key) !== -1));
       }
     });
-
     transfer.filterOption = (value, item) => item.description.indexOf(value) !== -1
         || item.title.indexOf(value) !== -1;
         
@@ -61,7 +57,6 @@
       width: "10%;",
       zIndex: 999
     }
-
     transfer.columnStyle = {
       width: "45%",
       boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)"
@@ -80,7 +75,7 @@
     var data, configuration;
     // JSON load
     axios
-    .get("transfer-data.json")
+    .get("../transfer-data.json")
     .then(function(response) {
       data = response.data.data;
       transfer.data = data;
@@ -96,7 +91,6 @@
       fillSourceTable = (items) => {
         fillTable("#source-table", items);
       }
-
       fillTargetTable = (items) => {
         fillTable("#target-table", items);
       }
@@ -132,7 +126,6 @@
           table.appendChild(tableBody);
         }
       }
-
       updateCheckboxes = (keys) => {
         console.log(keys)
         var table = document.querySelector("#source-table");

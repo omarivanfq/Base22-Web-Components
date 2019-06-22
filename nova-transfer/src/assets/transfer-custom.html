@@ -10,19 +10,24 @@
   <style>
     body { font-family: sans-serif; background-color: rgb(224, 60, 199);}
     p { margin: 0; padding: 0; }
+    h1 { color: #ffffff; text-align: center; font-size: 55px; 
+      text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none; }
+    h1 span { font-size: 45px; margin: 0 10px; }
     table { width: 100%; }
+    *[slot] { visibility: hidden; } 
   </style>
 </head>
 <body>
+  <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
   <nova-transfer 
     show-search
     show-select-all>
-    <p slot="source-footer" style="text-align:center; padding: 10px 0;">footer 1</p>
-    <p slot="target-footer" style="text-align:center; padding: 10px 0;">footer 2</p>
     <table slot="source-column" id="source-table">
     </table>
     <table slot="target-column" id="target-table">
     </table>
+    <p slot="source-footer" style="text-align:center; padding: 10px 0;">footer 1</p>
+    <p slot="target-footer" style="text-align:center; padding: 10px 0;">footer 2</p>
   </nova-transfer>
   <script>
     var transfer = document.querySelector("nova-transfer");
@@ -53,7 +58,8 @@
     transfer.operationStyle = {
       padding: "7px",
       margin: 0,
-      width: "10%;"
+      width: "10%;",
+      zIndex: 999
     }
 
     transfer.columnStyle = {
@@ -65,7 +71,7 @@
       width: "60%",
       height: "340px",
       minWidth: "500px",
-      margin: "80px auto",
+      margin: "0 auto",
     }
   </script>
 

@@ -119,12 +119,12 @@ export class NovaTransfer {
   componentDidLoad() {
     this.sourceFooter = this._isThereSourceFooter();
     this.targetFooter = this._isThereTargetFooter();
+    this.el.querySelectorAll("*[slot]").forEach(s => (s as any).style.visibility="visible");
   }
 
   /* 
     HANDLERS
   */
-
   @Method()
   async handleSelect(item:any) {
     this._handleSelect(item);

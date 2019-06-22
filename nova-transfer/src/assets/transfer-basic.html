@@ -10,11 +10,15 @@
   <script nomodule src="/build/nova-transfer.js"></script>
   <style>
     body { font-family: sans-serif; background-color: rgb(138,43,226,0.7); }
+    h1 { color: #ffffff; text-align: center; font-size: 55px; 
+      text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none; }
+    h1 span { font-size: 45px; margin: 0 10px; }
     p { margin: 0; padding: 0; }
   </style>
 </head>
 <body>
   <div>
+    <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
     <nova-transfer>   
     </nova-transfer>
     <ul>
@@ -37,10 +41,13 @@
     transfer.columnStyle = {
       boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)"
     } 
+    transfer.operationStyle = {
+      zIndex: 999
+    }
     transfer.wrapperStyle = {
       width: "40%",
       minWidth: "500px",
-      margin: "80px auto"
+      margin: "0 auto"
     }
   </script>
 

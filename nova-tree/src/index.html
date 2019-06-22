@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
   <head>
@@ -14,8 +13,29 @@
   </head>
   <body>
     <nova-tree>
-      <!-- aqui borre todo lo que estaba extra, se me hizo un desmadre ( no afecta borrrarlo
-      porque era codigo de fuera para referencias del html) -->
+
+      <ul id="myUL">
+    <li><span class="caret">Beverages</span>
+      <ul class="nested">
+        <li>Water</li>
+        <li>Coffee</li>
+        <li><span class="caret">Tea</span>
+          <ul class="nested">
+            <li>Black Tea</li>
+            <li>White Tea</li>
+            <li><span class="caret">Green Tea</span>
+              <ul class="nested">
+                <li>Sencha</li>
+                <li>Gyokuro</li>
+                <li>Matcha</li>
+                <li>Pi Lo Chun</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </nova-tree>
-</body>
+  </body>
 </html>

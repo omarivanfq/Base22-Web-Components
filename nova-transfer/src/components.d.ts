@@ -9,53 +9,79 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first': string;
-    /**
-    * The last name
-    */
-    'last': string;
-    /**
-    * The middle name
-    */
-    'middle': string;
+  interface NovaCheckbox {
+    'checked': boolean;
+    'disabled': boolean;
+    'handleClick': Function;
+    'styles': any;
+  }
+  interface NovaTransfer {
+    'columnStyle': any;
+    'configuration'?: any;
+    'data'?: any;
+    'disabled': boolean;
+    'filterOption': Function;
+    'handleSelect': (item: any) => Promise<void>;
+    'moveToT': () => Promise<void>;
+    'operationStyle': any;
+    'renderItem': Function;
+    'showSearch': boolean;
+    'showSelectAll': boolean;
+    'styling'?: any;
+    'wrapperStyle': any;
   }
 }
 
 declare global {
 
 
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
+  interface HTMLNovaCheckboxElement extends Components.NovaCheckbox, HTMLStencilElement {}
+  var HTMLNovaCheckboxElement: {
+    prototype: HTMLNovaCheckboxElement;
+    new (): HTMLNovaCheckboxElement;
+  };
+
+  interface HTMLNovaTransferElement extends Components.NovaTransfer, HTMLStencilElement {}
+  var HTMLNovaTransferElement: {
+    prototype: HTMLNovaTransferElement;
+    new (): HTMLNovaTransferElement;
   };
   interface HTMLElementTagNameMap {
-    'my-component': HTMLMyComponentElement;
+    'nova-checkbox': HTMLNovaCheckboxElement;
+    'nova-transfer': HTMLNovaTransferElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent extends JSXBase.HTMLAttributes<HTMLMyComponentElement> {
-    /**
-    * The first name
-    */
-    'first'?: string;
-    /**
-    * The last name
-    */
-    'last'?: string;
-    /**
-    * The middle name
-    */
-    'middle'?: string;
+  interface NovaCheckbox extends JSXBase.HTMLAttributes<HTMLNovaCheckboxElement> {
+    'checked'?: boolean;
+    'disabled'?: boolean;
+    'handleClick'?: Function;
+    'onClicked'?: (event: CustomEvent<any>) => void;
+    'styles'?: any;
+  }
+  interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
+    'columnStyle'?: any;
+    'configuration'?: any;
+    'data'?: any;
+    'disabled'?: boolean;
+    'filterOption'?: Function;
+    'onFilter'?: (event: CustomEvent<any>) => void;
+    'onScrollColumn'?: (event: CustomEvent<any>) => void;
+    'onSearch'?: (event: CustomEvent<any>) => void;
+    'onSelect'?: (event: CustomEvent<any>) => void;
+    'onTransferColumn'?: (event: CustomEvent<any>) => void;
+    'operationStyle'?: any;
+    'renderItem'?: Function;
+    'showSearch'?: boolean;
+    'showSelectAll'?: boolean;
+    'styling'?: any;
+    'wrapperStyle'?: any;
   }
 
   interface IntrinsicElements {
-    'my-component': MyComponent;
+    'nova-checkbox': NovaCheckbox;
+    'nova-transfer': NovaTransfer;
   }
 }
 

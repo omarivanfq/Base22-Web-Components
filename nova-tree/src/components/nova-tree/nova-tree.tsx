@@ -19,7 +19,7 @@ import {
 })
 export class MyComponent {
   //@Element() private element: HTMLElement;
-  @Prop() public defaultExpandAll: boolean = false;
+  @Prop() public defaultExpandAll: boolean = true;
   @Prop() public autoExpandParent: boolean;
   //@Prop() public autoExpandTopLevel: boolean = true;
   @Prop() public blockNode: boolean = false;
@@ -48,6 +48,13 @@ export class MyComponent {
   //   nodo.checked = newValue;
   // });
 
+  private autoExpandAllHandler(node): void {
+    node.expanded = true;
+    if (node.subnodes.length) {
+      node.subnodes.map(subnode => this.autoExpandAllHandler(subnode));
+    }
+  }
+
   public componentWillLoad(): void {
     //const ul = this.element.shadowRoot.children.item(1);
     //this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
@@ -57,6 +64,15 @@ export class MyComponent {
       //console.log("entro");
       MyComponent.treeData.map(parent => {
         parent.expanded = true;
+      });
+    }
+
+    if (this.defaultExpandAll) {
+      //console.log("entro");
+      //MyComponent.treeData.map(parent => {
+      //  parent.expanded = true;
+      MyComponent.treeData.map(parent => {
+        this.autoExpandAllHandler(parent);
       });
     }
   }
@@ -103,7 +119,26 @@ export class MyComponent {
               disabled: false,
               checked: false,
               expanded: false,
-              subnodes: []
+              subnodes: [
+                {
+                  text: "Coffee",
+                  key: "0-0-1-0",
+                  disableCheckbox: false,
+                  disabled: false,
+                  checked: false,
+                  expanded: false,
+                  subnodes: []
+                },
+                {
+                  text: "Whatever",
+                  key: "0-0-1-0",
+                  disableCheckbox: false,
+                  disabled: false,
+                  checked: false,
+                  expanded: false,
+                  subnodes: []
+                }
+              ]
             }
           ]
         }

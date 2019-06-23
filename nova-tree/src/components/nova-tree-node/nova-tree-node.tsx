@@ -9,6 +9,7 @@ export class NovaTreeNode {
   @Prop() public text!: string;
   @Prop() public checkable: boolean = false;
   @Prop() public autoExpandParent: boolean = true;
+  @Prop() public defaultExpandAll: boolean = true;
   @Prop() public disableCheckbox: boolean = false;
   @Prop({ reflect: true }) public checkStrictly: boolean = false;
   @Prop() public disabled: boolean = false;
@@ -47,8 +48,20 @@ export class NovaTreeNode {
     //console.log("esta entrando este");
   }
 
-  // componentDidLoad() {
-  //   this.autoExpandParent ? expandParent() : undefined;
+  // if (this.defaultExpandAll) {
+  //   //console.log("entro");
+  //   //MyComponent.treeData.map(parent => {
+  //   //  parent.expanded = true;
+  //   this.treeData.map(parent => {
+  //     parent.expanded = true;
+  //     if (parent.subnodes) {
+  //       parent.subnodes.expanded = true;
+  //       console.log("si hubo hijos");
+  //     }
+  //   });
+  //
+  //
+  //
   // }
 
   @Watch("checked")

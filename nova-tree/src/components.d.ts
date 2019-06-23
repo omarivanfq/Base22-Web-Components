@@ -31,6 +31,7 @@ export namespace Components {
     'checkStrictly': boolean;
     'checkable': boolean;
     'checked': boolean;
+    'defaultExpandAll': boolean;
     'disableCheckbox': boolean;
     'disabled': boolean;
     'expanded': boolean;
@@ -91,6 +92,7 @@ declare namespace LocalJSX {
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
     'checked'?: boolean;
+    'defaultExpandAll'?: boolean;
     'disableCheckbox'?: boolean;
     'disabled'?: boolean;
     'expanded'?: boolean;

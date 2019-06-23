@@ -16,19 +16,23 @@ export namespace Components {
     'styles': any;
   }
   interface NovaTree {
-    'autoExpandTopLevel': boolean;
+    'autoExpandParent': boolean;
     'blockNode': boolean;
-    'checkStricly': boolean;
     'checkStrictly': boolean;
     'checkable': boolean;
     'checked': boolean;
     'defaultExpandAll': boolean;
+    'disableTree': boolean;
     'disabled': boolean;
+    'key': string;
     'styles': object;
   }
   interface NovaTreeNode {
+    'autoExpandParent': boolean;
+    'checkStrictly': boolean;
     'checkable': boolean;
     'checked': boolean;
+    'defaultExpandAll': boolean;
     'disableCheckbox': boolean;
     'disabled': boolean;
     'expanded': boolean;
@@ -73,20 +77,24 @@ declare namespace LocalJSX {
     'styles'?: any;
   }
   interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
-    'autoExpandTopLevel'?: boolean;
+    'autoExpandParent'?: boolean;
     'blockNode'?: boolean;
-    'checkStricly'?: boolean;
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
     'checked'?: boolean;
     'defaultExpandAll'?: boolean;
+    'disableTree'?: boolean;
     'disabled'?: boolean;
+    'key'?: string;
     'onClicked'?: (event: CustomEvent<any>) => void;
     'styles'?: object;
   }
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
+    'autoExpandParent'?: boolean;
+    'checkStrictly'?: boolean;
     'checkable'?: boolean;
     'checked'?: boolean;
+    'defaultExpandAll'?: boolean;
     'disableCheckbox'?: boolean;
     'disabled'?: boolean;
     'expanded'?: boolean;

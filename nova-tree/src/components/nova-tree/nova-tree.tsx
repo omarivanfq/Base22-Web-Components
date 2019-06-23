@@ -1,7 +1,8 @@
 import {
   Component,
   Prop,
-  Element,
+  //Element,
+  //Watch,
   Event,
   EventEmitter,
   h
@@ -17,76 +18,144 @@ import {
   shadow: true
 })
 export class MyComponent {
-  @Element() private element: HTMLElement;
-
-  @Prop() public autoExpandTopLevel: boolean = true;
+  //@Element() private element: HTMLElement;
+  @Prop() public defaultExpandAll: boolean;
+  @Prop() public disableTree: boolean;
+  @Prop() public autoExpandParent: boolean;
+  //@Prop() public autoExpandTopLevel: boolean = true;
   @Prop() public blockNode: boolean = false;
   @Prop() public checkable: boolean = false;
-  @Prop() public checkStricly: boolean = false;
-  @Prop() public defaultExpandAll: boolean = false;
+  @Prop() public checkStrictly: boolean;
+  //@Prop() public defaultExpandAll: boolean = false;
   @Prop() public checked: boolean;
+  @Prop() public key: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
   @Event() public clicked: EventEmitter;
-  @Prop() public checkStrictly: boolean = true;
+  //@Watch("checked") public checkSubnodes(){ this.subnodes.map({subnode => {subnode.checked = this.checked;}});}
   //checkStrictly debe ser false
 
   //este de abajo es de stencil corregido despues de meterlo dentro del wrapper
-  public componentDidLoad(): void {
-    const ul = this.element.shadowRoot.children.item(1);
-    this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
-  }
 
-  private handleAutoExpand(e): void {
-    const uls = e.getElementsByTagName("ul");
-    for (let i = 0; i < uls.length; i++) {
-      uls.item(i).classList.add("active");
+  // private handleAutoExpand(e): void {
+  //   const uls = e.getElementsByTagName("ul");
+  //   for (let i = 0; i < uls.length; i++) {
+  //     uls.item(i).classList.add("active");
+  //   }
+  // }
+
+  //
+  // this.subnodes.map(nodo => {
+  //   nodo.checked = newValue;
+  // });
+
+  private autoExpandAllHandler(node): void {
+    node.expanded = true;
+    if (node.subnodes.length) {
+      node.subnodes.map(subnode => this.autoExpandAllHandler(subnode));
     }
   }
 
-  private treeData = [
+  private disableAllHandler(node): void {
+    node.disableCheckbox = true;
+    if (node.subnodes.length) {
+      node.subnodes.map(subnode => this.disableAllHandler(subnode));
+    }
+  }
+
+  public componentWillLoad(): void {
+    //const ul = this.element.shadowRoot.children.item(1);
+    //this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
+    //this.defaultExpandAll ? this.handleAutoExpand(ul) : undefined;
+    //
+    if (this.autoExpandParent) {
+      //console.log("entro");
+      MyComponent.treeData.map(parent => {
+        parent.expanded = true;
+      });
+    }
+
+    if (this.defaultExpandAll) {
+      //console.log("entro");
+      //MyComponent.treeData.map(parent => {
+      //  parent.expanded = true;
+      MyComponent.treeData.map(parent => {
+        this.autoExpandAllHandler(parent);
+      });
+    }
+
+    if (this.disableTree) {
+      //console.log("entro");
+      //MyComponent.treeData.map(parent => {
+      //  parent.expanded = true;
+      MyComponent.treeData.map(parent => {
+        this.disableAllHandler(parent);
+      });
+    }
+  }
+
+  private static treeData = [
     {
       text: "happy",
-
+      key: "0-0",
       disableCheckbox: false,
       disabled: false,
       checked: false,
-      expanded: true,
+      expanded: false,
       subnodes: [
         {
           text: "Water",
-
+          key: "0-0-0",
           disableCheckbox: false,
           disabled: false,
           checked: false,
-          expanded: true,
+          expanded: false,
           subnodes: []
         },
         {
           text: "Coffee",
-
+          key: "0-0-1",
           disableCheckbox: false,
           disabled: false,
           checked: false,
-          expanded: true,
+          expanded: false,
           subnodes: [
             {
               text: "Coffee",
-
+              key: "0-0-1-0",
               disableCheckbox: false,
               disabled: false,
               checked: false,
-              expanded: true,
+              expanded: false,
               subnodes: []
             },
             {
               text: "Whatever",
-
+              key: "0-0-1-0",
               disableCheckbox: false,
               disabled: false,
               checked: false,
-              expanded: true,
-              subnodes: []
+              expanded: false,
+              subnodes: [
+                {
+                  text: "Coffee",
+                  key: "0-0-1-0",
+                  disableCheckbox: false,
+                  disabled: false,
+                  checked: false,
+                  expanded: false,
+                  subnodes: []
+                },
+                {
+                  text: "Whatever",
+                  key: "0-0-1-0",
+                  disableCheckbox: false,
+                  disabled: false,
+                  checked: false,
+                  expanded: false,
+                  subnodes: []
+                }
+              ]
             }
           ]
         }
@@ -94,37 +163,37 @@ export class MyComponent {
     },
     {
       text: "Beverages",
-
+      key: "0-1",
       disableCheckbox: false,
       disabled: false,
       checked: false,
-      expanded: true,
+      expanded: false,
       subnodes: [
         {
           text: "Water",
-
+          key: "0-1-0",
           disableCheckbox: false,
           disabled: false,
           checked: false,
-          expanded: true,
+          expanded: false,
           subnodes: []
         },
         {
           text: "Coffee",
-
+          key: "0-1-1",
           disableCheckbox: false,
           disabled: false,
           checked: false,
-          expanded: true,
+          expanded: false,
           subnodes: []
         },
         {
           text: "Tea",
-
+          key: "0-1-2",
           disableCheckbox: false,
           disabled: false,
           checked: false,
-          expanded: true,
+          expanded: false,
           subnodes: []
         }
       ]
@@ -136,7 +205,9 @@ export class MyComponent {
       <li>
         <nova-tree-node
           text={child.text}
+          key={this.key}
           checkable={this.checkable}
+          checkStrictly={this.checkStrictly}
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}
           checked={child.checked}
@@ -156,7 +227,9 @@ export class MyComponent {
       //esto es con la intencino de quemetas el WILL load, arapra que no haga tnto overhead
 
       <ul id="myUL">
-        {this.treeData.map((child): HTMLLIElement => this.handleChild(child))}
+        {MyComponent.treeData.map(
+          (child): HTMLLIElement => this.handleChild(child)
+        )}
       </ul>
     );
   }

@@ -8,7 +8,10 @@ import { Component, Host, h, State, Prop, Watch } from "@stencil/core";
 export class NovaTreeNode {
   @Prop() public text!: string;
   @Prop() public checkable: boolean = false;
+  @Prop() public autoExpandParent: boolean = true;
+  @Prop() public defaultExpandAll: boolean = true;
   @Prop() public disableCheckbox: boolean = false;
+  @Prop({ reflect: true }) public checkStrictly: boolean = false;
   @Prop() public disabled: boolean = false;
   @Prop({ mutable: true }) public checked: boolean = false;
   @Prop({ mutable: true }) public expanded: boolean = false;
@@ -37,6 +40,50 @@ export class NovaTreeNode {
 
   private handleCheck(e): void {
     this.checked = e.target.checked;
+    //entra dos veces
+    //funciona para los hijos directos
+    //this.subnodes.map(nodo => {
+    //  nodo.checked = this.checked;
+    //});
+    //console.log("esta entrando este");
+  }
+
+  // if (this.defaultExpandAll) {
+  //   //console.log("entro");
+  //   //MyComponent.treeData.map(parent => {
+  //   //  parent.expanded = true;
+  //   this.treeData.map(parent => {
+  //     parent.expanded = true;
+  //     if (parent.subnodes) {
+  //       parent.subnodes.expanded = true;
+  //       console.log("si hubo hijos");
+  //     }
+  //   });
+  //
+  //
+  //
+  // }
+
+  @Watch("checked")
+  public checkRecursivo(newValue: boolean, _: boolean) {
+    if (this.checkStrictly) {
+      return;
+    }
+
+    this.subnodes.map(nodo => {
+      nodo.checked = newValue;
+    });
+  }
+
+  //esta a a ser la de expanded
+  @Watch("expanded")
+  public onExpand(newValue: boolean, _: boolean) {
+    //temp = newValue;
+    if (newValue) {
+      //console.log("Aqui es para meter funcion on expand");
+    } else {
+      //console.log("Para meter funncion on collapse");
+    }
   }
 
   private handleChild(child: NovaTreeNode): HTMLLIElement {
@@ -48,6 +95,7 @@ export class NovaTreeNode {
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}
           checked={child.checked}
+          checkStrictly={this.checkStrictly}
           expanded={child.expanded}
           subnodes={child.subnodes}
         ></nova-tree-node>
@@ -62,6 +110,7 @@ export class NovaTreeNode {
           <Host>
             <span class="caretsecret"></span>
             <nova-checkbox
+              disabled={this.disableCheckbox}
               checked={this.checked}
               onClick={(e): void => this.handleCheck(e)}
             />
@@ -77,6 +126,7 @@ export class NovaTreeNode {
                 onClick={(): void => this.handleToggle()}
               ></span>
               <nova-checkbox
+                disabled={this.disableCheckbox}
                 checked={this.checked}
                 onClick={(e): void => this.handleCheck(e)}
               />
@@ -97,6 +147,7 @@ export class NovaTreeNode {
                 onClick={(): void => this.handleToggle()}
               ></span>
               <nova-checkbox
+                disabled={this.disableCheckbox}
                 checked={this.checked}
                 onClick={(e): void => this.handleCheck(e)}
               />

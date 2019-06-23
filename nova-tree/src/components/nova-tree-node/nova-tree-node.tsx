@@ -110,6 +110,7 @@ export class NovaTreeNode {
           <Host>
             <span class="caretsecret"></span>
             <nova-checkbox
+              disabled={this.disableCheckbox}
               checked={this.checked}
               onClick={(e): void => this.handleCheck(e)}
             />
@@ -125,6 +126,7 @@ export class NovaTreeNode {
                 onClick={(): void => this.handleToggle()}
               ></span>
               <nova-checkbox
+                disabled={this.disableCheckbox}
                 checked={this.checked}
                 onClick={(e): void => this.handleCheck(e)}
               />
@@ -145,6 +147,7 @@ export class NovaTreeNode {
                 onClick={(): void => this.handleToggle()}
               ></span>
               <nova-checkbox
+                disabled={this.disableCheckbox}
                 checked={this.checked}
                 onClick={(e): void => this.handleCheck(e)}
               />

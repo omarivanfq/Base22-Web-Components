@@ -20,6 +20,7 @@ import {
 export class MyComponent {
   //@Element() private element: HTMLElement;
   @Prop() public defaultExpandAll: boolean;
+  @Prop() public disableTree: boolean;
   @Prop() public autoExpandParent: boolean;
   //@Prop() public autoExpandTopLevel: boolean = true;
   @Prop() public blockNode: boolean = false;
@@ -55,6 +56,13 @@ export class MyComponent {
     }
   }
 
+  private disableAllHandler(node): void {
+    node.disableCheckbox = true;
+    if (node.subnodes.length) {
+      node.subnodes.map(subnode => this.disableAllHandler(subnode));
+    }
+  }
+
   public componentWillLoad(): void {
     //const ul = this.element.shadowRoot.children.item(1);
     //this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
@@ -73,6 +81,15 @@ export class MyComponent {
       //  parent.expanded = true;
       MyComponent.treeData.map(parent => {
         this.autoExpandAllHandler(parent);
+      });
+    }
+
+    if (this.disableTree) {
+      //console.log("entro");
+      //MyComponent.treeData.map(parent => {
+      //  parent.expanded = true;
+      MyComponent.treeData.map(parent => {
+        this.disableAllHandler(parent);
       });
     }
   }

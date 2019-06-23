@@ -22,6 +22,7 @@ export namespace Components {
     'checkable': boolean;
     'checked': boolean;
     'defaultExpandAll': boolean;
+    'disableTree': boolean;
     'disabled': boolean;
     'key': string;
     'styles': object;
@@ -82,6 +83,7 @@ declare namespace LocalJSX {
     'checkable'?: boolean;
     'checked'?: boolean;
     'defaultExpandAll'?: boolean;
+    'disableTree'?: boolean;
     'disabled'?: boolean;
     'key'?: string;
     'onClicked'?: (event: CustomEvent<any>) => void;

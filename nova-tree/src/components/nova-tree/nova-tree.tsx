@@ -19,7 +19,7 @@ import {
 })
 export class MyComponent {
   //@Element() private element: HTMLElement;
-  @Prop() public defaultExpandAll: boolean = true;
+  @Prop() public defaultExpandAll: boolean;
   @Prop() public autoExpandParent: boolean;
   //@Prop() public autoExpandTopLevel: boolean = true;
   @Prop() public blockNode: boolean = false;

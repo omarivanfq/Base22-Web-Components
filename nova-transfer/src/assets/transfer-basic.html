@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Stencil Component Starter</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="/build/nova-transfer.esm.js"></script>
+  <script nomodule src="/build/nova-transfer.js"></script>
+  <style>
+    body { font-family: sans-serif; background-color: rgb(138,43,226,0.7); }
+    p { margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+  <div>
+    <nova-transfer>   
+    </nova-transfer>
+    <ul>
+    </ul>
+  </div>
+  <script>
+    /* event listeners */
+    var transfer = document.querySelector('nova-transfer');
+    transfer.addEventListener('search', event => console.log('searching', event.detail));
+    transfer.addEventListener('filter', event => console.log('filtering', event.detail));
+    transfer.addEventListener('transferColumn', event => console.log('transfering', event.detail));
+    transfer.addEventListener('scrollColumn', event => console.log('scrolling', event.detail));
+    transfer.addEventListener('select', event => console.log('selecting', event.detail));
+    /* functions */
+    // transfer.renderItem = item => item.title + '-' + item.description;
+    // transfer.filterOption = (value, item) =>  item.description.indexOf(value) !== -1 
+  </script>
+
+  <script>
+    transfer.columnStyle = {
+      boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)"
+    } 
+    transfer.wrapperStyle = {
+      width: "40%",
+      minWidth: "500px",
+      margin: "80px auto"
+    }
+  </script>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    // JSON load
+    axios
+    .get("transfer-data.json")
+    .then(function(response) {
+        var data = response.data.data;
+        transfer.data = data;
+        var configuration = response.data.configuration;
+      //  transfer.configuration = configuration;
+     })
+    .catch(console.error); 
+  </script>
+</body>
+</html>

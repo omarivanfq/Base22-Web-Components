@@ -24,7 +24,7 @@ export class MyComponent {
   //@Prop() public autoExpandTopLevel: boolean = true;
   @Prop() public blockNode: boolean = false;
   @Prop() public checkable: boolean = false;
-  @Prop() public checkStricly: boolean = false;
+  @Prop() public checkStrictly: boolean;
   //@Prop() public defaultExpandAll: boolean = false;
   @Prop() public checked: boolean;
   @Prop() public key: string;
@@ -32,7 +32,6 @@ export class MyComponent {
   @Prop() public styles: object = {};
   @Event() public clicked: EventEmitter;
   //@Watch("checked") public checkSubnodes(){ this.subnodes.map({subnode => {subnode.checked = this.checked;}});}
-  @Prop() public checkStrictly: boolean = true;
   //checkStrictly debe ser false
 
   //este de abajo es de stencil corregido despues de meterlo dentro del wrapper
@@ -143,6 +142,7 @@ export class MyComponent {
           text={child.text}
           key={this.key}
           checkable={this.checkable}
+          checkStrictly={this.checkStrictly}
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}
           checked={child.checked}

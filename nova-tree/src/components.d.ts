@@ -17,7 +17,6 @@ export namespace Components {
   }
   interface NovaTree {
     'blockNode': boolean;
-    'checkStricly': boolean;
     'checkStrictly': boolean;
     'checkable': boolean;
     'checked': boolean;
@@ -27,6 +26,7 @@ export namespace Components {
     'styles': object;
   }
   interface NovaTreeNode {
+    'checkStrictly': boolean;
     'checkable': boolean;
     'checked': boolean;
     'disableCheckbox': boolean;
@@ -74,7 +74,6 @@ declare namespace LocalJSX {
   }
   interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
     'blockNode'?: boolean;
-    'checkStricly'?: boolean;
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
     'checked'?: boolean;
@@ -85,6 +84,7 @@ declare namespace LocalJSX {
     'styles'?: object;
   }
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
+    'checkStrictly'?: boolean;
     'checkable'?: boolean;
     'checked'?: boolean;
     'disableCheckbox'?: boolean;

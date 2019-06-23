@@ -21,10 +21,6 @@ export class NovaCheckbox {
   // uls.item(i).classList.add("::before")
   //}
   //}
-  handleChildrenExpand = c => {
-    let uls = c.getElementsByTagName("");
-    console.log(uls);
-  };
 
   handleToggle = () => {
     this.checked = !this.checked;

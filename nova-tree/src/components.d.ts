@@ -9,15 +9,42 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface NovaTree {}
-  interface NovaTreeNode {
+  interface NovaCheckbox {
     'checked': boolean;
+    'disabled': boolean;
+    'handleClick': Function;
+    'styles': any;
+  }
+  interface NovaTree {
+    'autoExpandTopLevel': boolean;
+    'blockNode': boolean;
+    'checkStricly': boolean;
+    'checkStrictly': boolean;
+    'checkable': boolean;
+    'checked': boolean;
+    'defaultExpandAll': boolean;
+    'disabled': boolean;
+    'styles': object;
+  }
+  interface NovaTreeNode {
+    'checkable': boolean;
+    'checked': boolean;
+    'disableCheckbox': boolean;
+    'disabled': boolean;
+    'expanded': boolean;
+    'subnodes': NovaTreeNode[];
     'text': string;
   }
 }
 
 declare global {
 
+
+  interface HTMLNovaCheckboxElement extends Components.NovaCheckbox, HTMLStencilElement {}
+  var HTMLNovaCheckboxElement: {
+    prototype: HTMLNovaCheckboxElement;
+    new (): HTMLNovaCheckboxElement;
+  };
 
   interface HTMLNovaTreeElement extends Components.NovaTree, HTMLStencilElement {}
   var HTMLNovaTreeElement: {
@@ -31,19 +58,44 @@ declare global {
     new (): HTMLNovaTreeNodeElement;
   };
   interface HTMLElementTagNameMap {
+    'nova-checkbox': HTMLNovaCheckboxElement;
     'nova-tree': HTMLNovaTreeElement;
     'nova-tree-node': HTMLNovaTreeNodeElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {}
-  interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
+  interface NovaCheckbox extends JSXBase.HTMLAttributes<HTMLNovaCheckboxElement> {
     'checked'?: boolean;
-    'text'?: string;
+    'disabled'?: boolean;
+    'handleClick'?: Function;
+    'onClicked'?: (event: CustomEvent<any>) => void;
+    'styles'?: any;
+  }
+  interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
+    'autoExpandTopLevel'?: boolean;
+    'blockNode'?: boolean;
+    'checkStricly'?: boolean;
+    'checkStrictly'?: boolean;
+    'checkable'?: boolean;
+    'checked'?: boolean;
+    'defaultExpandAll'?: boolean;
+    'disabled'?: boolean;
+    'onClicked'?: (event: CustomEvent<any>) => void;
+    'styles'?: object;
+  }
+  interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
+    'checkable'?: boolean;
+    'checked'?: boolean;
+    'disableCheckbox'?: boolean;
+    'disabled'?: boolean;
+    'expanded'?: boolean;
+    'subnodes'?: NovaTreeNode[];
+    'text': string;
   }
 
   interface IntrinsicElements {
+    'nova-checkbox': NovaCheckbox;
     'nova-tree': NovaTree;
     'nova-tree-node': NovaTreeNode;
   }

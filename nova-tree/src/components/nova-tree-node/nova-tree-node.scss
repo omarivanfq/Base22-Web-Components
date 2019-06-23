@@ -10,6 +10,11 @@ li {
   font-size: 14px;
 }
 
+.children {
+  display: block;
+  margin-left: 32px;
+}
+
 .container > * {
   display: inline-block;
   cursor: pointer;

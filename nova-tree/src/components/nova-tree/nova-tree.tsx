@@ -1,83 +1,163 @@
-import { Component, h } from "@stencil/core";
-import Fragment from "stencil-fragment";
-
+import {
+  Component,
+  Prop,
+  Element,
+  Event,
+  EventEmitter,
+  h
+} from "@stencil/core";
+//import Fragment from "stencil-fragment";
+// State, <- ete metelo con los demas
+//method para las cosas que se pueden llamar desde auera porque son publicas
+//los que ienen  --- en el default vana ser states
+//if rprop is mutable utable: true inside {}
 @Component({
   tag: "nova-tree",
   styleUrl: "nova-tree.scss",
   shadow: true
 })
 export class MyComponent {
+  @Element() private element: HTMLElement;
 
-  render() {
-    let treeData = [
-      {
-        title: "0-0",
-        key: "0-0",
-        checked: true,
-        children: [
-          {
-            title: "0-0-0",
-            key: "0-0-0",
-            checked: true,
-            children: [
-              { title: "0-0-0-0", key: "0-0-0-0", checked: true },
-              { title: "0-0-0-1", key: "0-0-0-1", checked: true },
-              { title: "0-0-0-2", key: "0-0-0-2", checked: false }
-            ]
-          },
-          {
-            title: "0-0-1",
-            key: "0-0-1",
-            checked: false,
-            children: [
-              { title: "0-0-1-0", key: "0-0-1-0", checked: false },
-              { title: "0-0-1-1", key: "0-0-1-1", checked: false },
-              { title: "0-0-1-2", key: "0-0-1-2", checked: false }
-            ]
-          },
-          {
-            title: "0-0-2",
-            key: "0-0-2",
-            checked: false
-          }
-        ]
-      },
-      {
-        title: "0-1",
-        key: "0-1",
-        checked: false,
-        children: [
-          { title: "0-1-0-0", key: "0-1-0-0", checked: false },
-          { title: "0-1-0-1", key: "0-1-0-1", checked: false },
-          { title: "0-1-0-2", key: "0-1-0-2", checked: false }
-        ]
-      },
-      {
-        title: "0-2",
-        key: "0-2",
-        checked: false
-      }
-    ];
+  @Prop() public autoExpandTopLevel: boolean = true;
+  @Prop() public blockNode: boolean = false;
+  @Prop() public checkable: boolean = false;
+  @Prop() public checkStricly: boolean = false;
+  @Prop() public defaultExpandAll: boolean = false;
+  @Prop() public checked: boolean;
+  @Prop() public disabled: boolean;
+  @Prop() public styles: object = {};
+  @Event() public clicked: EventEmitter;
+  @Prop() public checkStrictly: boolean = true;
+  //checkStrictly debe ser false
 
-    const handleNode = leaf => {
-      return (
-        <Fragment>
-          <nova-tree-node
-            key={leaf.key}
-            text={leaf.title}
-            checked={leaf.checked}
-          />
+  //este de abajo es de stencil corregido despues de meterlo dentro del wrapper
+  public componentDidLoad(): void {
+    const ul = this.element.shadowRoot.children.item(1);
+    this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
+  }
 
-          {leaf.children ? (
-            <div class="children">
-              {leaf.children.map(child => handleNode(child))}
-            </div>
-          ) : (
-            undefined
-          )}
-        </Fragment>
-      );
-    };
-    return <ul>{treeData.map(leaf => handleNode(leaf))}</ul>;
+  private handleAutoExpand(e): void {
+    const uls = e.getElementsByTagName("ul");
+    for (let i = 0; i < uls.length; i++) {
+      uls.item(i).classList.add("active");
+    }
+  }
+
+  private treeData = [
+    {
+      text: "happy",
+
+      disableCheckbox: false,
+      disabled: false,
+      checked: false,
+      expanded: true,
+      subnodes: [
+        {
+          text: "Water",
+
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          expanded: true,
+          subnodes: []
+        },
+        {
+          text: "Coffee",
+
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          expanded: true,
+          subnodes: [
+            {
+              text: "Coffee",
+
+              disableCheckbox: false,
+              disabled: false,
+              checked: false,
+              expanded: true,
+              subnodes: []
+            },
+            {
+              text: "Whatever",
+
+              disableCheckbox: false,
+              disabled: false,
+              checked: false,
+              expanded: true,
+              subnodes: []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      text: "Beverages",
+
+      disableCheckbox: false,
+      disabled: false,
+      checked: false,
+      expanded: true,
+      subnodes: [
+        {
+          text: "Water",
+
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          expanded: true,
+          subnodes: []
+        },
+        {
+          text: "Coffee",
+
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          expanded: true,
+          subnodes: []
+        },
+        {
+          text: "Tea",
+
+          disableCheckbox: false,
+          disabled: false,
+          checked: false,
+          expanded: true,
+          subnodes: []
+        }
+      ]
+    }
+  ];
+
+  private handleChild(child): HTMLLIElement {
+    return (
+      <li>
+        <nova-tree-node
+          text={child.text}
+          checkable={this.checkable}
+          disableCheckbox={child.disableCheckbox}
+          disabled={child.disabled}
+          checked={child.checked}
+          expanded={child.expanded}
+          subnodes={child.subnodes}
+        ></nova-tree-node>
+      </li>
+    );
+  }
+
+  public render(): HTMLNovaTreeElement {
+    return (
+      //en teoria aqui deberia de alar todo en una sola linea
+      //desde el json que nos entreguen con la informacion
+      //solo para que lo tomes en cuenta
+      //checalo en ratetsx de eddy
+      //esto es con la intencino de quemetas el WILL load, arapra que no haga tnto overhead
+
+      <ul id="myUL">
+        {this.treeData.map((child): HTMLLIElement => this.handleChild(child))}
+      </ul>
+    );
   }
 }

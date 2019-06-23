@@ -11,7 +11,9 @@ export class NovaCheckbox {
   @Prop() public styles: any = {};
   @Event() public clicked: EventEmitter;
   @Prop() public handleClick: Function = () => {};
-  //  @Prop() autoSelectChildren: boolean = true;
+  //@Prop() autoSelectChildren: boolean = true;
+
+  //@Prop() public handleChildrenExpand: void;
 
   //handleAutoChildren = c =>{
   //  let uls. = c.getElementsByTagName("ul")<-
@@ -19,9 +21,15 @@ export class NovaCheckbox {
   // uls.item(i).classList.add("::before")
   //}
   //}
+  handleChildrenExpand = c => {
+    let uls = c.getElementsByTagName("");
+    console.log(uls);
+  };
 
   handleToggle = () => {
     this.checked = !this.checked;
+    //console.log("wored?");
+    //sthis.subnodes.map({subnode => {subnode.checked = this.checked} })
   };
 
   render() {
@@ -31,11 +39,8 @@ export class NovaCheckbox {
           <input
             type="checkbox"
             {...{ checked: this.checked, disabled: this.disabled }}
+            //onclick={c => this.handleChildrenExpand(c)}
             onClick={() => this.handleToggle()}
-            //{
-            //      this.clicked.emit();
-            //    this.handleClick();
-            //}
           />
           <span class="checkmark"></span>
         </label>

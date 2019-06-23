@@ -2,6 +2,7 @@ import {
   Component,
   Prop,
   Element,
+  //Watch,
   Event,
   EventEmitter,
   h
@@ -18,23 +19,27 @@ import {
 })
 export class MyComponent {
   @Element() private element: HTMLElement;
+  @Prop() public defaultExpandAll: boolean = false;
 
-  @Prop() public autoExpandTopLevel: boolean = true;
+  //@Prop() public autoExpandTopLevel: boolean = true;
   @Prop() public blockNode: boolean = false;
   @Prop() public checkable: boolean = false;
   @Prop() public checkStricly: boolean = false;
-  @Prop() public defaultExpandAll: boolean = false;
+  //@Prop() public defaultExpandAll: boolean = false;
   @Prop() public checked: boolean;
+  @Prop() public key: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
   @Event() public clicked: EventEmitter;
+  //@Watch("checked") public checkSubnodes(){ this.subnodes.map({subnode => {subnode.checked = this.checked;}});}
   @Prop() public checkStrictly: boolean = true;
   //checkStrictly debe ser false
 
   //este de abajo es de stencil corregido despues de meterlo dentro del wrapper
   public componentDidLoad(): void {
     const ul = this.element.shadowRoot.children.item(1);
-    this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
+    //this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
+    this.defaultExpandAll ? this.handleAutoExpand(ul) : undefined;
   }
 
   private handleAutoExpand(e): void {
@@ -47,7 +52,7 @@ export class MyComponent {
   private treeData = [
     {
       text: "happy",
-
+      key: "0-0",
       disableCheckbox: false,
       disabled: false,
       checked: false,
@@ -55,7 +60,7 @@ export class MyComponent {
       subnodes: [
         {
           text: "Water",
-
+          key: "0-0-0",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -64,7 +69,7 @@ export class MyComponent {
         },
         {
           text: "Coffee",
-
+          key: "0-0-1",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -72,7 +77,7 @@ export class MyComponent {
           subnodes: [
             {
               text: "Coffee",
-
+              key: "0-0-1-0",
               disableCheckbox: false,
               disabled: false,
               checked: false,
@@ -81,7 +86,7 @@ export class MyComponent {
             },
             {
               text: "Whatever",
-
+              key: "0-0-1-0",
               disableCheckbox: false,
               disabled: false,
               checked: false,
@@ -94,7 +99,7 @@ export class MyComponent {
     },
     {
       text: "Beverages",
-
+      key: "0-1",
       disableCheckbox: false,
       disabled: false,
       checked: false,
@@ -102,7 +107,7 @@ export class MyComponent {
       subnodes: [
         {
           text: "Water",
-
+          key: "0-1-0",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -111,7 +116,7 @@ export class MyComponent {
         },
         {
           text: "Coffee",
-
+          key: "0-1-1",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -120,7 +125,7 @@ export class MyComponent {
         },
         {
           text: "Tea",
-
+          key: "0-1-2",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -136,6 +141,7 @@ export class MyComponent {
       <li>
         <nova-tree-node
           text={child.text}
+          key={this.key}
           checkable={this.checkable}
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}

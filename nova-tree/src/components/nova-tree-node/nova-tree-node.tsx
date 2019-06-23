@@ -37,6 +37,12 @@ export class NovaTreeNode {
 
   private handleCheck(e): void {
     this.checked = e.target.checked;
+    //entra dos veces
+    //funciona para los hijos directos
+    this.subnodes.map(nodo => {
+      nodo.checked = this.checked;
+    });
+    console.log("esta entrando este");
   }
 
   private handleChild(child: NovaTreeNode): HTMLLIElement {

@@ -16,7 +16,6 @@ export namespace Components {
     'styles': any;
   }
   interface NovaTree {
-    'autoExpandTopLevel': boolean;
     'blockNode': boolean;
     'checkStricly': boolean;
     'checkStrictly': boolean;
@@ -24,6 +23,7 @@ export namespace Components {
     'checked': boolean;
     'defaultExpandAll': boolean;
     'disabled': boolean;
+    'key': string;
     'styles': object;
   }
   interface NovaTreeNode {
@@ -73,7 +73,6 @@ declare namespace LocalJSX {
     'styles'?: any;
   }
   interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
-    'autoExpandTopLevel'?: boolean;
     'blockNode'?: boolean;
     'checkStricly'?: boolean;
     'checkStrictly'?: boolean;
@@ -81,6 +80,7 @@ declare namespace LocalJSX {
     'checked'?: boolean;
     'defaultExpandAll'?: boolean;
     'disabled'?: boolean;
+    'key'?: string;
     'onClicked'?: (event: CustomEvent<any>) => void;
     'styles'?: object;
   }

@@ -9,53 +9,106 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface MyComponent {
+  interface NovaRate {
     /**
-    * The first name
+    * Props This property allow to clear by setting value to 0
     */
-    'first': string;
+    'allowClear': boolean;
     /**
-    * The last name
+    * This property allow half values
     */
-    'last': string;
+    'allowHalf': boolean;
     /**
-    * The middle name
+    * This property focus the ul when component is mounted
     */
-    'middle': string;
+    'autoFocus': boolean;
+    /**
+    * Public API Methods
+    */
+    'blurComponent': () => Promise<void>;
+    /**
+    * This property sets the caracter to display as symbol
+    */
+    'character': string;
+    /**
+    * This property sets the number of stars
+    */
+    'count': number;
+    /**
+    * This property sets the initial value
+    */
+    'defaultValue': number;
+    /**
+    * This property makes the component "read only"
+    */
+    'disabled': boolean;
+    'focusComponent': () => Promise<void>;
+    /**
+    * This property replaces character for an icon
+    */
+    'icon': string;
   }
 }
 
 declare global {
 
 
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
+  interface HTMLNovaRateElement extends Components.NovaRate, HTMLStencilElement {}
+  var HTMLNovaRateElement: {
+    prototype: HTMLNovaRateElement;
+    new (): HTMLNovaRateElement;
   };
   interface HTMLElementTagNameMap {
-    'my-component': HTMLMyComponentElement;
+    'nova-rate': HTMLNovaRateElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent extends JSXBase.HTMLAttributes<HTMLMyComponentElement> {
+  interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
     /**
-    * The first name
+    * Props This property allow to clear by setting value to 0
     */
-    'first'?: string;
+    'allowClear'?: boolean;
     /**
-    * The last name
+    * This property allow half values
     */
-    'last'?: string;
+    'allowHalf'?: boolean;
     /**
-    * The middle name
+    * This property focus the ul when component is mounted
     */
-    'middle'?: string;
+    'autoFocus'?: boolean;
+    /**
+    * This property sets the caracter to display as symbol
+    */
+    'character'?: string;
+    /**
+    * This property sets the number of stars
+    */
+    'count'?: number;
+    /**
+    * This property sets the initial value
+    */
+    'defaultValue'?: number;
+    /**
+    * This property makes the component "read only"
+    */
+    'disabled'?: boolean;
+    /**
+    * This property replaces character for an icon
+    */
+    'icon'?: string;
+    /**
+    * Public API Events
+    */
+    'onOnBlur'?: (event: CustomEvent<any>) => void;
+    'onOnChange'?: (event: CustomEvent<any>) => void;
+    'onOnFocus'?: (event: CustomEvent<any>) => void;
+    'onOnHoverChange'?: (event: CustomEvent<any>) => void;
+    'onOnKeyDown'?: (event: CustomEvent<any>) => void;
   }
 
   interface IntrinsicElements {
-    'my-component': MyComponent;
+    'nova-rate': NovaRate;
   }
 }
 

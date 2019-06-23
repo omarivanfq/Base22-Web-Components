@@ -1,0 +1,64 @@
+ul {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  list-style: none;
+  display: inline-block;
+  outline: none;
+}
+
+ul li span {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+li {
+  position: relative;
+  display: inline-block;
+  margin-right: 8px;
+
+  cursor: pointer;
+
+  // Unselectable
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+li:hover {
+  transform: scale(1.1);
+}
+
+li > span {
+  color: #e8e8e8;
+}
+
+.on {
+  color: #fadb14;
+}
+
+.background {
+  color: transparent;
+  z-index: -1;
+}
+
+.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  direction: rtl;
+}

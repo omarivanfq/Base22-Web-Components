@@ -1,4 +1,4 @@
-import { Component, Element, Prop, h } from "@stencil/core";
+import { Component, Element, Prop, h, Watch } from "@stencil/core";
 
 @Component({
   tag: "nova-tree",
@@ -36,8 +36,17 @@ export class NovaTree {
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
 
+  @Prop() public multiple: boolean;
+
   private autoExpandAllHandler(node): void {
     node.expanded = true;
+    if (node.subnodes.length) {
+      node.subnodes.map(subnode => this.autoExpandAllHandler(subnode));
+    }
+  }
+
+  private autoSelectAllHandler(node): void {
+    node.selected = false;
     if (node.subnodes.length) {
       node.subnodes.map(subnode => this.autoExpandAllHandler(subnode));
     }
@@ -49,6 +58,15 @@ export class NovaTree {
       node.subnodes.map(subnode => this.disableAllHandler(subnode));
     }
   }
+
+  handleMultiple = multiple => {
+    if (!multiple) {
+      // let aux = 0;
+      NovaTree.treeData.map(parent => {
+        this.autoSelectAllHandler(parent);
+      });
+    }
+  };
 
   public componentWillLoad(): void {
     //const ul = this.element.shadowRoot.children.item(1);
@@ -62,6 +80,12 @@ export class NovaTree {
         parent.expanded = true;
       });
     }
+
+    this.handleMultiple(false);
+
+    NovaTree.treeData.map(parent => {
+      this.autoSelectAllHandler(parent);
+    });
 
     if (this.defaultExpandAll) {
       //console.log("entro");
@@ -213,7 +237,7 @@ export class NovaTree {
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}
-        ></nova-tree-node>
+        />
       </li>
     );
   }
@@ -226,5 +250,10 @@ export class NovaTree {
         )}
       </ul>
     );
+  }
+
+  @Watch("multiple")
+  multipleWatchHandler(newValue: boolean, oldValue: boolean) {
+    console.log("The new value of activated is: ", newValue);
   }
 }

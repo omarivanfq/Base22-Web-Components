@@ -23,12 +23,12 @@ export class NovaTreeNode {
   @Prop() public text!: string;
   @Prop() public key: string;
   @Prop() public checkable: boolean = false;
-  @Prop() public selected: boolean;
+  @Prop() public selected: boolean = true;
   @Prop() public autoExpandParent: boolean = true;
   @Prop() public defaultExpandAll: boolean = true;
   @Prop() public disableCheckbox: boolean = false;
   @Prop() public checkStrictly: boolean = false;
-  @Prop() public multiple: boolean;
+
   @Prop() public disabled: boolean = false;
   @Prop({ mutable: true }) public checked: boolean = false;
   @Prop({ mutable: true }) public expanded: boolean = false;
@@ -61,9 +61,11 @@ export class NovaTreeNode {
       return;
     }
 
-    this.subnodes.map((nodo: NovaTreeNode): void => {
-      nodo.checked = newValue;
-    });
+    this.subnodes.map(
+      (nodo: NovaTreeNode): void => {
+        nodo.checked = newValue;
+      }
+    );
   }
 
   //esta a a ser la de expanded
@@ -76,6 +78,10 @@ export class NovaTreeNode {
     }
   }
 
+  handleToggle = () => {
+    this.selected = !this.selected;
+  };
+
   public render(): HTMLElement {
     if (this.checkable) {
       if (this.isLeaf) {
@@ -84,11 +90,10 @@ export class NovaTreeNode {
             <span class="caretsecret" />
             <label>
               {this._generateCheckbox()}
+
               <span
-                onClick={(e): void => {
-                  (e.target as any).classList.toggle("selected");
-                  this.selected = !this.selected;
-                }}
+                onClick={() => this.handleToggle()}
+                class={this.selected ? "selected" : ""}
               >
                 {this.text}
               </span>
@@ -102,10 +107,8 @@ export class NovaTreeNode {
             <label>
               {this._generateCheckbox()}
               <span
-                onClick={(e): void => {
-                  (e.target as any).classList.toggle("selected");
-                  this.selected = !this.selected;
-                }}
+                onClick={() => this.handleToggle()}
+                class={this.selected ? "selected" : ""}
               >
                 {this.text}
               </span>
@@ -120,10 +123,8 @@ export class NovaTreeNode {
           <Host>
             <span class="caretsecret" />
             <span
-              onClick={(e): void => {
-                (e.target as any).classList.toggle("selected");
-                this.selected = !this.selected;
-              }}
+              onClick={() => this.handleToggle()}
+              class={this.selected ? "selected" : ""}
             >
               {this.text}
             </span>
@@ -134,10 +135,8 @@ export class NovaTreeNode {
           <Host>
             {this._generateCaret()}
             <span
-              onClick={(e): void => {
-                (e.target as any).classList.toggle("selected");
-                this.selected = !this.selected;
-              }}
+              onClick={() => this.handleToggle()}
+              class={this.selected ? "selected" : ""}
             >
               {this.text}
             </span>
@@ -208,7 +207,6 @@ export class NovaTreeNode {
           checkable={this.checkable}
           disableCheckbox={node.disableCheckbox}
           disabled={node.disabled}
-          selected={node.selected}
           checked={node.checked}
           checkStrictly={this.checkStrictly}
           expanded={node.expanded}
@@ -217,16 +215,18 @@ export class NovaTreeNode {
             e.stopPropagation();
             this._handleSubnodeCheckedChange(e);
           }}
-        ></nova-tree-node>
+        />
       </li>
     );
   }
 
   private _handleSubnodeCheckedChange(e): void {
     const key = e.target.key;
-    const node = this.subnodes.filter((node): boolean => {
-      return node.key === key;
-    })[0];
+    const node = this.subnodes.filter(
+      (node): boolean => {
+        return node.key === key;
+      }
+    )[0];
     node.checked = e.target.checked;
     if (e.target.checked) {
       this.checked = this.subnodes.reduce((accum, subnode): boolean => {

@@ -33,7 +33,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-unused-vars": [
       "warn",
-      { varsIgnorePattern: "(h|Host|Fragment)" }
+      { varsIgnorePattern: "(h|Host|Fragment)", argsIgnorePattern: "^_" }
     ]
   }
 };

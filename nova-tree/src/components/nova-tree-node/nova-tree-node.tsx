@@ -23,7 +23,7 @@ export class NovaTreeNode {
   @Prop() public text!: string;
   @Prop() public key: string;
   @Prop() public checkable: boolean = false;
-  @Prop() public selected: boolean = true;
+  @Prop({ mutable: true }) selected: boolean = false;
   @Prop() public autoExpandParent: boolean = true;
   @Prop() public defaultExpandAll: boolean = true;
   @Prop() public disableCheckbox: boolean = false;
@@ -95,7 +95,7 @@ export class NovaTreeNode {
                 onClick={() => this.handleToggle()}
                 class={this.selected ? "selected" : ""}
               >
-                {this.text}
+                {this.selected.toString()}
               </span>
             </label>
           </Host>
@@ -110,7 +110,7 @@ export class NovaTreeNode {
                 onClick={() => this.handleToggle()}
                 class={this.selected ? "selected" : ""}
               >
-                {this.text}
+                {this.selected.toString()}
               </span>
             </label>
             {this._generateListOfSubnodes()}
@@ -126,7 +126,7 @@ export class NovaTreeNode {
               onClick={() => this.handleToggle()}
               class={this.selected ? "selected" : ""}
             >
-              {this.text}
+              {this.selected.toString()}
             </span>
           </Host>
         );
@@ -138,7 +138,7 @@ export class NovaTreeNode {
               onClick={() => this.handleToggle()}
               class={this.selected ? "selected" : ""}
             >
-              {this.text}
+              {this.selected.toString()}
             </span>
             {this._generateListOfSubnodes()}
           </Host>

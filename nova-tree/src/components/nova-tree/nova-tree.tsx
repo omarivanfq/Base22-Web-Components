@@ -45,28 +45,12 @@ export class NovaTree {
     }
   }
 
-  private autoSelectAllHandler(node): void {
-    node.selected = false;
-    if (node.subnodes.length) {
-      node.subnodes.map(subnode => this.autoExpandAllHandler(subnode));
-    }
-  }
-
   private disableAllHandler(node): void {
     node.disableCheckbox = true;
     if (node.subnodes.length) {
       node.subnodes.map(subnode => this.disableAllHandler(subnode));
     }
   }
-
-  handleMultiple = multiple => {
-    if (!multiple) {
-      // let aux = 0;
-      NovaTree.treeData.map(parent => {
-        this.autoSelectAllHandler(parent);
-      });
-    }
-  };
 
   public componentWillLoad(): void {
     //const ul = this.element.shadowRoot.children.item(1);
@@ -80,12 +64,6 @@ export class NovaTree {
         parent.expanded = true;
       });
     }
-
-    this.handleMultiple(false);
-
-    NovaTree.treeData.map(parent => {
-      this.autoSelectAllHandler(parent);
-    });
 
     if (this.defaultExpandAll) {
       //console.log("entro");
@@ -253,7 +231,20 @@ export class NovaTree {
   }
 
   @Watch("multiple")
-  multipleWatchHandler(newValue: boolean, oldValue: boolean) {
-    console.log("The new value of activated is: ", newValue);
+  multipleWatchHandler(newValue: boolean) {
+    NovaTree.treeData.map(parent => {
+      this.autoSelectAllHandler(parent, newValue);
+    });
+  }
+
+  private autoSelectAllHandler(node, newValue): void {
+    console.log(node.selected);
+    node.selected = newValue;
+
+    if (node.subnodes.length) {
+      node.subnodes.map(subnode =>
+        this.autoSelectAllHandler(subnode, newValue)
+      );
+    }
   }
 }

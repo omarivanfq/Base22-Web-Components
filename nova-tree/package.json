@@ -31,12 +31,11 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-stencil": "0.0.1",
     "prettier": "^1.18.2",
-    "stencil-fragment": "^1.0.1"
-  },
-  "license": "MIT",
-  "dependencies": {
+    "stencil-fragment": "^1.0.1",
     "vuepress": "^1.0.2"
   },
+  "license": "MIT",
+  "dependencies": {},
   "keywords": [],
   "author": ""
 }

@@ -536,7 +536,6 @@ export class NovaTransfer {
 
   private _moveToSource() {
     if (!this.disabled) {
-      console.log("selected", this.selected);
       var alreadyInSource = [];
       var moveKeys = []; // items that are transfering
       this.selected.forEach(key => {
@@ -554,7 +553,6 @@ export class NovaTransfer {
         moveKeys
       });
       this.transfered = [...moveKeys];
-      console.log("transfered", this.transfered);
     }
   }
 

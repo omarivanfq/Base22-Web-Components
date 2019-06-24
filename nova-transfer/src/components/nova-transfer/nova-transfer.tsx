@@ -119,6 +119,7 @@ export class NovaTransfer {
   componentDidLoad() {
     this.sourceFooter = this._isThereSourceFooter();
     this.targetFooter = this._isThereTargetFooter();
+    this.el.querySelectorAll("*[slot]").forEach(s => (s as any).style.visibility="visible");
   }
 
   /* 
@@ -126,7 +127,8 @@ export class NovaTransfer {
   */
 
   @Method()
-  async handleSelect(item:any) {
+  async handleSelect(key:string) {
+    var item = this.data.items.find(item => item.key === key);
     this._handleSelect(item);
   }
 
@@ -554,11 +556,6 @@ export class NovaTransfer {
       });
       this.transfered = [...moveKeys];
     }
-  }
-
-  @Method()
-  async moveToT() {
-    this._moveToTarget();
   }
 
   private _moveToSource() {

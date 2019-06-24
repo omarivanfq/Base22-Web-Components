@@ -21,8 +21,7 @@ export namespace Components {
     'data'?: any;
     'disabled': boolean;
     'filterOption': Function;
-    'handleSelect': (item: any) => Promise<void>;
-    'moveToT': () => Promise<void>;
+    'handleSelect': (key: string) => Promise<void>;
     'operationStyle': any;
     'renderItem': Function;
     'showSearch': boolean;

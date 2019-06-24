@@ -170,11 +170,8 @@
           table.querySelectorAll("tr")
           .forEach(tr => {
             var checkbox = tr.querySelector("input[type='checkbox']");
-            if (keys.indexOf(tr.getAttribute("id")) !== -1) {
-              checkbox.checked = true;
-            }
-            else {
-              checkbox.checked = false;
+            if (checkbox) {
+              checkbox.checked = keys.indexOf(tr.getAttribute("id")) !== -1
             }
           });
         }
@@ -183,11 +180,8 @@
           table.querySelectorAll("tr")
           .forEach(tr => {
             var checkbox = tr.querySelector("input[type='checkbox']");
-            if (keys.indexOf(tr.getAttribute("id")) !== -1) {
-              checkbox.checked = true;
-            }
-            else {
-              checkbox.checked = false;
+            if (checkbox) {
+              checkbox.checked = keys.indexOf(tr.getAttribute("id")) !== -1
             }
           });
         }

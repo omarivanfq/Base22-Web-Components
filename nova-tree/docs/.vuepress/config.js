@@ -21,7 +21,7 @@ function getPAtternsSidebar() {
       // y esto es un objeto
       title: "Componentes NOVA",
       collapsable: true,
-      children: ["Tree", "TreeNode", "Checkbox", "General"]
+      children: ["Tree", "TreeNode", "Checkbox", "General", "Transfer"]
 
       //children: ["WHAT", "whatTwo"]
     }

@@ -29,6 +29,7 @@ export class NovaTree {
   @Prop() public blockNode: boolean = false;
   @Prop() public checkable: boolean = false;
   @Prop() public checkStrictly: boolean;
+  @Prop() public selected;
   //@Prop() public defaultExpandAll: boolean = false;
   @Prop() public checked: boolean;
   @Prop() public key: string;
@@ -54,6 +55,7 @@ export class NovaTree {
     //this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
     //this.defaultExpandAll ? this.handleAutoExpand(ul) : undefined;
     //
+
     if (this.autoExpandParent) {
       //console.log("entro");
       NovaTree.treeData.map(parent => {
@@ -86,6 +88,7 @@ export class NovaTree {
       key: "0-0",
       disableCheckbox: false,
       disabled: false,
+      selected: false,
       checked: false,
       expanded: false,
       subnodes: [
@@ -94,6 +97,7 @@ export class NovaTree {
           key: "0-0-0",
           disableCheckbox: false,
           disabled: false,
+          selected: false,
           checked: false,
           expanded: false,
           subnodes: []
@@ -103,6 +107,7 @@ export class NovaTree {
           key: "0-0-1",
           disableCheckbox: false,
           disabled: false,
+          selected: false,
           checked: false,
           expanded: false,
           subnodes: [
@@ -111,6 +116,7 @@ export class NovaTree {
               key: "0-0-1-0",
               disableCheckbox: false,
               disabled: false,
+              selected: false,
               checked: false,
               expanded: false,
               subnodes: []
@@ -120,6 +126,7 @@ export class NovaTree {
               key: "0-0-1-0",
               disableCheckbox: false,
               disabled: false,
+              selected: false,
               checked: false,
               expanded: false,
               subnodes: [
@@ -128,6 +135,7 @@ export class NovaTree {
                   key: "0-0-1-0",
                   disableCheckbox: false,
                   disabled: false,
+                  selected: false,
                   checked: false,
                   expanded: false,
                   subnodes: []
@@ -137,6 +145,7 @@ export class NovaTree {
                   key: "0-0-1-0",
                   disableCheckbox: false,
                   disabled: false,
+                  selected: false,
                   checked: false,
                   expanded: false,
                   subnodes: []
@@ -152,6 +161,7 @@ export class NovaTree {
       key: "0-1",
       disableCheckbox: false,
       disabled: false,
+      selected: false,
       checked: false,
       expanded: false,
       subnodes: [
@@ -160,6 +170,7 @@ export class NovaTree {
           key: "0-1-0",
           disableCheckbox: false,
           disabled: false,
+          selected: false,
           checked: false,
           expanded: false,
           subnodes: []
@@ -169,6 +180,7 @@ export class NovaTree {
           key: "0-1-1",
           disableCheckbox: false,
           disabled: false,
+          selected: false,
           checked: false,
           expanded: false,
           subnodes: []
@@ -178,6 +190,7 @@ export class NovaTree {
           key: "0-1-2",
           disableCheckbox: false,
           disabled: false,
+          selected: false,
           checked: false,
           expanded: false,
           subnodes: []
@@ -196,6 +209,7 @@ export class NovaTree {
           checkStrictly={this.checkStrictly}
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}
+          selected={this.selected}
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}

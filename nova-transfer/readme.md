@@ -8,7 +8,7 @@ Transfer elements between two columns in an intuitive and efficient way.
     show-select-all
     show-search> 
     <p slot="source-footer" style="padding: 8px 0; text-align: center;">Footer 1</p>
-    <p slot="target-footer" style="padding: 8px 0; text-align: center;">Footer 1</p>
+    <p slot="target-footer" style="padding: 8px 0; text-align: center;">Footer 2</p>
   </nova-transfer>
  ```
  

@@ -1,4 +1,14 @@
-import { Component, Host, h, State, Prop, Watch } from "@stencil/core";
+import {
+  Component,
+  Element,
+  Host,
+  h,
+  State,
+  Prop,
+  Watch,
+  Event,
+  EventEmitter
+} from "@stencil/core";
 
 @Component({
   tag: "nova-tree-node",
@@ -6,18 +16,24 @@ import { Component, Host, h, State, Prop, Watch } from "@stencil/core";
   shadow: false
 })
 export class NovaTreeNode {
+  //Element
+  @Element() public el;
+
+  //Props
   @Prop() public text!: string;
   @Prop() public checkable: boolean = false;
   @Prop() public autoExpandParent: boolean = true;
   @Prop() public defaultExpandAll: boolean = true;
   @Prop() public disableCheckbox: boolean = false;
-  @Prop({ reflect: true }) public checkStrictly: boolean = false;
+  @Prop() public checkStrictly: boolean = false;
   @Prop() public disabled: boolean = false;
   @Prop({ mutable: true }) public checked: boolean = false;
   @Prop({ mutable: true }) public expanded: boolean = false;
   @Prop({ mutable: true }) public subnodes: NovaTreeNode[] = [];
 
   @State() private isLeaf: boolean = true;
+
+  @Event() public novaTreeNodeCheckedChange: EventEmitter;
 
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
@@ -34,51 +50,22 @@ export class NovaTreeNode {
     this.isLeaf = !newValue.length;
   }
 
-  private handleToggle(): void {
-    this.expanded = !this.expanded;
-  }
-
-  private handleCheck(e): void {
-    this.checked = e.target.checked;
-    //entra dos veces
-    //funciona para los hijos directos
-    //this.subnodes.map(nodo => {
-    //  nodo.checked = this.checked;
-    //});
-    //console.log("esta entrando este");
-  }
-
-  // if (this.defaultExpandAll) {
-  //   //console.log("entro");
-  //   //MyComponent.treeData.map(parent => {
-  //   //  parent.expanded = true;
-  //   this.treeData.map(parent => {
-  //     parent.expanded = true;
-  //     if (parent.subnodes) {
-  //       parent.subnodes.expanded = true;
-  //       console.log("si hubo hijos");
-  //     }
-  //   });
-  //
-  //
-  //
-  // }
-
   @Watch("checked")
-  public checkRecursivo(newValue: boolean, _: boolean) {
+  public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
+    this.novaTreeNodeCheckedChange.emit();
+
     if (this.checkStrictly) {
       return;
     }
 
-    this.subnodes.map(nodo => {
+    this.subnodes.map((nodo: NovaTreeNode): void => {
       nodo.checked = newValue;
     });
   }
 
   //esta a a ser la de expanded
   @Watch("expanded")
-  public onExpand(newValue: boolean, _: boolean) {
-    //temp = newValue;
+  public onExpand(newValue: boolean, _oldValue: boolean): void {
     if (newValue) {
       //console.log("Aqui es para meter funcion on expand");
     } else {
@@ -86,81 +73,25 @@ export class NovaTreeNode {
     }
   }
 
-  private handleChild(child: NovaTreeNode): HTMLLIElement {
-    return (
-      <li>
-        <nova-tree-node
-          text={child.text}
-          checkable={this.checkable}
-          disableCheckbox={child.disableCheckbox}
-          disabled={child.disabled}
-          checked={child.checked}
-          checkStrictly={this.checkStrictly}
-          expanded={child.expanded}
-          subnodes={child.subnodes}
-        ></nova-tree-node>
-      </li>
-    );
-  }
-
   public render(): HTMLElement {
     if (this.checkable) {
       if (this.isLeaf) {
         return (
           <Host>
-            <span class="caretsecret"></span>
-            <nova-checkbox
-              disabled={this.disableCheckbox}
-              checked={this.checked}
-              onClick={(e): void => this.handleCheck(e)}
-            />
+            <span class="caretsecret" />
+            {this._generateCheckbox()}
             <span>{this.text}</span>
           </Host>
         );
       } else {
-        if (this.expanded) {
-          return (
-            <Host>
-              <span
-                class="caret caret-down"
-                onClick={(): void => this.handleToggle()}
-              ></span>
-              <nova-checkbox
-                disabled={this.disableCheckbox}
-                checked={this.checked}
-                onClick={(e): void => this.handleCheck(e)}
-              />
-              <span>{this.text}</span>
-              <ul class="nested active">
-                {this.subnodes.map(
-                  (child: NovaTreeNode): HTMLLIElement =>
-                    this.handleChild(child)
-                )}
-              </ul>
-            </Host>
-          );
-        } else {
-          return (
-            <Host>
-              <span
-                class="caret"
-                onClick={(): void => this.handleToggle()}
-              ></span>
-              <nova-checkbox
-                disabled={this.disableCheckbox}
-                checked={this.checked}
-                onClick={(e): void => this.handleCheck(e)}
-              />
-              <span>{this.text}</span>
-              <ul class="nested">
-                {this.subnodes.map(
-                  (child: NovaTreeNode): HTMLLIElement =>
-                    this.handleChild(child)
-                )}
-              </ul>
-            </Host>
-          );
-        }
+        return (
+          <Host>
+            {this._generateCaret()}
+            {this._generateCheckbox()}
+            <span>{this.text}</span>
+            {this._generateListOfSubnodes()}
+          </Host>
+        );
       }
     } else {
       if (this.isLeaf) {
@@ -171,40 +102,94 @@ export class NovaTreeNode {
           </Host>
         );
       } else {
-        if (this.expanded) {
-          return (
-            <Host>
-              <span
-                class="caret caret-down"
-                onClick={(): void => this.handleToggle()}
-              />
-              <span>{this.text}</span>
-              <ul class="nested active">
-                {this.subnodes.map(
-                  (child: NovaTreeNode): HTMLLIElement =>
-                    this.handleChild(child)
-                )}
-              </ul>
-            </Host>
-          );
-        } else {
-          return (
-            <Host>
-              <span
-                class="caret caret-down"
-                onClick={(): void => this.handleToggle()}
-              />
-              <span>{this.text}</span>
-              <ul class="nested active">
-                {this.subnodes.map(
-                  (child: NovaTreeNode): HTMLLIElement =>
-                    this.handleChild(child)
-                )}
-              </ul>
-            </Host>
-          );
-        }
+        return (
+          <Host>
+            {this._generateCaret()}
+            <span>{this.text}</span>
+            {this._generateListOfSubnodes()}
+          </Host>
+        );
       }
+    }
+  }
+
+  /**
+   * Local methods
+   */
+
+  private _generateCaret(): HTMLSpanElement {
+    if (this.expanded) {
+      return (
+        <span
+          class="caret caret-down"
+          onClick={(): void => this._toggleExpandedState()}
+        />
+      );
+    } else {
+      return (
+        <span class="caret" onClick={(): void => this._toggleExpandedState()} />
+      );
+    }
+  }
+
+  private _toggleExpandedState(): void {
+    this.expanded = !this.expanded;
+  }
+
+  private _generateCheckbox(): HTMLNovaCheckboxElement {
+    return (
+      <nova-checkbox
+        disabled={this.disableCheckbox}
+        checked={this.checked}
+        onNovaCheckboxClicked={(e): void => {
+          e.stopPropagation();
+          this._updateCheckedState(e);
+        }}
+      />
+    );
+  }
+
+  private _updateCheckedState(e): void {
+    this.checked = e.target.checked;
+  }
+
+  private _generateListOfSubnodes(): HTMLUListElement {
+    return (
+      <ul class={this.expanded ? "nested active" : "nested"}>
+        {this.subnodes.map(
+          (node: NovaTreeNode): HTMLLIElement => this._generateSubnode(node)
+        )}
+      </ul>
+    );
+  }
+
+  private _generateSubnode(node: NovaTreeNode): HTMLLIElement {
+    return (
+      <li>
+        <nova-tree-node
+          text={node.text}
+          checkable={this.checkable}
+          disableCheckbox={node.disableCheckbox}
+          disabled={node.disabled}
+          checked={node.checked}
+          checkStrictly={this.checkStrictly}
+          expanded={node.expanded}
+          subnodes={node.subnodes}
+          onNovaTreeNodeCheckedChange={(e): void => {
+            e.stopPropagation();
+            this._handleSubnodeCheckedChange(e);
+          }}
+        ></nova-tree-node>
+      </li>
+    );
+  }
+
+  private _handleSubnodeCheckedChange(e): void {
+    if (e.target.checked) {
+      console.log("IT enters");
+      this.checked = this.subnodes.reduce((accum, subnode): boolean => {
+        return accum && subnode.checked;
+      }, true);
     }
   }
 }

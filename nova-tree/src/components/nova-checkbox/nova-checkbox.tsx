@@ -1,46 +1,34 @@
-import { Component, Event, EventEmitter, h, Prop } from "@stencil/core";
+import { Component, Host, Event, EventEmitter, h, Prop } from "@stencil/core";
 
 @Component({
   tag: "nova-checkbox",
-  styleUrl: "nova-checkbox.css",
+  styleUrl: "nova-checkbox.scss",
   shadow: true
 })
 export class NovaCheckbox {
-  @Prop({ mutable: true }) public checked: boolean;
+  @Prop() public checked: boolean;
   @Prop() public disabled: boolean;
   @Prop() public styles: any = {};
-  @Event() public clicked: EventEmitter;
-  @Prop() public handleClick: Function = () => {};
-  //@Prop() autoSelectChildren: boolean = true;
+  @Prop() public handleClick: Function = (_e): void => {};
 
-  //@Prop() public handleChildrenExpand: void;
+  @Event() public novaCheckboxClicked: EventEmitter;
 
-  //handleAutoChildren = c =>{
-  //  let uls. = c.getElementsByTagName("ul")<-
-  // for (var i=0; i<uls.length;i++){
-  // uls.item(i).classList.add("::before")
-  //}
-  //}
-
-  handleToggle = () => {
-    this.checked = !this.checked;
-    //console.log("wored?");
-    //sthis.subnodes.map({subnode => {subnode.checked = this.checked} })
-  };
-
-  render() {
+  public render(): HTMLNovaCheckboxElement {
     return (
-      <div class="wrapper" style={this.styles}>
-        <label class={"container " + (this.disabled ? "disabled" : "")}>
+      <Host style={this.styles}>
+        <label class={this.disabled ? "disabled" : ""}>
           <input
             type="checkbox"
             {...{ checked: this.checked, disabled: this.disabled }}
-            //onclick={c => this.handleChildrenExpand(c)}
-            onClick={() => this.handleToggle()}
+            onClick={(e): void => {
+              this.checked = !this.checked;
+              this.novaCheckboxClicked.emit();
+              this.handleClick(e);
+            }}
           />
           <span class="checkmark"></span>
         </label>
-      </div>
+      </Host>
     );
   }
 }

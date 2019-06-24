@@ -1,6 +1,6 @@
 module.exports = {
-  title: "AAAAA",
-  description: "a ver donde encuentras esto",
+  title: "Documentacion Equipo 3 Team Hortons",
+  description: "Trabajo de practicantes para Base22",
   themeConfig: {
     logo: "/assets/img/image.png",
     nav: [
@@ -19,9 +19,11 @@ function getPAtternsSidebar() {
     //te regresa un arreglo
     {
       // y esto es un objeto
-      title: "web  cool",
-      collapsable: false,
-      children: ["WHAT", "whatTwo"]
+      title: "Componentes NOVA",
+      collapsable: true,
+      children: ["Tree", "TreeNode", "Checkbox", "General"]
+
+      //children: ["WHAT", "whatTwo"]
     }
   ];
 }

@@ -22,7 +22,7 @@ Ten cuidado
 
 ```js {3}
 module.exports = {
-  title: "amazin shiet",
+  title: "amazin stuff",
   description: "oh yhea"
 };
 ```

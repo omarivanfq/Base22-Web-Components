@@ -34,5 +34,9 @@
     "stencil-fragment": "^1.0.1"
   },
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "vuepress": "^1.0.2"
+  },
+  "keywords": [],
+  "author": ""
 }

@@ -48,6 +48,7 @@ export namespace Components {
     'disableCheckbox': boolean;
     'disabled': boolean;
     'expanded': boolean;
+    'key': string;
     'subnodes': NovaTreeNode[];
     'text': string;
   }
@@ -121,6 +122,7 @@ declare namespace LocalJSX {
     'disableCheckbox'?: boolean;
     'disabled'?: boolean;
     'expanded'?: boolean;
+    'key'?: string;
     'onNovaTreeNodeCheckedChange'?: (event: CustomEvent<any>) => void;
     'subnodes'?: NovaTreeNode[];
     'text': string;

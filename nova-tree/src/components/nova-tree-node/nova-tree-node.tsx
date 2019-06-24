@@ -21,6 +21,7 @@ export class NovaTreeNode {
 
   //Props
   @Prop() public text!: string;
+  @Prop() public key: string;
   @Prop() public checkable: boolean = false;
   @Prop() public autoExpandParent: boolean = true;
   @Prop() public defaultExpandAll: boolean = true;
@@ -79,16 +80,20 @@ export class NovaTreeNode {
         return (
           <Host>
             <span class="caretsecret" />
-            {this._generateCheckbox()}
-            <span>{this.text}</span>
+            <label>
+              {this._generateCheckbox()}
+              <span>{this.text}</span>
+            </label>
           </Host>
         );
       } else {
         return (
           <Host>
             {this._generateCaret()}
-            {this._generateCheckbox()}
-            <span>{this.text}</span>
+            <label>
+              {this._generateCheckbox()}
+              <span>{this.text}</span>
+            </label>
             {this._generateListOfSubnodes()}
           </Host>
         );
@@ -157,17 +162,19 @@ export class NovaTreeNode {
     return (
       <ul class={this.expanded ? "nested active" : "nested"}>
         {this.subnodes.map(
-          (node: NovaTreeNode): HTMLLIElement => this._generateSubnode(node)
+          (node: NovaTreeNode, index): HTMLLIElement =>
+            this._generateSubnode(node, index)
         )}
       </ul>
     );
   }
 
-  private _generateSubnode(node: NovaTreeNode): HTMLLIElement {
+  private _generateSubnode(node: NovaTreeNode, index): HTMLLIElement {
     return (
       <li>
         <nova-tree-node
           text={node.text}
+          key={this.key + "-" + index}
           checkable={this.checkable}
           disableCheckbox={node.disableCheckbox}
           disabled={node.disabled}
@@ -185,8 +192,12 @@ export class NovaTreeNode {
   }
 
   private _handleSubnodeCheckedChange(e): void {
+    const key = e.target.key;
+    const node = this.subnodes.filter((node): boolean => {
+      return node.key === key;
+    })[0];
+    node.checked = e.target.checked;
     if (e.target.checked) {
-      console.log("IT enters");
       this.checked = this.subnodes.reduce((accum, subnode): boolean => {
         return accum && subnode.checked;
       }, true);

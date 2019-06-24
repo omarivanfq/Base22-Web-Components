@@ -186,12 +186,12 @@ export class NovaTree {
     }
   ];
 
-  private handleChild(child): HTMLLIElement {
+  private handleChild(child, index): HTMLLIElement {
     return (
       <li>
         <nova-tree-node
           text={child.text}
-          key={this.key}
+          key={index}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}
           disableCheckbox={child.disableCheckbox}
@@ -208,7 +208,7 @@ export class NovaTree {
     return (
       <ul id="topLevelUL">
         {NovaTree.treeData.map(
-          (child): HTMLLIElement => this.handleChild(child)
+          (child, index): HTMLLIElement => this.handleChild(child, index)
         )}
       </ul>
     );

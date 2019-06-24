@@ -134,6 +134,11 @@ export class NovaRate {
    * Event handlers
    */
   handleSetValue(newValue) {
+    // Checks input is number
+    if (!Number(newValue) || newValue === true || newValue === false) {
+      return;
+    }
+
     let aux = this.value; // save initial value
 
     if ((this.allowClear && this.value === newValue) || newValue <= 0) {
@@ -143,10 +148,11 @@ export class NovaRate {
     } else {
       this.value = newValue;
     }
+
     // If value changes, generate new StarList and emit onChange
     if (aux !== this.value) {
       this.handleGenerateStarList(this.value);
-      this.onChange.emit(this.value);
+      // this.onChange.emit(this.value);
     }
   }
 

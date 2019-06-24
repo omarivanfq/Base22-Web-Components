@@ -1,3 +1,8 @@
+<!--
+  With the help of event listeners and the handleSelect method the 
+  nova-transfer component can be customized so it can display a different
+  view inside of each column as shown in the next example.
+-->
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
@@ -10,33 +15,43 @@
   <style>
     body { font-family: sans-serif; background-color: rgb(224, 60, 199);}
     p { margin: 0; padding: 0; }
-    table { width: 100%; }
+    h1 { color: #ffffff; text-align: center; font-size: 55px; 
+      text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none; }
+    h1 span { font-size: 45px; margin: 0 10px; }
+    table { width: 100%; text-align: center; }
+    *[slot] { visibility: hidden; } 
   </style>
 </head>
 <body>
+  <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
   <nova-transfer 
     show-search
     show-select-all>
-    <p slot="source-footer" style="text-align:center; padding: 10px 0;">footer 1</p>
-    <p slot="target-footer" style="text-align:center; padding: 10px 0;">footer 2</p>
+    <!-- source-column and target-column are the slots that allow the customization 
+      of each column -->
     <table slot="source-column" id="source-table">
     </table>
     <table slot="target-column" id="target-table">
     </table>
+    <p slot="source-footer" style="text-align:center; padding: 10px 0;">footer 1</p>
+    <p slot="target-footer" style="text-align:center; padding: 10px 0;">footer 2</p>
   </nova-transfer>
   <script>
     var transfer = document.querySelector("nova-transfer");
-
+    // event that is emitted each time the user requests to change items from one column to another
     transfer.addEventListener('transferColumn', event => { 
-      var { targetKeys } = event.detail;
+      var { targetKeys } = event.detail; // keys of the items that must now be in the target column
+      // updating the view of each column/table
       fillSourceTable(data.items.filter(item => targetKeys.indexOf(item.key) === -1));
       fillTargetTable(data.items.filter(item => targetKeys.indexOf(item.key) !== -1));
     });
-
+    // event that is emitted each time the user selects the item of a column
     transfer.addEventListener('select', event => {
-      updateCheckboxes([...event.detail.sourceSelectedKeys, ...event.detail.targetSelectedKeys]);
+      var sourceKeys = event.detail.sourceSelectedKeys; // keys of all the selected items from source column
+      var targetKeys = event.detail.targetSelectedKeys; // keys of all the selected items from target column
+      updateCheckboxes([...sourceKeys, ...targetKeys]);
     });
-
+    // event that is emitted each time the items from one column are filtered
     transfer.addEventListener('filter', event => {
       var { direction, filteredKeys } = event.detail
       if (direction === 'left') {
@@ -46,26 +61,28 @@
         fillTargetTable(data.items.filter(item => filteredKeys.indexOf(item.key) !== -1));
       }
     });
-
+    // function that handles the filtering of the items using the value from the searcbox
     transfer.filterOption = (value, item) => item.description.indexOf(value) !== -1
         || item.title.indexOf(value) !== -1;
-        
+      
+    // customized styles for the operation buttons (<,>)
     transfer.operationStyle = {
       padding: "7px",
       margin: 0,
-      width: "10%;"
+      width: "10%;",
+      zIndex: 999
     }
-
+    // customized styles for the columns
     transfer.columnStyle = {
       width: "45%",
       boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)"
     } 
- 
+    // customized styles for the wrapper of the component
     transfer.wrapperStyle = {
       width: "60%",
       height: "340px",
       minWidth: "500px",
-      margin: "80px auto",
+      margin: "0 auto",
     }
   </script>
 
@@ -74,7 +91,7 @@
     var data, configuration;
     // JSON load
     axios
-    .get("transfer-data.json")
+    .get("../transfer-data.json")
     .then(function(response) {
       data = response.data.data;
       transfer.data = data;
@@ -90,27 +107,48 @@
       fillSourceTable = (items) => {
         fillTable("#source-table", items);
       }
-
       fillTargetTable = (items) => {
         fillTable("#target-table", items);
       }
       
+      // function that creates a table with data from the transfer-data json
+      //   using the transfer method to handle the selection of items
       fillTable = (id, items) => {
         var table = document.querySelector(id);
         if (items.length > 0 && table) {
           table.innerHTML = ''        
-          var tableBody = document.createElement("tbody");
+          // getting items atributtes from json file
           var keys = Object.keys(items[0]);
           var noAttributes = keys.length;
+
+          // creating table header
+          var tableHead = document.createElement("thead");
+          var row_header = document.createElement("tr");
+          var cell = document.createElement("th");
+          // appending checkbox header 
+          var cellText = document.createTextNode("select");
+          cell.appendChild(cellText);
+          row_header.appendChild(cell);
+          // appending atributtes headers
+          for (var i = 0; i < noAttributes; i++) {
+            var cell = document.createElement("th");
+            var cellText = document.createTextNode(keys[i]);
+            cell.appendChild(cellText);
+            row_header.appendChild(cell);
+          }
+          tableHead.appendChild(row_header);
+          table.appendChild(tableHead);
+          // creating table body
+          var tableBody = document.createElement("tbody");
           for (var i = 0; i < items.length; i++) {
             const item = items[i];
             var row = document.createElement("tr");
             row.setAttribute("id", item.key);
-            row.classList.add("test");
             var checkbox = document.createElement("input");
             checkbox.setAttribute("type", "checkbox");
+            checkbox.disabled = item.disabled;
             checkbox.addEventListener('change', () => {
-              transfer.handleSelect(item);
+              transfer.handleSelect(item.key); // using the transfer method to handle the selection of items
             });
             var cell = document.createElement("td");
             cell.appendChild(checkbox);
@@ -126,9 +164,7 @@
           table.appendChild(tableBody);
         }
       }
-
       updateCheckboxes = (keys) => {
-        console.log(keys)
         var table = document.querySelector("#source-table");
         if (table) {
           table.querySelectorAll("tr")
@@ -147,8 +183,6 @@
           table.querySelectorAll("tr")
           .forEach(tr => {
             var checkbox = tr.querySelector("input[type='checkbox']");
-            console.log(checkbox);
-            console.log(tr.getAttribute("id"));
             if (keys.indexOf(tr.getAttribute("id")) !== -1) {
               checkbox.checked = true;
             }

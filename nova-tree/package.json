@@ -15,6 +15,9 @@
     "loader/"
   ],
   "scripts": {
+    "dev": "vuepress dev",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
     "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
@@ -32,7 +35,8 @@
     "eslint-plugin-stencil": "0.0.1",
     "prettier": "^1.18.2",
     "stencil-fragment": "^1.0.1",
-    "vuepress": "^1.0.2"
+    "vuepress": "^1.0.2",
+    "vuepress-plugin-container": "^2.0.1"
   },
   "license": "MIT",
   "dependencies": {},

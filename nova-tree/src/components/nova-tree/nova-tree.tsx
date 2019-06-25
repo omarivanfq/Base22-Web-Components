@@ -26,8 +26,11 @@ export class NovaTree {
   @Prop() public defaultExpandAll: boolean;
   @Prop() public disableTree: boolean;
   @Prop() public blockNode: boolean;
+
+  @Prop() public multiple: boolean;
   //@Prop() public autoExpandTopLevel: boolean = true;s
   @Prop() public checkable: boolean = false;
+  @Prop() public selectable: boolean;
   @Prop() public checkStrictly: boolean;
   @Prop() public selected;
   //@Prop() public defaultExpandAll: boolean = false;
@@ -79,6 +82,26 @@ export class NovaTree {
       NovaTree.treeData.map(parent => {
         this.disableAllHandler(parent);
       });
+    }
+  }
+  //
+  // @Watch("selected")
+  // public selectRecursivo(newValue: boolean, _oldValue: boolean): void {
+  //   if (newValue) {
+  //     console.log(" multiple true");
+  //     return;
+  //   } else {
+  //     console.log(" multiple false");
+  //     //
+  //     // NovaTree.treeData.map(parent => {
+  //     //   this.diselectAllHandler(parent);
+  //     // });
+  //   }
+  // }
+  private diselectAllHandler(node): void {
+    node.selected = false;
+    if (node.subnodes.length) {
+      node.subnodes.map(subnode => this.diselectAllHandler(subnode));
     }
   }
 
@@ -203,11 +226,12 @@ export class NovaTree {
     return (
       <li>
         <nova-tree-node
-          blockNode //={this.blockNode}
+          //blockNode //={this.blockNode}
           text={child.text}
           key={index}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}
+          multiple={this.multiple}
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}
           selected={this.selected}

@@ -16,7 +16,7 @@ module.exports = {
     [
       "script",
       {
-        src: "https://unpkg.com/@ivanesc/nova-tree@0.0.1/dist/nova-tree.js"
+        src: "https://unpkg.com/nova-tree@0.0.1/dist/nova-tree.js"
       }
     ]
   ]

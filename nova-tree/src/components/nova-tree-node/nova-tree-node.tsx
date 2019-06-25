@@ -22,14 +22,21 @@ export class NovaTreeNode {
   //Props
   @Prop() public text!: string;
   @Prop() public key: string;
+
+  @Prop() public selectedKey: string;
+  @Prop() public selectedFlag: boolean = false;
+  //@Prop() public selectedInt: integer = 0;
+
   @Prop() public blockNode: boolean;
   @Prop() public checkable: boolean = false;
   @Prop() public selected: boolean;
+  @Prop() public selectable: boolean;
   @Prop() public autoExpandParent: boolean = true;
   @Prop() public defaultExpandAll: boolean = true;
   @Prop() public disableCheckbox: boolean = false;
   @Prop() public checkStrictly: boolean = false;
-  @Prop() public multiple: boolean;
+  @Prop() public multiple: boolean = false;
+
   @Prop() public disabled: boolean = false;
   @Prop({ mutable: true }) public checked: boolean = false;
   @Prop({ mutable: true }) public expanded: boolean = false;
@@ -41,6 +48,39 @@ export class NovaTreeNode {
 
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
+  }
+
+  @Watch("selected")
+  public selectRecursivo(newValue: boolean, _oldValue: boolean): void {
+    if (newValue) {
+      this.selectedFlag = true;
+      //this.selectedKey =
+      //console.log(" multiple true");
+      console.log(this);
+      console.log("new value");
+      console.log(this.selectedFlag);
+      //return;
+    } else {
+      console.log("else part");
+      if (this.selected == false) {
+        this.selectedFlag = false;
+      }
+      console.log(this.selectedFlag);
+      //this.selectedFlag = false;
+      // selectedKey y selectedFlag
+      console.log(this);
+      //console.log(" multiple false");
+      //<ul class={this.expanded ? "nested active" : "nested"}>
+
+      //   {this.subnodes.map(
+      //     (node: NovaTreeNode, index): HTMLLIElement =>
+      //       this._generateSubnode(node, index)
+      //   )}
+      // //
+      // NovaTree.treeData.map(parent => {
+      //   this.diselectAllHandler(parent);
+      // });
+    }
   }
 
   @Watch("subnodes")
@@ -87,10 +127,13 @@ export class NovaTreeNode {
               {this._generateCheckbox()}
               <span
                 class={this.blockNode ? "blockNode" : ""}
+                //if(this.selectable){
                 onClick={(e): void => {
                   (e.target as any).classList.toggle("selected");
                   this.selected = !this.selected;
                 }}
+                //}
+
                 // onClick={(e): void => {
                 //   if (this.blockNode) {
                 //     (e.target as any).classList.toggle("selectedtwo");
@@ -235,6 +278,7 @@ export class NovaTreeNode {
           selected={node.selected}
           checked={node.checked}
           checkStrictly={this.checkStrictly}
+          multiple={this.multiple}
           expanded={node.expanded}
           subnodes={node.subnodes}
           onNovaTreeNodeCheckedChange={(e): void => {

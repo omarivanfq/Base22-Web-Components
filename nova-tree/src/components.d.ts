@@ -43,6 +43,7 @@ export namespace Components {
   }
   interface NovaTreeNode {
     'autoExpandParent': boolean;
+    'blockNode': boolean;
     'checkStrictly': boolean;
     'checkable': boolean;
     'checked': boolean;
@@ -120,6 +121,7 @@ declare namespace LocalJSX {
   }
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
     'autoExpandParent'?: boolean;
+    'blockNode'?: boolean;
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
     'checked'?: boolean;

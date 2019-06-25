@@ -41,5 +41,8 @@
   "license": "MIT",
   "dependencies": {},
   "keywords": [],
-  "author": ""
+  "author": "ivan",
+  "directories": {
+    "doc": "docs"
+  }
 }

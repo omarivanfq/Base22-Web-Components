@@ -25,7 +25,7 @@ export class NovaTree {
   @Prop() public autoExpandParent: boolean;
   @Prop() public defaultExpandAll: boolean;
   @Prop() public disableTree: boolean;
-  @Prop() public blockNode: boolean = true;
+  @Prop() public blockNode: boolean;
   //@Prop() public autoExpandTopLevel: boolean = true;s
   @Prop() public checkable: boolean = false;
   @Prop() public checkStrictly: boolean;
@@ -203,7 +203,7 @@ export class NovaTree {
     return (
       <li>
         <nova-tree-node
-          blockNode={this.blockNode}
+          blockNode //={this.blockNode}
           text={child.text}
           key={index}
           checkable={this.checkable}

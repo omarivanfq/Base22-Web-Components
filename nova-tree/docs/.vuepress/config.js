@@ -11,7 +11,15 @@ module.exports = {
     sidebar: {
       "/patterns/": getPAtternsSidebar()
     }
-  }
+  },
+  head: [
+    [
+      "script",
+      {
+        src: "https://unpkg.com/@ivanesc/nova-tree@0.0.1/dist/nova-tree.js"
+      }
+    ]
+  ]
 };
 
 function getPAtternsSidebar() {

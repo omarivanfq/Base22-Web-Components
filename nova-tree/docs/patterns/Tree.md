@@ -2,6 +2,37 @@
 
 Primero los buleanos
 
+## Update blockNode
+
+<TreeNodeWrapper/>
+
+:::warning Tenemos un bug en implementacion
+
+```js{4}
+private handleChild(child, index): HTMLLIElement {
+  return (
+    <li>
+      <nova-tree-node
+        blockNode //={this.blockNode}
+        text={child.text}
+        key={index}
+        checkable={this.checkable}
+        checkStrictly={this.checkStrictly}
+        disableCheckbox={child.disableCheckbox}
+        disabled={child.disabled}
+        selected={this.selected}
+        checked={child.checked}
+        expanded={child.expanded}
+        subnodes={child.subnodes}
+      ></nova-tree-node>
+    </li>
+  );
+}
+
+```
+
+:::
+
 ## autoExpandParent
 
 ```js

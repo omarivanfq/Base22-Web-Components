@@ -11,8 +11,8 @@ import {
 } from "@stencil/core";
 
 @Component({
-  tag: "nova-tree-node",
-  styleUrl: "nova-tree-node.scss",
+  tag: "nova-child",
+  styleUrl: "nova-child.scss",
   shadow: false
 })
 export class NovaTreeNode {

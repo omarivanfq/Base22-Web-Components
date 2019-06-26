@@ -1,4 +1,4 @@
-import { Component, Element, Prop, h } from "@stencil/core";
+import { Component, Element, Event, EventEmitter, Prop, h } from "@stencil/core";
 
 @Component({
   tag: "nova-tree",
@@ -38,6 +38,7 @@ export class NovaTree {
   @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
+  @Event() public select: EventEmitter;
 
   private autoExpandAllHandler(node): void {
     node.expanded = true;
@@ -234,12 +235,20 @@ export class NovaTree {
     );
   }
 
+  private _handleSelectEvent() {
+    var nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+    var nodesArr = Array.prototype.slice.call(nodes);
+    this.select.emit({checkedKeys: nodesArr
+      .filter(node => node.checked)
+      .map(node => node.nodeKey) });
+  }
+
   private handleChild(child): HTMLLIElement {
     return (
       <li>
         <nova-tree-node
           blockNode={this.blockNode}
-          text={child.text}
+          text={child.nodeKey}
           key={child.nodeKey}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
@@ -252,6 +261,7 @@ export class NovaTree {
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}
+          onNovaTreeNodeCheckedChange={() => this._handleSelectEvent()}
         ></nova-tree-node>
       </li>
     );

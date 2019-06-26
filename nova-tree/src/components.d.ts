@@ -118,6 +118,7 @@ declare namespace LocalJSX {
     'disabled'?: boolean;
     'multiple'?: boolean;
     'nodeKey'?: string;
+    'onSelect'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
     'selected'?: any;
     'styles'?: object;

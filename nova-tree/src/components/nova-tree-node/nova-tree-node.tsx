@@ -98,7 +98,6 @@ export class NovaTreeNode {
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
     this.novaTreeNodeCheckedChange.emit();
-
     if (this.checkStrictly) {
       return;
     }
@@ -284,7 +283,7 @@ export class NovaTreeNode {
             display: "block",
             width: "100%"
           }}
-          text={node.text}
+          text={node.nodeKey}
           key={node.nodeKey}
           nodeKey={node.nodeKey}
           checkable={this.checkable}
@@ -300,7 +299,7 @@ export class NovaTreeNode {
           onNovaTreeNodeCheckedChange={(e): void => {
             e.stopPropagation();
             this._handleSubnodeCheckedChange(e);
-            console.log("Hipotesis 3");
+            this.novaTreeNodeCheckedChange.emit();
           }}
         ></nova-tree-node>
       </li>
@@ -308,18 +307,6 @@ export class NovaTreeNode {
   }
 
   private _handleSubnodeCheckedChange(e): void {
-<<<<<<< HEAD
-    const key = e.target.key;
-    console.log(e.target);
-    const node = this.subnodes.filter((node): boolean => {
-      return node.key === key;
-    })[0];
-    node.checked = e.target.checked;
-    if (e.target.checked) {
-      this.checked = this.subnodes.reduce((accum, subnode): boolean => {
-        return accum && subnode.checked;
-      }, true);
-=======
     const nodeKey = e.target.nodeKey;
     const checked = e.target.checked;
     const node = this.subnodes.find((node): boolean => {
@@ -336,7 +323,6 @@ export class NovaTreeNode {
     } else {
       if (this.checked) this.checkChangedFromChild = true;
       this.checked = false;
->>>>>>> b399e3d972557c55f5b2cd839c715b27e5bc3824
     }
   }
 }

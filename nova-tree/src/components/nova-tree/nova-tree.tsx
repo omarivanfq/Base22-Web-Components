@@ -13,7 +13,7 @@ export class NovaTree {
   /**
    *  Common attributes
    */
-  @Prop({ mutable: true }) public data: object = {};
+  @Prop({ mutable: true }) public data: any = { items: {} };
   /**
    *  Common attributes
    */
@@ -60,9 +60,11 @@ export class NovaTree {
     //this.defaultExpandAll ? this.handleAutoExpand(ul) : undefined;
     //
 
+    this.data.items = NovaTree.treeData;
+
     if (this.autoExpandParent) {
       //console.log("entro");
-      NovaTree.treeData.map(parent => {
+      this.data.items.map(parent => {
         parent.expanded = true;
       });
     }
@@ -71,7 +73,7 @@ export class NovaTree {
       //console.log("entro");
       //NovaTree.treeData.map(parent => {
       //  parent.expanded = true;
-      NovaTree.treeData.map(parent => {
+      this.data.items.map(parent => {
         this.autoExpandAllHandler(parent);
       });
     }
@@ -80,12 +82,12 @@ export class NovaTree {
       //console.log("entro");
       //NovaTree.treeData.map(parent => {
       //  parent.expanded = true;
-      NovaTree.treeData.map(parent => {
+      this.data.items.map(parent => {
         this.disableAllHandler(parent);
       });
     }
 
-    NovaTree.treeData;
+   // NovaTree.treeData;
   }
   //
   // @Watch("selected")
@@ -183,7 +185,7 @@ export class NovaTree {
       ]
     },
     {
-      text: "Beverages",
+      text: "bebidas",
       nodeKey: "1",
       disableCheckbox: false,
       disabled: false,
@@ -228,7 +230,7 @@ export class NovaTree {
   public render(): HTMLNovaTreeElement {
     return (
       <ul id="topLevelUL">
-        {NovaTree.treeData.map(
+        {this.data.items.map(
           (child): HTMLLIElement => this.handleChild(child)
         )}
       </ul>
@@ -248,7 +250,7 @@ export class NovaTree {
       <li>
         <nova-tree-node
           blockNode={this.blockNode}
-          text={child.nodeKey}
+          text={child.text}
           key={child.nodeKey}
           nodeKey={child.nodeKey}
           checkable={this.checkable}

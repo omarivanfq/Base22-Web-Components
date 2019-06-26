@@ -277,13 +277,13 @@ export class NovaTreeNode {
     return (
       <li>
         <nova-tree-node
-          //meter en dcumentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
+          //meter en documentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
           block-node={this.blockNode}
           style={{
             display: "block",
             width: "100%"
           }}
-          text={node.nodeKey}
+          text={node.text}
           key={node.nodeKey}
           nodeKey={node.nodeKey}
           checkable={this.checkable}

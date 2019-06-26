@@ -1,10 +1,10 @@
-# Tree
+# << Tree >>
 
-Primero los buleanos
+:::tip <h1>Primero los buleanos</h1>
+:::
+<TreeNodeWrapper/>
 
 ## Update blockNode
-
-<TreeNodeWrapper/>
 
 :::warning Tenemos un bug en implementacion
 

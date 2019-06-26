@@ -61,26 +61,6 @@
   width: calc(100% - 40px);
 }
 
-/*
-// When an item is selected
-.selectedtwo {
-  position: relative;
-}
-
-.selectedtwo::before {
-  content: "";
-  width: calc(100% - 45px);
-  height: 17px;
-  right: 0;
-  top: 0;
-  box-sizing: border-box;
-  position: absolute;
-  background-color: #96b6f5;
-  padding: 1px 2px;
-  border-radius: 2px;
-  z-index: -5;
-}
-*/
 /* Hide the nested list */
 .nested {
   display: none;

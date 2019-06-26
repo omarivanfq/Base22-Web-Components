@@ -32,8 +32,8 @@ export namespace Components {
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
-    'key': string;
     'multiple': boolean;
+    'nodeKey': string;
     'selectable': boolean;
     'selected': any;
     'styles': object;
@@ -54,6 +54,7 @@ export namespace Components {
     'expanded': boolean;
     'key': string;
     'multiple': boolean;
+    'nodeKey': string;
     'selectable': boolean;
     'selected': boolean;
     'selectedFlag': boolean;
@@ -115,8 +116,8 @@ declare namespace LocalJSX {
     'defaultExpandAll'?: boolean;
     'disableTree'?: boolean;
     'disabled'?: boolean;
-    'key'?: string;
     'multiple'?: boolean;
+    'nodeKey'?: string;
     'selectable'?: boolean;
     'selected'?: any;
     'styles'?: object;
@@ -137,6 +138,7 @@ declare namespace LocalJSX {
     'expanded'?: boolean;
     'key'?: string;
     'multiple'?: boolean;
+    'nodeKey'?: string;
     'onNovaTreeNodeCheckedChange'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
     'selected'?: boolean;

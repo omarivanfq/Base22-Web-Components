@@ -22,11 +22,10 @@ export class NovaTreeNode {
   //Props
   @Prop() public text!: string;
   @Prop() public key: string;
-
+  @Prop() public nodeKey: string;
   @Prop() public selectedKey: string;
   @Prop() public selectedFlag: boolean = false;
   //@Prop() public selectedInt: integer = 0;
-
   @Prop() public blockNode: boolean;
   @Prop() public checkable: boolean = false;
   @Prop() public selected: boolean;
@@ -38,13 +37,15 @@ export class NovaTreeNode {
   @Prop() public multiple: boolean = false;
 
   @Prop() public disabled: boolean = false;
-  @Prop({ mutable: true }) public checked: boolean = false;
+  @Prop({ mutable: true, reflectToAttr: true }) public checked: boolean = false;
   @Prop({ mutable: true }) public expanded: boolean = false;
   @Prop({ mutable: true }) public subnodes: NovaTreeNode[] = [];
 
   @State() private isLeaf: boolean = true;
 
   @Event() public novaTreeNodeCheckedChange: EventEmitter;
+
+  private checkChangedFromChild: boolean = false;
 
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
@@ -102,9 +103,18 @@ export class NovaTreeNode {
       return;
     }
 
+    if (this.checkChangedFromChild) {
+      this.checkChangedFromChild = false;
+      return;
+    }
+
+    console.group("A run");
     this.subnodes.map((nodo: NovaTreeNode): void => {
+      console.log(nodo.nodeKey + " " + nodo.checked);
       nodo.checked = newValue;
+      console.log(nodo.nodeKey + " " + nodo.checked);
     });
+    console.groupEnd();
   }
 
   //esta a a ser la de expanded
@@ -258,14 +268,13 @@ export class NovaTreeNode {
     return (
       <ul class={this.expanded ? "nested active" : "nested"}>
         {this.subnodes.map(
-          (node: NovaTreeNode, index): HTMLLIElement =>
-            this._generateSubnode(node, index)
+          (node: NovaTreeNode): HTMLLIElement => this._generateSubnode(node)
         )}
       </ul>
     );
   }
 
-  private _generateSubnode(node: NovaTreeNode, index): HTMLLIElement {
+  private _generateSubnode(node: NovaTreeNode): HTMLLIElement {
     return (
       <li>
         <nova-tree-node
@@ -276,7 +285,8 @@ export class NovaTreeNode {
             width: "100%"
           }}
           text={node.text}
-          key={this.key + "-" + index}
+          key={node.nodeKey}
+          nodeKey={node.nodeKey}
           checkable={this.checkable}
           disableCheckbox={node.disableCheckbox}
           disabled={node.disabled}
@@ -298,6 +308,7 @@ export class NovaTreeNode {
   }
 
   private _handleSubnodeCheckedChange(e): void {
+<<<<<<< HEAD
     const key = e.target.key;
     console.log(e.target);
     const node = this.subnodes.filter((node): boolean => {
@@ -308,6 +319,24 @@ export class NovaTreeNode {
       this.checked = this.subnodes.reduce((accum, subnode): boolean => {
         return accum && subnode.checked;
       }, true);
+=======
+    const nodeKey = e.target.nodeKey;
+    const checked = e.target.checked;
+    const node = this.subnodes.find((node): boolean => {
+      return node.nodeKey === nodeKey;
+    });
+    node.checked = checked;
+    if (this.checkStrictly) {
+      return;
+    }
+    if (checked) {
+      this.checked = this.subnodes.every((subnode): boolean => {
+        return subnode.checked;
+      });
+    } else {
+      if (this.checked) this.checkChangedFromChild = true;
+      this.checked = false;
+>>>>>>> b399e3d972557c55f5b2cd839c715b27e5bc3824
     }
   }
 }

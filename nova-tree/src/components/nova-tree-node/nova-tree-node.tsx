@@ -76,7 +76,6 @@ export class NovaTreeNode {
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
     this.novaTreeNodeCheckedChange.emit();
-
     if (this.checkStrictly) {
       return;
     }
@@ -244,6 +243,7 @@ export class NovaTreeNode {
     return (
       <li>
         <nova-tree-node
+          //meter en documentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
           block-node={this.blockNode}
           text={node.text}
           key={node.nodeKey}
@@ -261,6 +261,7 @@ export class NovaTreeNode {
           onNovaTreeNodeCheckedChange={(e): void => {
             e.stopPropagation();
             this._handleSubnodeCheckedChange(e);
+            this.novaTreeNodeCheckedChange.emit();
           }}
         ></nova-tree-node>
       </li>

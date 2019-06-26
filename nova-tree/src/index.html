@@ -14,7 +14,7 @@
     <script nomodule src="/build/nova-tree.js"></script>
   </head>
   <body>
-    <nova-tree checkable auto-expand-parent default-expand-all>
+    <nova-tree checkable auto-expand-parent default-expand-all selectable block-node>
       <!--
       default-expand-all
       disable-tree
@@ -22,6 +22,10 @@
       defaultExpandAll  auto-expand-parent
       Favor de tomar en cuenta que tiene que llevar un - el texto cuhando son mayusculas
     pra el correcto llamado yfucnioonamiento de la funcion  -->
+    <script>
+      document.querySelector("nova-tree")
+      .addEventListener("select", event => console.log(event.detail.checkedKeys));
+    </script>
     </nova-tree>
   </body>
 </html>

@@ -30,7 +30,66 @@ li {
 .caret-down::before {
   transform: rotate(90deg);
 }
+/*
+.selected {
+  padding: 1px 2px;
+  border-radius: 2px;
+  //  background-color: #96b6f5;
+  background-color: #ac6310;
+}
+*/
+.this-label > span.selected {
+  border-radius: 2px;
+  background-color: #96b6f5;
+}
+.wrapper {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+}
+.this-label {
+  display: block;
+  width: 100%;
+  left: 14px;
+  top: 0;
+  position: absolute;
+}
 
+.this-label > span {
+  display: block;
+  left: 30px;
+  top: 0;
+  position: absolute;
+  box-sizing: border-box;
+  padding: 1px 2px;
+  transition: all 0.07s ease-in;
+  user-select: none;
+}
+
+.this-label > span.blockNode {
+  width: calc(100% - 40px);
+}
+
+/*
+// When an item is selected
+.selectedtwo {
+  position: relative;
+}
+
+.selectedtwo::before {
+  content: "";
+  width: calc(100% - 45px);
+  height: 17px;
+  right: 0;
+  top: 0;
+  box-sizing: border-box;
+  position: absolute;
+  background-color: #96b6f5;
+  padding: 1px 2px;
+  border-radius: 2px;
+  z-index: -5;
+}
+*/
 /* Hide the nested list */
 .nested {
   display: none;

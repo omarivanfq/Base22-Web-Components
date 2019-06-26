@@ -21,12 +21,21 @@ export class NovaTreeNode {
 
   //Props
   @Prop() public text!: string;
+  @Prop() public key: string;
   @Prop() public nodeKey: string;
+  @Prop() public selectedKey: string;
+  @Prop() public selectedFlag: boolean = false;
+  //@Prop() public selectedInt: integer = 0;
+  @Prop() public blockNode: boolean;
   @Prop() public checkable: boolean = false;
+  @Prop() public selected: boolean;
+  @Prop() public selectable: boolean;
   @Prop() public autoExpandParent: boolean = true;
   @Prop() public defaultExpandAll: boolean = true;
   @Prop() public disableCheckbox: boolean = false;
   @Prop() public checkStrictly: boolean = false;
+  @Prop() public multiple: boolean = false;
+
   @Prop() public disabled: boolean = false;
   @Prop({ mutable: true, reflectToAttr: true }) public checked: boolean = false;
   @Prop({ mutable: true }) public expanded: boolean = false;
@@ -40,6 +49,39 @@ export class NovaTreeNode {
 
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
+  }
+
+  @Watch("selected")
+  public selectRecursivo(newValue: boolean, _oldValue: boolean): void {
+    if (newValue) {
+      this.selectedFlag = true;
+      //this.selectedKey =
+      //console.log(" multiple true");
+      console.log(this);
+      console.log("new value");
+      console.log(this.selectedFlag);
+      //return;
+    } else {
+      console.log("else part");
+      if (this.selected == false) {
+        this.selectedFlag = false;
+      }
+      console.log(this.selectedFlag);
+      //this.selectedFlag = false;
+      // selectedKey y selectedFlag
+      console.log(this);
+      //console.log(" multiple false");
+      //<ul class={this.expanded ? "nested active" : "nested"}>
+
+      //   {this.subnodes.map(
+      //     (node: NovaTreeNode, index): HTMLLIElement =>
+      //       this._generateSubnode(node, index)
+      //   )}
+      // //
+      // NovaTree.treeData.map(parent => {
+      //   this.diselectAllHandler(parent);
+      // });
+    }
   }
 
   @Watch("subnodes")
@@ -89,18 +131,50 @@ export class NovaTreeNode {
     if (this.checkable) {
       if (this.isLeaf) {
         return (
-          <Host>
+          <Host class="wrapper">
             <span class="caretsecret" />
-            {this._generateCheckbox()}
-            <span>{this.text}</span>
+            <label class="this-label">
+              {this._generateCheckbox()}
+              <span
+                class={this.blockNode ? "blockNode" : ""}
+                //if(this.selectable){
+                onClick={(e): void => {
+                  (e.target as any).classList.toggle("selected");
+                  this.selected = !this.selected;
+                }}
+                //}
+
+                // onClick={(e): void => {
+                //   if (this.blockNode) {
+                //     (e.target as any).classList.toggle("selectedtwo");
+                //     this.selected = !this.selected;
+                //   } else {
+                //     (e.target as any).classList.toggle("selected");
+                //     this.selected = !this.selected;
+                //   }
+                // }}
+              >
+                {this.text}
+              </span>
+            </label>
           </Host>
         );
       } else {
         return (
-          <Host>
+          <Host class="wrapper">
             {this._generateCaret()}
-            {this._generateCheckbox()}
-            <span>{this.text}</span>
+            <label class="this-label">
+              {this._generateCheckbox()}
+              <span
+                class={this.blockNode ? "blockNode" : ""}
+                onClick={(e): void => {
+                  (e.target as any).classList.toggle("selected");
+                  this.selected = !this.selected;
+                }}
+              >
+                {this.text}
+              </span>
+            </label>
             {this._generateListOfSubnodes()}
           </Host>
         );
@@ -108,16 +182,36 @@ export class NovaTreeNode {
     } else {
       if (this.isLeaf) {
         return (
-          <Host>
+          <Host class="wrapper">
             <span class="caretsecret" />
-            <span>{this.text}</span>
+            <label class="this-label">
+              <span
+                class={this.blockNode ? "blockNode" : ""}
+                onClick={(e): void => {
+                  (e.target as any).classList.toggle("selected");
+                  this.selected = !this.selected;
+                }}
+              >
+                {this.text}
+              </span>
+            </label>
           </Host>
         );
       } else {
         return (
-          <Host>
+          <Host class="wrapper">
             {this._generateCaret()}
-            <span>{this.text}</span>
+            <label class="this-label">
+              <span
+                class={this.blockNode ? "blockNode" : ""}
+                onClick={(e): void => {
+                  (e.target as any).classList.toggle("selected");
+                  this.selected = !this.selected;
+                }}
+              >
+                {this.text}
+              </span>
+            </label>
             {this._generateListOfSubnodes()}
           </Host>
         );
@@ -179,14 +273,22 @@ export class NovaTreeNode {
     return (
       <li>
         <nova-tree-node
+          //meter en dcumentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
+          block-node={this.blockNode}
+          style={{
+            display: "block",
+            width: "100%"
+          }}
           text={node.text}
           key={node.nodeKey}
           nodeKey={node.nodeKey}
           checkable={this.checkable}
           disableCheckbox={node.disableCheckbox}
           disabled={node.disabled}
+          selected={node.selected}
           checked={node.checked}
           checkStrictly={this.checkStrictly}
+          multiple={this.multiple}
           expanded={node.expanded}
           subnodes={node.subnodes}
           onNovaTreeNodeCheckedChange={(e): void => {

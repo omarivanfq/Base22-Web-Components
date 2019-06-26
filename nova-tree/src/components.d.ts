@@ -33,6 +33,9 @@ export namespace Components {
     'disableTree': boolean;
     'disabled': boolean;
     'key': string;
+    'multiple': boolean;
+    'selectable': boolean;
+    'selected': any;
     'styles': object;
     /**
     * Common attributes
@@ -41,6 +44,7 @@ export namespace Components {
   }
   interface NovaTreeNode {
     'autoExpandParent': boolean;
+    'blockNode': boolean;
     'checkStrictly': boolean;
     'checkable': boolean;
     'checked': boolean;
@@ -49,6 +53,11 @@ export namespace Components {
     'disabled': boolean;
     'expanded': boolean;
     'key': string;
+    'multiple': boolean;
+    'selectable': boolean;
+    'selected': boolean;
+    'selectedFlag': boolean;
+    'selectedKey': string;
     'subnodes': NovaTreeNode[];
     'text': string;
   }
@@ -107,6 +116,9 @@ declare namespace LocalJSX {
     'disableTree'?: boolean;
     'disabled'?: boolean;
     'key'?: string;
+    'multiple'?: boolean;
+    'selectable'?: boolean;
+    'selected'?: any;
     'styles'?: object;
     /**
     * Common attributes
@@ -115,6 +127,7 @@ declare namespace LocalJSX {
   }
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {
     'autoExpandParent'?: boolean;
+    'blockNode'?: boolean;
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
     'checked'?: boolean;
@@ -123,7 +136,12 @@ declare namespace LocalJSX {
     'disabled'?: boolean;
     'expanded'?: boolean;
     'key'?: string;
+    'multiple'?: boolean;
     'onNovaTreeNodeCheckedChange'?: (event: CustomEvent<any>) => void;
+    'selectable'?: boolean;
+    'selected'?: boolean;
+    'selectedFlag'?: boolean;
+    'selectedKey'?: string;
     'subnodes'?: NovaTreeNode[];
     'text': string;
   }

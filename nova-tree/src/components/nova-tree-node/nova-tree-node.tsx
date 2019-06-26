@@ -158,8 +158,10 @@ export class NovaTreeNode {
               <span
                 class={this.blockNode ? "blockNode" : ""}
                 onClick={(e): void => {
-                  (e.target as any).classList.toggle("selected");
-                  this.selected = !this.selected;
+                  if (this.selectable) {
+                    (e.target as any).classList.toggle("selected");
+                    this.selected = !this.selected;
+                  }
                 }}
               >
                 {this.text}
@@ -178,8 +180,10 @@ export class NovaTreeNode {
               <span
                 class={this.blockNode ? "blockNode" : ""}
                 onClick={(e): void => {
-                  (e.target as any).classList.toggle("selected");
-                  this.selected = !this.selected;
+                  if (this.selectable) {
+                    (e.target as any).classList.toggle("selected");
+                    this.selected = !this.selected;
+                  }
                 }}
               >
                 {this.text}
@@ -193,10 +197,11 @@ export class NovaTreeNode {
             {this._generateCaret()}
             <label class="this-label">
               <span
-                class={this.blockNode ? "blockNode" : ""}
                 onClick={(e): void => {
-                  (e.target as any).classList.toggle("selected");
-                  this.selected = !this.selected;
+                  if (this.selectable) {
+                    (e.target as any).classList.toggle("selected");
+                    this.selected = !this.selected;
+                  }
                 }}
               >
                 {this.text}
@@ -276,6 +281,7 @@ export class NovaTreeNode {
           disableCheckbox={node.disableCheckbox}
           disabled={node.disabled}
           selected={node.selected}
+          selectable={this.selectable}
           checked={node.checked}
           checkStrictly={this.checkStrictly}
           multiple={this.multiple}
@@ -284,6 +290,7 @@ export class NovaTreeNode {
           onNovaTreeNodeCheckedChange={(e): void => {
             e.stopPropagation();
             this._handleSubnodeCheckedChange(e);
+            console.log("Hipotesis 3");
           }}
         ></nova-tree-node>
       </li>
@@ -292,6 +299,7 @@ export class NovaTreeNode {
 
   private _handleSubnodeCheckedChange(e): void {
     const key = e.target.key;
+    console.log(e.target);
     const node = this.subnodes.filter((node): boolean => {
       return node.key === key;
     })[0];

@@ -226,7 +226,7 @@ export class NovaTree {
     return (
       <li>
         <nova-tree-node
-          //blockNode //={this.blockNode}
+          blockNode={this.blockNode}
           text={child.text}
           key={index}
           checkable={this.checkable}
@@ -235,6 +235,7 @@ export class NovaTree {
           disableCheckbox={child.disableCheckbox}
           disabled={child.disabled}
           selected={this.selected}
+          selectable={this.selectable}
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}

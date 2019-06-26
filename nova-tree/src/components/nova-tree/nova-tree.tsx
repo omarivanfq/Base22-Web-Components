@@ -31,7 +31,7 @@ export class NovaTree {
   @Prop() public checkStrictly: boolean;
   //@Prop() public defaultExpandAll: boolean = false;
   @Prop() public checked: boolean;
-  @Prop() public key: string;
+  @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
 
@@ -78,12 +78,14 @@ export class NovaTree {
         this.disableAllHandler(parent);
       });
     }
+
+    NovaTree.treeData;
   }
 
   private static treeData = [
     {
       text: "happy",
-      key: "0-0",
+      nodeKey: "0",
       disableCheckbox: false,
       disabled: false,
       checked: false,
@@ -91,7 +93,7 @@ export class NovaTree {
       subnodes: [
         {
           text: "Water",
-          key: "0-0-0",
+          nodeKey: "0-0",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -100,7 +102,7 @@ export class NovaTree {
         },
         {
           text: "Coffee",
-          key: "0-0-1",
+          nodeKey: "0-1",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -108,7 +110,7 @@ export class NovaTree {
           subnodes: [
             {
               text: "Coffee",
-              key: "0-0-1-0",
+              nodeKey: "0-1-0",
               disableCheckbox: false,
               disabled: false,
               checked: false,
@@ -117,7 +119,7 @@ export class NovaTree {
             },
             {
               text: "Whatever",
-              key: "0-0-1-0",
+              nodeKey: "0-1-1",
               disableCheckbox: false,
               disabled: false,
               checked: false,
@@ -125,7 +127,7 @@ export class NovaTree {
               subnodes: [
                 {
                   text: "Coffee",
-                  key: "0-0-1-0",
+                  nodeKey: "0-1-1-0",
                   disableCheckbox: false,
                   disabled: false,
                   checked: false,
@@ -134,7 +136,7 @@ export class NovaTree {
                 },
                 {
                   text: "Whatever",
-                  key: "0-0-1-0",
+                  nodeKey: "0-1-1-1",
                   disableCheckbox: false,
                   disabled: false,
                   checked: false,
@@ -149,7 +151,7 @@ export class NovaTree {
     },
     {
       text: "Beverages",
-      key: "0-1",
+      nodeKey: "1",
       disableCheckbox: false,
       disabled: false,
       checked: false,
@@ -157,7 +159,7 @@ export class NovaTree {
       subnodes: [
         {
           text: "Water",
-          key: "0-1-0",
+          nodeKey: "1-0",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -166,7 +168,7 @@ export class NovaTree {
         },
         {
           text: "Coffee",
-          key: "0-1-1",
+          nodeKey: "1-1",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -175,7 +177,7 @@ export class NovaTree {
         },
         {
           text: "Tea",
-          key: "0-1-2",
+          nodeKey: "1-2",
           disableCheckbox: false,
           disabled: false,
           checked: false,
@@ -186,12 +188,23 @@ export class NovaTree {
     }
   ];
 
-  private handleChild(child, index): HTMLLIElement {
+  public render(): HTMLNovaTreeElement {
+    return (
+      <ul id="topLevelUL">
+        {NovaTree.treeData.map(
+          (child): HTMLLIElement => this.handleChild(child)
+        )}
+      </ul>
+    );
+  }
+
+  private handleChild(child): HTMLLIElement {
     return (
       <li>
         <nova-tree-node
           text={child.text}
-          key={index}
+          key={child.nodeKey}
+          nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}
           disableCheckbox={child.disableCheckbox}
@@ -204,13 +217,18 @@ export class NovaTree {
     );
   }
 
-  public render(): HTMLNovaTreeElement {
-    return (
-      <ul id="topLevelUL">
-        {NovaTree.treeData.map(
-          (child, index): HTMLLIElement => this.handleChild(child, index)
-        )}
-      </ul>
-    );
+  private _generateDefaultnodeKeys(node, index, parentnodeKey = ""): void {
+    if (node.nodeKey == null) {
+      if (parentnodeKey) {
+        node.nodeKey = parentnodeKey + "-" + index;
+      } else {
+        node.nodeKey = index.toString;
+      }
+    }
+    if (node.subnodes.length) {
+      node.subnodes.map((subnode, index): void => {
+        this._generateDefaultnodeKeys(subnode, index, node.nodeKey);
+      });
+    }
   }
 }

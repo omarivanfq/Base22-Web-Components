@@ -108,13 +108,9 @@ export class NovaTreeNode {
       return;
     }
 
-    console.group("A run");
     this.subnodes.map((nodo: NovaTreeNode): void => {
-      console.log(nodo.nodeKey + " " + nodo.checked);
       nodo.checked = newValue;
-      console.log(nodo.nodeKey + " " + nodo.checked);
     });
-    console.groupEnd();
   }
 
   //esta a a ser la de expanded
@@ -278,12 +274,7 @@ export class NovaTreeNode {
     return (
       <li>
         <nova-tree-node
-          //meter en dcumentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
           block-node={this.blockNode}
-          style={{
-            display: "block",
-            width: "100%"
-          }}
           text={node.text}
           key={node.nodeKey}
           nodeKey={node.nodeKey}

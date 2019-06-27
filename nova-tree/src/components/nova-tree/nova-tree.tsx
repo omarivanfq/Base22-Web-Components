@@ -1,4 +1,11 @@
-import { Component, Element, Event, EventEmitter, Prop, h } from "@stencil/core";
+import {
+  Component,
+  Element,
+  Event,
+  EventEmitter,
+  Prop,
+  h
+} from "@stencil/core";
 
 @Component({
   tag: "nova-tree",
@@ -13,15 +20,15 @@ export class NovaTree {
   /**
    *  Common attributes
    */
-  @Prop({ mutable: true }) public data: any = { items: {} };
+  @Prop({ mutable: true }) public data?: any = { items: [] };
   /**
    *  Common attributes
    */
-  @Prop({ mutable: true }) public configuration: object = {};
+  @Prop({ mutable: true }) public configuration?: object = {};
   /**
    *  Common attributes
    */
-  @Prop({ mutable: true }) public styling: object = {};
+  @Prop({ mutable: true }) public styling?: object = {};
   @Prop() public autoExpandParent: boolean;
   @Prop() public defaultExpandAll: boolean;
   @Prop() public disableTree: boolean;
@@ -55,11 +62,6 @@ export class NovaTree {
   }
 
   public componentWillLoad(): void {
-    //const ul = this.element.shadowRoot.children.item(1);
-    //this.autoExpandTopLevel ? this.handleAutoExpand(ul) : undefined;
-    //this.defaultExpandAll ? this.handleAutoExpand(ul) : undefined;
-    //
-
     this.data.items = NovaTree.treeData;
 
     if (this.autoExpandParent) {
@@ -87,7 +89,7 @@ export class NovaTree {
       });
     }
 
-   // NovaTree.treeData;
+    // NovaTree.treeData;
   }
   //
   // @Watch("selected")
@@ -230,19 +232,19 @@ export class NovaTree {
   public render(): HTMLNovaTreeElement {
     return (
       <ul id="topLevelUL">
-        {this.data.items.map(
-          (child): HTMLLIElement => this.handleChild(child)
-        )}
+        {this.data.items.map((child): HTMLLIElement => this.handleChild(child))}
       </ul>
     );
   }
 
-  private _handleSelectEvent() {
-    var nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
-    var nodesArr = Array.prototype.slice.call(nodes);
-    this.select.emit({checkedKeys: nodesArr
-      .filter(node => node.checked)
-      .map(node => node.nodeKey) });
+  private _handleSelectEvent(): void {
+    const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+    const nodesArr = Array.prototype.slice.call(nodes);
+    this.select.emit({
+      checkedKeys: nodesArr
+        .filter((node): boolean => node.checked)
+        .map(node => node.nodeKey)
+    });
   }
 
   private handleChild(child): HTMLLIElement {
@@ -251,7 +253,6 @@ export class NovaTree {
         <nova-tree-node
           blockNode={this.blockNode}
           text={child.text}
-          key={child.nodeKey}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}
@@ -263,13 +264,13 @@ export class NovaTree {
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}
-          onNovaTreeNodeCheckedChange={() => this._handleSelectEvent()}
+          onCheck={(): void => this._handleSelectEvent()}
         ></nova-tree-node>
       </li>
     );
   }
 
-  private _generateDefaultnodeKeys(node, index, parentnodeKey = ""): void {
+  private _generateDefaultNodeKeys(node, index, parentnodeKey = ""): void {
     if (node.nodeKey == null) {
       if (parentnodeKey) {
         node.nodeKey = parentnodeKey + "-" + index;
@@ -279,7 +280,7 @@ export class NovaTree {
     }
     if (node.subnodes.length) {
       node.subnodes.map((subnode, index): void => {
-        this._generateDefaultnodeKeys(subnode, index, node.nodeKey);
+        this._generateDefaultNodeKeys(subnode, index, node.nodeKey);
       });
     }
   }

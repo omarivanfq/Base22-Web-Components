@@ -9,6 +9,7 @@ import {
   Event,
   EventEmitter
 } from "@stencil/core";
+import { DEFAULT_CONFIGURATION } from "./default-configuration";
 
 @Component({
   tag: "nova-tree-node",
@@ -21,15 +22,13 @@ export class NovaTreeNode {
 
   //Props
   @Prop() public text!: string;
-  @Prop() public key: string;
+
+  @Prop() public checkable?: boolean = false;
+  @Prop() public selectable?: boolean = DEFAULT_CONFIGURATION.selectable;
+  @Prop() public blockNode?: boolean = false;
+
   @Prop() public nodeKey: string;
-  @Prop() public selectedKey: string;
-  @Prop() public selectedFlag: boolean = false;
-  //@Prop() public selectedInt: integer = 0;
-  @Prop() public blockNode: boolean;
-  @Prop() public checkable: boolean = false;
   @Prop() public selected: boolean;
-  @Prop() public selectable: boolean;
   @Prop() public autoExpandParent: boolean = true;
   @Prop() public defaultExpandAll: boolean = true;
   @Prop() public disableCheckbox: boolean = false;
@@ -37,29 +36,18 @@ export class NovaTreeNode {
   @Prop() public multiple: boolean = false;
 
   @Prop() public disabled: boolean = false;
-  @Prop({ mutable: true, reflectToAttr: true }) public checked: boolean = false;
+  @Prop({ mutable: true }) public checked: boolean = false;
   @Prop({ mutable: true }) public expanded: boolean = false;
   @Prop({ mutable: true }) public subnodes: NovaTreeNode[] = [];
 
-  @State() private isLeaf: boolean = true;
+  @State() private isLeaf: boolean;
 
-  @Event() public novaTreeNodeCheckedChange: EventEmitter;
+  @Event() public check: EventEmitter;
 
-  private checkChangedFromChild: boolean = false;
+  public checkChangedFromChild: boolean = false;
 
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
-  }
-
-  @Watch("selected")
-  public selectRecursivo(newValue: boolean, _oldValue: boolean): void {
-    if (newValue) {
-      this.selectedFlag = true;
-    } else {
-      if (this.selected == false) {
-        this.selectedFlag = false;
-      }
-    }
   }
 
   @Watch("subnodes")
@@ -75,7 +63,7 @@ export class NovaTreeNode {
 
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
-    this.novaTreeNodeCheckedChange.emit();
+    this.check.emit();
     if (this.checkStrictly) {
       return;
     }
@@ -104,7 +92,7 @@ export class NovaTreeNode {
     if (this.checkable) {
       if (this.isLeaf) {
         return (
-          <Host class="wrapper">
+          <Host>
             <span class="caretsecret" />
             <label class="this-label">
               {this._generateCheckbox()}
@@ -114,7 +102,7 @@ export class NovaTreeNode {
         );
       } else {
         return (
-          <Host class="wrapper">
+          <Host>
             {this._generateCaret()}
             <label class="this-label">
               {this._generateCheckbox()}
@@ -127,14 +115,14 @@ export class NovaTreeNode {
     } else {
       if (this.isLeaf) {
         return (
-          <Host class="wrapper">
+          <Host>
             <span class="caretsecret" />
             <label class="this-label">{this._generateTextbox()}</label>
           </Host>
         );
       } else {
         return (
-          <Host class="wrapper">
+          <Host>
             {this._generateCaret()}
             <label class="this-label">{this._generateTextbox()}</label>
             {this._generateListOfSubnodes()}
@@ -244,7 +232,7 @@ export class NovaTreeNode {
       <li>
         <nova-tree-node
           //meter en documentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
-          block-node={this.blockNode}
+          blockNode={this.blockNode}
           text={node.text}
           key={node.nodeKey}
           nodeKey={node.nodeKey}
@@ -258,23 +246,23 @@ export class NovaTreeNode {
           multiple={this.multiple}
           expanded={node.expanded}
           subnodes={node.subnodes}
-          onNovaTreeNodeCheckedChange={(e): void => {
+          onCheck={(e): void => {
             e.stopPropagation();
-            this._handleSubnodeCheckedChange(e);
-            this.novaTreeNodeCheckedChange.emit();
+            this._handleSubnodeOnCheck(e);
           }}
-        ></nova-tree-node>
+        />
       </li>
     );
   }
 
-  private _handleSubnodeCheckedChange(e): void {
+  private _handleSubnodeOnCheck(e): void {
     const nodeKey = e.target.nodeKey;
     const checked = e.target.checked;
-    const node = this.subnodes.find((node): boolean => {
-      return node.nodeKey === nodeKey;
+    this.subnodes.map((node): void => {
+      if (node.nodeKey === nodeKey) {
+        node.checked = checked;
+      }
     });
-    node.checked = checked;
     if (this.checkStrictly) {
       return;
     }

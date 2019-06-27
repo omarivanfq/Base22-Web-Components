@@ -56,9 +56,10 @@ export class NovaTreeSelect {
     this.toBeRemoved.push(key);
     this.toBeRemoved = [...this.toBeRemoved];
     setTimeout(() => {
-      this.selected.splice(this.selected.indexOf(key), 1); 
-      this.selected = [...this.selected]; // to re-render
-    }, 300);
+      this.selected.splice(this.selected.indexOf(key), 1);
+      this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);  
+      this.selected = [...this.selected]; // to re-render      
+    }, 400);
   }
 
   private _getOptions() {
@@ -66,6 +67,7 @@ export class NovaTreeSelect {
     .filter(option => this.selected.indexOf(option.key) !== -1)
     .map(option => 
       <span 
+        key={option.key}
         class={"option-selected " + (this.toBeRemoved.indexOf(option.key) !== -1? "remove" : "")} 
         title={option.key}>
         { option.text }

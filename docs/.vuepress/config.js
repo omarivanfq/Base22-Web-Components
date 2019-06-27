@@ -16,7 +16,7 @@ module.exports = {
     [
       "script",
       {
-        src: "https://unpkg.com/nova-tree@0.0.2/dist/nova-tree.js"
+        src: "https://unpkg.com/nova-tree@0.0.3/dist/nova-tree.js"
       }
     ]
   ]
@@ -30,8 +30,6 @@ function getPAtternsSidebar() {
       title: "Componentes NOVA",
       collapsable: true,
       children: ["Tree", "TreeNode", "Checkbox", "General", "Transfer"]
-
-      //children: ["WHAT", "whatTwo"]
     }
   ];
 }

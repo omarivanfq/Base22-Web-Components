@@ -1,3 +1,13 @@
+.container {
+  font-family: 'Lato', sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.container > * {
+  box-sizing: inherit;
+}
+
 .nova-select {
   width: 100%;
   max-width: 320px;
@@ -15,7 +25,6 @@
   position: relative;
   display: inline-block;
   outline: 0;
-  font-family: 'Lato', sans-serif;
 }
 
 // No estoy seguro del :focus-within
@@ -93,6 +102,35 @@
   }
 }
 
-.remove {
+.removed {
   transform: scale(0);
+}
+
+.disabled {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.options {
+  width: 100%;
+  max-width: 320px;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  padding: 3px;
+  .option {
+    display: block;
+    width: 100%;
+    color: #929292;
+    padding: 4px 6px;
+    transition: all .15s linear;
+    box-sizing: border-box;
+    &:hover {
+      cursor: pointer;
+      background-color: #bae7ff;
+      border-radius: 2px;
+    }
+    &:not(:last-child) {
+      margin-bottom: 4px;
+    }
+  }
 }

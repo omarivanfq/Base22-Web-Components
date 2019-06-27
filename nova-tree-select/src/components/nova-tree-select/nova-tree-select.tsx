@@ -44,7 +44,7 @@ export class NovaTreeSelect {
   @Prop() toBeRemoved: string[];
 
   componentWillLoad() {
-    this.selected = ["op1", "op2", "op3", "op4", "op5", "op6", "op7"]
+    this.selected = []; //["op1", "op2", "op3", "op4", "op5", "op6", "op7"]
     this.toBeRemoved = [];
   }
 
@@ -62,13 +62,18 @@ export class NovaTreeSelect {
     }, 200);
   }
 
+  private _addOption(key:string) {
+    this.selected.push(key);
+    this.selected = [...this.selected];
+  }
+
   private _getOptionsSelected() {
     return NovaTreeSelect.options
     .filter(option => this.selected.indexOf(option.key) !== -1)
     .map(option => 
       <span 
         key={option.key}
-        class={"option-selected " + (this.toBeRemoved.indexOf(option.key) !== -1? "remove" : "")} 
+        class={"option-selected " + (this.toBeRemoved.indexOf(option.key) !== -1? "removed" : "")} 
         title={option.key}>
         { option.text }
         <span onClick={() => this._removeOption(option.key)}> 
@@ -77,9 +82,20 @@ export class NovaTreeSelect {
       </span>);
   }
 
+  private _getOptions() {
+    return NovaTreeSelect.options.map(option => 
+      <span 
+        key={option.key} 
+        class={"option " + (this.selected.indexOf(option.key) !== -1? "disabled" : "")} 
+        onClick={() => this._addOption(option.key)}>
+          {option.text}
+      </span>
+    );
+  }
+
   render() {
     return (
-      <div>
+      <div class="container">
         <span class="nova-select">
           <span class="nova-select-single nova-select-selection" tabindex="0">
             <span 
@@ -88,6 +104,9 @@ export class NovaTreeSelect {
             { this._getOptionsSelected() }
           </span>
         </span>
+        <div class="options">
+          { this._getOptions() }
+        </div>
       </div>
     );
   }

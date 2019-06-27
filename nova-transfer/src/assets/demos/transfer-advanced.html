@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Stencil Component Starter</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <script type="module" src="/build/nova-transfer.esm.js"></script>
+  <script nomodule src="/build/nova-transfer.js"></script>
+  <style>
+    body { font-family: sans-serif; background-color: rgb(161, 206, 39); 
+      transition: all 0.05s linear; padding:0; }
+    p { margin: 0; padding: 0; }
+    h1 { color: #ffffff; text-align: center; font-size: 55px; 
+      text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none; }
+    h1 span { font-size: 45px; margin: 0 10px; }
+    .back { display: block; position: fixed; left: 0; top: 0; 
+      background-color: #729610; height: 100vh; z-index: -999; }
+    *[slot] { visibility: hidden; } 
+  </style>
+</head>
+<body>
+  <div class="back"></div>
+  <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
+  <nova-transfer 
+    show-select-all
+    show-search> 
+    <p slot="source-footer" style="padding: 8px 0; text-align: center;">Footer 1</p>
+    <p slot="target-footer" style="padding: 8px 0; text-align: center;">Footer 1</p>
+  </nova-transfer>
+  <script>
+    /* event listeners */
+    var transfer = document.querySelector('nova-transfer');
+    transfer.addEventListener('search', event => console.log('searching', event.detail));
+    transfer.addEventListener('filter', event => console.log('filtering', event.detail));
+    transfer.addEventListener('transferColumn', event => console.log('transfering', event.detail));
+    transfer.addEventListener('select', event => console.log('selecting', event.detail));
+    var backWidth = 0;
+    transfer.addEventListener('scrollColumn', event => {
+      backWidth = backWidth + 1;
+      if (backWidth > 100)
+       backWidth = 0;
+      document.querySelector(".back").style.width = backWidth + "%";
+    });
+    /* functions */
+    transfer.renderItem = item => item.title + '-' + item.description;
+    transfer.filterOption = (value, item) =>  item.description.indexOf(value) !== -1; 
+  </script>
+
+  <script>
+    // customized styles for the columns
+    transfer.columnStyle = {
+      boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)",
+      width: "45%"
+    } 
+    // customized styles for the operation buttons (<,>)
+    transfer.operationStyle = {
+      width: "10%",
+      zIndex: 999
+    }
+    // customized styles for the wrapper of the component
+    transfer.wrapperStyle = {
+      width: "46%",
+      height: "340px",
+      minWidth: "500px",
+      margin: "0 auto"
+    }
+  </script>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    // JSON load
+    axios
+    .get("../transfer-data.json")
+    .then(function(response) {
+        var data = response.data.data;
+        transfer.data = data;
+        var configuration = response.data.configuration;
+        transfer.configuration = configuration;
+        console.log(configuration.labels);
+     })
+    .catch(console.error); 
+  </script>
+</body>
+</html>

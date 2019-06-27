@@ -10,7 +10,9 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface NovaTreeNode {}
-  interface NovaTreeSelect {}
+  interface NovaTreeSelect {
+    'selected': string[];
+  }
 }
 
 declare global {
@@ -35,7 +37,9 @@ declare global {
 
 declare namespace LocalJSX {
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {}
-  interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {}
+  interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
+    'selected'?: string[];
+  }
 
   interface IntrinsicElements {
     'nova-tree-node': NovaTreeNode;

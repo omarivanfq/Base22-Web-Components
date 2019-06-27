@@ -49,8 +49,8 @@ export class NovaTree {
 
   @Watch("data")
   public dataChange(newValue: any, _oldValue: any): void {
-    var nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
-    var nodesArr = Array.prototype.slice.call(nodes);
+    const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+    const nodesArr = Array.prototype.slice.call(nodes);
     this._updateCheckboxes(newValue.items, nodesArr);
     this._handleExpandOptions();
   }
@@ -308,8 +308,8 @@ export class NovaTree {
   }
 
   @Watch("multiple")
-  multipleWatchHandler(newValue: boolean) {
-    NovaTree.treeData.map(parent => {
+  public multipleWatchHandler(newValue: boolean): void {
+    NovaTree.treeData.map((parent): void => {
       this.autoSelectAllHandler(parent, newValue);
     });
   }

@@ -7,35 +7,69 @@
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
     />
     <title>Stencil Component Starter</title>
-
-    <script
-      type="module"
-      src="/build/team-hortons-webcomponents.esm.js"
-    ></script>
-    <script nomodule src="/build/team-hortons-webcomponents.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+      integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+      crossorigin="anonymous"
+    />
+    <script type="module" src="/build/nova.esm.js"></script>
+    <script nomodule src="/build/nova.js"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: rgb(15, 102, 157);
+        padding: 50px 30%;
+        color: #ffffff;
+        text-align: center;
+        margin: 0;
+        user-select: none;
+      }
+      p {
+        margin: 0;
+        padding: 0;
+      }
+      h3 {
+        margin: 120px 0 20px 0;
+      }
+      h1 {
+        position: relative;
+      }
+      h1::after {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 150px;
+        left: 0;
+        top: -50px;
+        opacity: 0.3;
+        background-image: url(https://nova.lab.base22.com/assets/img/logo.png);
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      a {
+        color: #ffffff;
+        background-color: rgb(8, 56, 86);
+        display: block;
+        text-decoration: none;
+        padding: 17px 0;
+        margin: 15px 0;
+        transition: all 0.4s linear;
+      }
+      a:hover {
+        letter-spacing: 4px;
+      }
+    </style>
   </head>
   <body>
-    <nova-tree
-      checkable
-      auto-expand-parent
-      default-expand-all
-      selectable
-      block-node
-    >
-      <!--
-      default-expand-all
-      disable-tree
-      check-strictly
-      defaultExpandAll  auto-expand-parent
-      Favor de tomar en cuenta que tiene que llevar un - el texto cuhando son mayusculas
-    pra el correcto llamado yfucnioonamiento de la funcion  -->
-      <script>
-        document
-          .querySelector("nova-tree")
-          .addEventListener("select", event =>
-            console.log(event.detail.checkedKeys)
-          );
-      </script>
-    </nova-tree>
+    <h1>Base22 Nova Team Hortons</h1>
+    <h3>Demos</h3>
+    <a href="assets/demos/transfer-basic.html">Basic Transfer</a>
+    <a href="assets/demos/transfer-advanced.html">Advanced Transfer</a>
+    <a href="assets/demos/transfer-custom.html">Custom Transfer</a>
+    <a href="assets/demos/nova-rate.html">Rate</a>
+    <a href="assets/demos/nova-tree.html">Tree</a>
+    <a href="assets/demos/nova-tree-select.html">Tree Select</a>
   </body>
 </html>

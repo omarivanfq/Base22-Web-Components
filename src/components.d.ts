@@ -15,47 +15,6 @@ export namespace Components {
     'handleClick': Function;
     'styles': any;
   }
-  interface NovaChild {
-    'autoExpandParent': boolean;
-    'blockNode': boolean;
-    'checkStrictly': boolean;
-    'checkable': boolean;
-    'checked': boolean;
-    'defaultExpandAll': boolean;
-    'disableCheckbox': boolean;
-    'disabled': boolean;
-    'expanded': boolean;
-    'key': string;
-    'selected': boolean;
-    'subnodes': NovaTreeNode[];
-    'text': string;
-  }
-  interface NovaParent {
-    'autoExpandParent': boolean;
-    'blockNode': boolean;
-    'checkStrictly': boolean;
-    'checkable': boolean;
-    'checked': boolean;
-    /**
-    * Common attributes
-    */
-    'configuration': object;
-    /**
-    * Common attributes
-    */
-    'data': object;
-    'defaultExpandAll': boolean;
-    'disableTree': boolean;
-    'disabled': boolean;
-    'key': string;
-    'multiple': boolean;
-    'selected': any;
-    'styles': object;
-    /**
-    * Common attributes
-    */
-    'styling': object;
-  }
   interface NovaRate {
     /**
     * Props This property allow to clear by setting value to 0
@@ -165,18 +124,6 @@ declare global {
     new (): HTMLNovaCheckboxElement;
   };
 
-  interface HTMLNovaChildElement extends Components.NovaChild, HTMLStencilElement {}
-  var HTMLNovaChildElement: {
-    prototype: HTMLNovaChildElement;
-    new (): HTMLNovaChildElement;
-  };
-
-  interface HTMLNovaParentElement extends Components.NovaParent, HTMLStencilElement {}
-  var HTMLNovaParentElement: {
-    prototype: HTMLNovaParentElement;
-    new (): HTMLNovaParentElement;
-  };
-
   interface HTMLNovaRateElement extends Components.NovaRate, HTMLStencilElement {}
   var HTMLNovaRateElement: {
     prototype: HTMLNovaRateElement;
@@ -208,8 +155,6 @@ declare global {
   };
   interface HTMLElementTagNameMap {
     'nova-checkbox': HTMLNovaCheckboxElement;
-    'nova-child': HTMLNovaChildElement;
-    'nova-parent': HTMLNovaParentElement;
     'nova-rate': HTMLNovaRateElement;
     'nova-transfer': HTMLNovaTransferElement;
     'nova-tree': HTMLNovaTreeElement;
@@ -225,48 +170,6 @@ declare namespace LocalJSX {
     'handleClick'?: Function;
     'onClicked'?: (event: CustomEvent<any>) => void;
     'styles'?: any;
-  }
-  interface NovaChild extends JSXBase.HTMLAttributes<HTMLNovaChildElement> {
-    'autoExpandParent'?: boolean;
-    'blockNode'?: boolean;
-    'checkStrictly'?: boolean;
-    'checkable'?: boolean;
-    'checked'?: boolean;
-    'defaultExpandAll'?: boolean;
-    'disableCheckbox'?: boolean;
-    'disabled'?: boolean;
-    'expanded'?: boolean;
-    'key'?: string;
-    'onNovaTreeNodeCheckedChange'?: (event: CustomEvent<any>) => void;
-    'selected'?: boolean;
-    'subnodes'?: NovaTreeNode[];
-    'text': string;
-  }
-  interface NovaParent extends JSXBase.HTMLAttributes<HTMLNovaParentElement> {
-    'autoExpandParent'?: boolean;
-    'blockNode'?: boolean;
-    'checkStrictly'?: boolean;
-    'checkable'?: boolean;
-    'checked'?: boolean;
-    /**
-    * Common attributes
-    */
-    'configuration'?: object;
-    /**
-    * Common attributes
-    */
-    'data'?: object;
-    'defaultExpandAll'?: boolean;
-    'disableTree'?: boolean;
-    'disabled'?: boolean;
-    'key'?: string;
-    'multiple'?: boolean;
-    'selected'?: any;
-    'styles'?: object;
-    /**
-    * Common attributes
-    */
-    'styling'?: object;
   }
   interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
     /**
@@ -378,8 +281,6 @@ declare namespace LocalJSX {
 
   interface IntrinsicElements {
     'nova-checkbox': NovaCheckbox;
-    'nova-child': NovaChild;
-    'nova-parent': NovaParent;
     'nova-rate': NovaRate;
     'nova-transfer': NovaTransfer;
     'nova-tree': NovaTree;

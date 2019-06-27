@@ -65,6 +65,7 @@ export class NovaTreeNode {
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
     this.check.emit();
+
     if (this.checkStrictly) {
       return;
     }
@@ -88,10 +89,6 @@ export class NovaTreeNode {
       //console.log("Para meter funncion on collapse");
     }
   }
-
-  handleToggle = () => {
-    this.selected = !this.selected;
-  };
 
   public render(): HTMLElement {
     if (this.checkable) {

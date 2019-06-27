@@ -4,6 +4,7 @@ import {
   Event,
   EventEmitter,
   Prop,
+  Watch,
   h
 } from "@stencil/core";
 
@@ -40,12 +41,47 @@ export class NovaTree {
   @Prop() public selectable: boolean;
   @Prop() public checkStrictly: boolean;
   @Prop() public selected;
-  //@Prop() public defaultExpandAll: boolean = false;
   @Prop() public checked: boolean;
   @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
   @Event() public select: EventEmitter;
+
+  @Watch("data")
+  public dataChange(newValue: any, _oldValue: any): void {
+    var nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+    var nodesArr = Array.prototype.slice.call(nodes);
+    this._updateCheckboxes(newValue.items, nodesArr);
+    this._handleExpandOptions();
+  }
+
+  private _handleExpandOptions() {
+    if (this.defaultExpandAll) {
+      this.data.items.map(parent => {
+        this.autoExpandAllHandler(parent);
+      });
+    }
+    if (this.autoExpandParent) {
+      this.data.items.map(parent => {
+        parent.expanded = true;
+      });
+    }
+  }
+
+  public componentWillRender(): void {
+    this._handleExpandOptions();
+  }
+
+  private _updateCheckboxes(updatedNodes, nodes) {
+    updatedNodes.forEach(updatedNode => {
+      var node = nodes.find(node => node.nodeKey === updatedNode.nodeKey);
+      node.checked = updatedNode.checked;
+      node.disableCheckbox = updatedNode.disableCheckbox;
+      if (updatedNode.subnodes.length > 0) {
+        this._updateCheckboxes(updatedNode.subnodes, nodes);
+      }
+    });
+  }
 
   private autoExpandAllHandler(node): void {
     node.expanded = true;
@@ -64,21 +100,7 @@ export class NovaTree {
   public componentWillLoad(): void {
     this.data.items = NovaTree.treeData;
 
-    if (this.autoExpandParent) {
-      //console.log("entro");
-      this.data.items.map(parent => {
-        parent.expanded = true;
-      });
-    }
-
-    if (this.defaultExpandAll) {
-      //console.log("entro");
-      //NovaTree.treeData.map(parent => {
-      //  parent.expanded = true;
-      this.data.items.map(parent => {
-        this.autoExpandAllHandler(parent);
-      });
-    }
+    this._handleExpandOptions();
 
     if (this.disableTree) {
       //console.log("entro");

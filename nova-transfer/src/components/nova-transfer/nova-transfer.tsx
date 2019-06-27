@@ -119,14 +119,15 @@ export class NovaTransfer {
   componentDidLoad() {
     this.sourceFooter = this._isThereSourceFooter();
     this.targetFooter = this._isThereTargetFooter();
+    this.el.querySelectorAll("*[slot]").forEach(s => (s as any).style.visibility="visible");
   }
 
   /* 
     HANDLERS
   */
-
   @Method()
-  async handleSelect(item:any) {
+  async handleSelect(key:string) {
+    var item = this.data.items.find(item => item.key === key);
     this._handleSelect(item);
   }
 
@@ -347,30 +348,6 @@ export class NovaTransfer {
     this.scrollColumn.emit({ direction, event });
   }
 
-  /*
-  private _getTable() {
-    return (
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Age</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>Omar Iván</th>
-            <th>22</th>
-          </tr>
-          <tr>
-            <th>Oscar Alán</th>
-            <th>20</th>
-          </tr>
-        </tbody>
-      </table>
-    );
-  }
-*/
   render() {
     this.sourceFooter = this._isThereSourceFooter();
     this.targetFooter = this._isThereTargetFooter();
@@ -455,7 +432,7 @@ export class NovaTransfer {
                 class="items"
                 onScroll={event => this._handleItemsScroll(RIGHT, event)}
               >
-                <slot name="target-column"><ul>{this._getItems(RIGHT) /*this.getTable() */}</ul></slot>
+                <slot name="target-column"><ul>{this._getItems(RIGHT) }</ul></slot>
               </div>
               <span class="empty-msg">
                 {this.configuration.labels.notFoundContent}
@@ -556,14 +533,8 @@ export class NovaTransfer {
     }
   }
 
-  @Method()
-  async moveToT() {
-    this._moveToTarget();
-  }
-
   private _moveToSource() {
     if (!this.disabled) {
-      console.log("selected", this.selected);
       var alreadyInSource = [];
       var moveKeys = []; // items that are transfering
       this.selected.forEach(key => {
@@ -581,7 +552,6 @@ export class NovaTransfer {
         moveKeys
       });
       this.transfered = [...moveKeys];
-      console.log("transfered", this.transfered);
     }
   }
 

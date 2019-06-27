@@ -1,5 +1,5 @@
 {
-  "name": "nova-rate",
+  "name": "nova-tree-select",
   "version": "0.0.1",
   "description": "Stencil Component Starter",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/nova-rate/nova-rate.js",
+  "unpkg": "dist/nova-tree-select/nova-tree-select.js",
   "files": [
     "dist/",
     "loader/"
@@ -17,20 +17,12 @@
   "scripts": {
     "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve",
-    "test": "jest --no-cache",
-    "test.watch": "jest --watch --no-cache"
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "devDependencies": {
-    "@stencil/core": "1.0.0-beta.8",
-    "@stencil/sass": "^1.0.0",
-    "@types/jest": "^24.0.15",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.3",
-    "jest": "^24.8.0",
-    "jest-cli": "^24.8.0"
+    "@stencil/core": "^1.0.7",
+    "@stencil/sass": "^1.0.1"
   },
-  "license": "MIT",
-  "dependencies": {}
+  "license": "MIT"
 }

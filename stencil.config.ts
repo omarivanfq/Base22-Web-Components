@@ -3,7 +3,7 @@ import { sass } from "@stencil/sass";
 
 export const config: Config = {
   plugins: [sass()],
-  namespace: "nova-rate",
+  namespace: "nova",
   outputTargets: [
     {
       type: "dist",

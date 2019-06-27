@@ -56,6 +56,59 @@ export namespace Components {
     */
     'styling': object;
   }
+  interface NovaRate {
+    /**
+    * Props This property allow to clear by setting value to 0
+    */
+    'allowClear': boolean;
+    /**
+    * This property allow half values
+    */
+    'allowHalf': boolean;
+    /**
+    * This property focus the ul when component is mounted
+    */
+    'autoFocus': boolean;
+    /**
+    * Public API Methods
+    */
+    'blurComponent': () => Promise<void>;
+    /**
+    * This property sets the caracter to display as symbol
+    */
+    'character': string;
+    /**
+    * This property sets the number of stars
+    */
+    'count': number;
+    /**
+    * This property sets the initial value
+    */
+    'defaultValue': number;
+    /**
+    * This property makes the component "read only"
+    */
+    'disabled': boolean;
+    'focusComponent': () => Promise<void>;
+    /**
+    * This property replaces character for an icon
+    */
+    'icon': string;
+  }
+  interface NovaTransfer {
+    'columnStyle': any;
+    'configuration'?: any;
+    'data'?: any;
+    'disabled': boolean;
+    'filterOption': Function;
+    'handleSelect': (key: string) => Promise<void>;
+    'operationStyle': any;
+    'renderItem': Function;
+    'showSearch': boolean;
+    'showSelectAll': boolean;
+    'styling'?: any;
+    'wrapperStyle': any;
+  }
   interface NovaTree {
     'autoExpandParent': boolean;
     'blockNode': boolean;
@@ -73,14 +126,9 @@ export namespace Components {
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
-<<<<<<< HEAD
     'multiple': boolean;
     'nodeKey': string;
     'selectable': boolean;
-=======
-    'key': string;
-    'multiple': boolean;
->>>>>>> origin/tree-select
     'selected': any;
     'styles': object;
     /**
@@ -98,17 +146,14 @@ export namespace Components {
     'disableCheckbox': boolean;
     'disabled': boolean;
     'expanded': boolean;
-<<<<<<< HEAD
     'multiple': boolean;
     'nodeKey': string;
     'selectable'?: boolean;
-=======
-    'key': string;
->>>>>>> origin/tree-select
     'selected': boolean;
     'subnodes': NovaTreeNode[];
     'text': string;
   }
+  interface NovaTreeSelect {}
 }
 
 declare global {
@@ -132,6 +177,18 @@ declare global {
     new (): HTMLNovaParentElement;
   };
 
+  interface HTMLNovaRateElement extends Components.NovaRate, HTMLStencilElement {}
+  var HTMLNovaRateElement: {
+    prototype: HTMLNovaRateElement;
+    new (): HTMLNovaRateElement;
+  };
+
+  interface HTMLNovaTransferElement extends Components.NovaTransfer, HTMLStencilElement {}
+  var HTMLNovaTransferElement: {
+    prototype: HTMLNovaTransferElement;
+    new (): HTMLNovaTransferElement;
+  };
+
   interface HTMLNovaTreeElement extends Components.NovaTree, HTMLStencilElement {}
   var HTMLNovaTreeElement: {
     prototype: HTMLNovaTreeElement;
@@ -143,12 +200,21 @@ declare global {
     prototype: HTMLNovaTreeNodeElement;
     new (): HTMLNovaTreeNodeElement;
   };
+
+  interface HTMLNovaTreeSelectElement extends Components.NovaTreeSelect, HTMLStencilElement {}
+  var HTMLNovaTreeSelectElement: {
+    prototype: HTMLNovaTreeSelectElement;
+    new (): HTMLNovaTreeSelectElement;
+  };
   interface HTMLElementTagNameMap {
     'nova-checkbox': HTMLNovaCheckboxElement;
     'nova-child': HTMLNovaChildElement;
     'nova-parent': HTMLNovaParentElement;
+    'nova-rate': HTMLNovaRateElement;
+    'nova-transfer': HTMLNovaTransferElement;
     'nova-tree': HTMLNovaTreeElement;
     'nova-tree-node': HTMLNovaTreeNodeElement;
+    'nova-tree-select': HTMLNovaTreeSelectElement;
   }
 }
 
@@ -157,7 +223,7 @@ declare namespace LocalJSX {
     'checked'?: boolean;
     'disabled'?: boolean;
     'handleClick'?: Function;
-    'onNovaCheckboxClicked'?: (event: CustomEvent<any>) => void;
+    'onClicked'?: (event: CustomEvent<any>) => void;
     'styles'?: any;
   }
   interface NovaChild extends JSXBase.HTMLAttributes<HTMLNovaChildElement> {
@@ -202,6 +268,66 @@ declare namespace LocalJSX {
     */
     'styling'?: object;
   }
+  interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
+    /**
+    * Props This property allow to clear by setting value to 0
+    */
+    'allowClear'?: boolean;
+    /**
+    * This property allow half values
+    */
+    'allowHalf'?: boolean;
+    /**
+    * This property focus the ul when component is mounted
+    */
+    'autoFocus'?: boolean;
+    /**
+    * This property sets the caracter to display as symbol
+    */
+    'character'?: string;
+    /**
+    * This property sets the number of stars
+    */
+    'count'?: number;
+    /**
+    * This property sets the initial value
+    */
+    'defaultValue'?: number;
+    /**
+    * This property makes the component "read only"
+    */
+    'disabled'?: boolean;
+    /**
+    * This property replaces character for an icon
+    */
+    'icon'?: string;
+    /**
+    * Public API Events
+    */
+    'onOnBlur'?: (event: CustomEvent<any>) => void;
+    'onOnChange'?: (event: CustomEvent<any>) => void;
+    'onOnFocus'?: (event: CustomEvent<any>) => void;
+    'onOnHoverChange'?: (event: CustomEvent<any>) => void;
+    'onOnKeyDown'?: (event: CustomEvent<any>) => void;
+  }
+  interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
+    'columnStyle'?: any;
+    'configuration'?: any;
+    'data'?: any;
+    'disabled'?: boolean;
+    'filterOption'?: Function;
+    'onFilter'?: (event: CustomEvent<any>) => void;
+    'onScrollColumn'?: (event: CustomEvent<any>) => void;
+    'onSearch'?: (event: CustomEvent<any>) => void;
+    'onSelect'?: (event: CustomEvent<any>) => void;
+    'onTransferColumn'?: (event: CustomEvent<any>) => void;
+    'operationStyle'?: any;
+    'renderItem'?: Function;
+    'showSearch'?: boolean;
+    'showSelectAll'?: boolean;
+    'styling'?: any;
+    'wrapperStyle'?: any;
+  }
   interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
     'autoExpandParent'?: boolean;
     'blockNode'?: boolean;
@@ -219,15 +345,10 @@ declare namespace LocalJSX {
     'defaultExpandAll'?: boolean;
     'disableTree'?: boolean;
     'disabled'?: boolean;
-<<<<<<< HEAD
     'multiple'?: boolean;
     'nodeKey'?: string;
     'onSelect'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
-=======
-    'key'?: string;
-    'multiple'?: boolean;
->>>>>>> origin/tree-select
     'selected'?: any;
     'styles'?: object;
     /**
@@ -245,26 +366,25 @@ declare namespace LocalJSX {
     'disableCheckbox'?: boolean;
     'disabled'?: boolean;
     'expanded'?: boolean;
-<<<<<<< HEAD
     'multiple'?: boolean;
     'nodeKey'?: string;
     'onCheck'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
-=======
-    'key'?: string;
-    'onNovaTreeNodeCheckedChange'?: (event: CustomEvent<any>) => void;
->>>>>>> origin/tree-select
     'selected'?: boolean;
     'subnodes'?: NovaTreeNode[];
     'text': string;
   }
+  interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {}
 
   interface IntrinsicElements {
     'nova-checkbox': NovaCheckbox;
     'nova-child': NovaChild;
     'nova-parent': NovaParent;
+    'nova-rate': NovaRate;
+    'nova-transfer': NovaTransfer;
     'nova-tree': NovaTree;
     'nova-tree-node': NovaTreeNode;
+    'nova-tree-select': NovaTreeSelect;
   }
 }
 

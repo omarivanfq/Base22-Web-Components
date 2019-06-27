@@ -11,7 +11,7 @@ export class NovaCheckbox {
   @Prop() public styles: any = {};
   @Prop() public handleClick: Function = (_e): void => {};
 
-  @Event() public novaCheckboxClicked: EventEmitter;
+  @Event() public clicked: EventEmitter;
 
   public render(): HTMLNovaCheckboxElement {
     return (
@@ -22,7 +22,7 @@ export class NovaCheckbox {
             {...{ checked: this.checked, disabled: this.disabled }}
             onClick={(e): void => {
               this.checked = !this.checked;
-              this.novaCheckboxClicked.emit();
+              this.clicked.emit({ checked: this.checked });
               this.handleClick(e);
             }}
           />

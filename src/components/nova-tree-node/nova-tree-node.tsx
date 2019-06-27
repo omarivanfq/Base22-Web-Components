@@ -165,7 +165,7 @@ export class NovaTreeNode {
       <nova-checkbox
         disabled={this.disableCheckbox}
         checked={this.checked}
-        onNovaCheckboxClicked={(e): void => {
+        onClicked={(e): void => {
           e.stopPropagation();
           this._updateCheckedState(e);
         }}
@@ -174,7 +174,7 @@ export class NovaTreeNode {
   }
 
   private _updateCheckedState(e): void {
-    this.checked = e.target.checked;
+    this.checked = e.checked;
   }
 
   private _generateTextbox(): HTMLSpanElement {

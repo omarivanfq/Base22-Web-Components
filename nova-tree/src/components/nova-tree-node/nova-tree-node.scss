@@ -3,6 +3,10 @@
 //   width: 100%;
 // }
 
+:host {
+  font-family: 'Lato', sans-serif;
+}
+
 li {
   display: block;
 }
@@ -22,9 +26,10 @@ li {
     color: black;
     display: inline-block;
     margin-right: 6px;
+    transition: all .07s linear;
   }
   /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
-  &::before {
+  &.caret-down::before {
     transform: rotate(90deg);
   }
 }

@@ -112,7 +112,10 @@ export namespace Components {
     'subnodes': NovaTreeNode[];
     'text': string;
   }
-  interface NovaTreeSelect {}
+  interface NovaTreeSelect {
+    'selected': string[];
+    'toBeRemoved': string[];
+  }
 }
 
 declare global {
@@ -277,7 +280,10 @@ declare namespace LocalJSX {
     'subnodes'?: NovaTreeNode[];
     'text': string;
   }
-  interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {}
+  interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
+    'selected'?: string[];
+    'toBeRemoved'?: string[];
+  }
 
   interface IntrinsicElements {
     'nova-checkbox': NovaCheckbox;

@@ -44,7 +44,7 @@ export class NovaTreeSelect {
   @Prop() toBeRemoved: string[];
 
   componentWillLoad() {
-    this.selected = ["op3", "op6", "op7", "op4"]
+    this.selected = ["op1", "op2", "op3", "op4", "op5", "op6", "op7"]
     this.toBeRemoved = [];
   }
 
@@ -59,10 +59,10 @@ export class NovaTreeSelect {
       this.selected.splice(this.selected.indexOf(key), 1);
       this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);  
       this.selected = [...this.selected]; // to re-render      
-    }, 400);
+    }, 200);
   }
 
-  private _getOptions() {
+  private _getOptionsSelected() {
     return NovaTreeSelect.options
     .filter(option => this.selected.indexOf(option.key) !== -1)
     .map(option => 
@@ -85,7 +85,7 @@ export class NovaTreeSelect {
             <span 
               class="options-remove-all"
               onClick={() => this._removeAllOptions() }></span>
-            { this._getOptions() }
+            { this._getOptionsSelected() }
           </span>
         </span>
       </div>

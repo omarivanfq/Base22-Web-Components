@@ -2,6 +2,8 @@
 
 Transfer elements between two columns in an intuitive and efficient way.
 
+<TreeTransferWrapper/>
+
 ## How do I do? (HTML Markup)
 
 ```html

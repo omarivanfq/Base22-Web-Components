@@ -15,6 +15,47 @@ export namespace Components {
     'handleClick': Function;
     'styles': any;
   }
+  interface NovaChild {
+    'autoExpandParent': boolean;
+    'blockNode': boolean;
+    'checkStrictly': boolean;
+    'checkable': boolean;
+    'checked': boolean;
+    'defaultExpandAll': boolean;
+    'disableCheckbox': boolean;
+    'disabled': boolean;
+    'expanded': boolean;
+    'key': string;
+    'selected': boolean;
+    'subnodes': NovaTreeNode[];
+    'text': string;
+  }
+  interface NovaParent {
+    'autoExpandParent': boolean;
+    'blockNode': boolean;
+    'checkStrictly': boolean;
+    'checkable': boolean;
+    'checked': boolean;
+    /**
+    * Common attributes
+    */
+    'configuration': object;
+    /**
+    * Common attributes
+    */
+    'data': object;
+    'defaultExpandAll': boolean;
+    'disableTree': boolean;
+    'disabled': boolean;
+    'key': string;
+    'multiple': boolean;
+    'selected': any;
+    'styles': object;
+    /**
+    * Common attributes
+    */
+    'styling': object;
+  }
   interface NovaTree {
     'autoExpandParent': boolean;
     'blockNode': boolean;
@@ -32,9 +73,14 @@ export namespace Components {
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
+<<<<<<< HEAD
     'multiple': boolean;
     'nodeKey': string;
     'selectable': boolean;
+=======
+    'key': string;
+    'multiple': boolean;
+>>>>>>> origin/tree-select
     'selected': any;
     'styles': object;
     /**
@@ -52,9 +98,13 @@ export namespace Components {
     'disableCheckbox': boolean;
     'disabled': boolean;
     'expanded': boolean;
+<<<<<<< HEAD
     'multiple': boolean;
     'nodeKey': string;
     'selectable'?: boolean;
+=======
+    'key': string;
+>>>>>>> origin/tree-select
     'selected': boolean;
     'subnodes': NovaTreeNode[];
     'text': string;
@@ -70,6 +120,18 @@ declare global {
     new (): HTMLNovaCheckboxElement;
   };
 
+  interface HTMLNovaChildElement extends Components.NovaChild, HTMLStencilElement {}
+  var HTMLNovaChildElement: {
+    prototype: HTMLNovaChildElement;
+    new (): HTMLNovaChildElement;
+  };
+
+  interface HTMLNovaParentElement extends Components.NovaParent, HTMLStencilElement {}
+  var HTMLNovaParentElement: {
+    prototype: HTMLNovaParentElement;
+    new (): HTMLNovaParentElement;
+  };
+
   interface HTMLNovaTreeElement extends Components.NovaTree, HTMLStencilElement {}
   var HTMLNovaTreeElement: {
     prototype: HTMLNovaTreeElement;
@@ -83,6 +145,8 @@ declare global {
   };
   interface HTMLElementTagNameMap {
     'nova-checkbox': HTMLNovaCheckboxElement;
+    'nova-child': HTMLNovaChildElement;
+    'nova-parent': HTMLNovaParentElement;
     'nova-tree': HTMLNovaTreeElement;
     'nova-tree-node': HTMLNovaTreeNodeElement;
   }
@@ -95,6 +159,48 @@ declare namespace LocalJSX {
     'handleClick'?: Function;
     'onNovaCheckboxClicked'?: (event: CustomEvent<any>) => void;
     'styles'?: any;
+  }
+  interface NovaChild extends JSXBase.HTMLAttributes<HTMLNovaChildElement> {
+    'autoExpandParent'?: boolean;
+    'blockNode'?: boolean;
+    'checkStrictly'?: boolean;
+    'checkable'?: boolean;
+    'checked'?: boolean;
+    'defaultExpandAll'?: boolean;
+    'disableCheckbox'?: boolean;
+    'disabled'?: boolean;
+    'expanded'?: boolean;
+    'key'?: string;
+    'onNovaTreeNodeCheckedChange'?: (event: CustomEvent<any>) => void;
+    'selected'?: boolean;
+    'subnodes'?: NovaTreeNode[];
+    'text': string;
+  }
+  interface NovaParent extends JSXBase.HTMLAttributes<HTMLNovaParentElement> {
+    'autoExpandParent'?: boolean;
+    'blockNode'?: boolean;
+    'checkStrictly'?: boolean;
+    'checkable'?: boolean;
+    'checked'?: boolean;
+    /**
+    * Common attributes
+    */
+    'configuration'?: object;
+    /**
+    * Common attributes
+    */
+    'data'?: object;
+    'defaultExpandAll'?: boolean;
+    'disableTree'?: boolean;
+    'disabled'?: boolean;
+    'key'?: string;
+    'multiple'?: boolean;
+    'selected'?: any;
+    'styles'?: object;
+    /**
+    * Common attributes
+    */
+    'styling'?: object;
   }
   interface NovaTree extends JSXBase.HTMLAttributes<HTMLNovaTreeElement> {
     'autoExpandParent'?: boolean;
@@ -113,10 +219,15 @@ declare namespace LocalJSX {
     'defaultExpandAll'?: boolean;
     'disableTree'?: boolean;
     'disabled'?: boolean;
+<<<<<<< HEAD
     'multiple'?: boolean;
     'nodeKey'?: string;
     'onSelect'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
+=======
+    'key'?: string;
+    'multiple'?: boolean;
+>>>>>>> origin/tree-select
     'selected'?: any;
     'styles'?: object;
     /**
@@ -134,10 +245,15 @@ declare namespace LocalJSX {
     'disableCheckbox'?: boolean;
     'disabled'?: boolean;
     'expanded'?: boolean;
+<<<<<<< HEAD
     'multiple'?: boolean;
     'nodeKey'?: string;
     'onCheck'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
+=======
+    'key'?: string;
+    'onNovaTreeNodeCheckedChange'?: (event: CustomEvent<any>) => void;
+>>>>>>> origin/tree-select
     'selected'?: boolean;
     'subnodes'?: NovaTreeNode[];
     'text': string;
@@ -145,6 +261,8 @@ declare namespace LocalJSX {
 
   interface IntrinsicElements {
     'nova-checkbox': NovaCheckbox;
+    'nova-child': NovaChild;
+    'nova-parent': NovaParent;
     'nova-tree': NovaTree;
     'nova-tree-node': NovaTreeNode;
   }

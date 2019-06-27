@@ -12,6 +12,7 @@ export namespace Components {
   interface NovaTreeNode {}
   interface NovaTreeSelect {
     'selected': string[];
+    'toBeRemoved': string[];
   }
 }
 
@@ -39,6 +40,7 @@ declare namespace LocalJSX {
   interface NovaTreeNode extends JSXBase.HTMLAttributes<HTMLNovaTreeNodeElement> {}
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
     'selected'?: string[];
+    'toBeRemoved'?: string[];
   }
 
   interface IntrinsicElements {

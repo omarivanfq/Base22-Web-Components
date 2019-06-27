@@ -1,4 +1,4 @@
-import { Component, h, Prop } from "@stencil/core";
+import { Component, Element, h, Prop } from "@stencil/core";
 
 @Component({
   tag: "nova-tree-select",
@@ -6,6 +6,8 @@ import { Component, h, Prop } from "@stencil/core";
   shadow: true
 })
 export class NovaTreeSelect {
+
+  @Element() el;
 
   private static options = [
     {
@@ -39,9 +41,11 @@ export class NovaTreeSelect {
   ]
 
   @Prop() selected: string[];
+  @Prop() toBeRemoved: string[];
 
   componentWillLoad() {
-    this.selected = ["op3", "op6", "op7"]
+    this.selected = ["op3", "op6", "op7", "op4"]
+    this.toBeRemoved = [];
   }
 
   private _removeAllOptions() {
@@ -49,15 +53,22 @@ export class NovaTreeSelect {
   }
 
   private _removeOption(key:string) {
-    this.selected.splice(this.selected.indexOf(key), 1); 
-    this.selected = [...this.selected]; // to re-render
+    this.toBeRemoved.push(key);
+    this.toBeRemoved = [...this.toBeRemoved];
+    setTimeout(() => {
+      this.selected.splice(this.selected.indexOf(key), 1); 
+      this.selected = [...this.selected]; // to re-render
+    }, 300);
   }
 
   private _getOptions() {
     return NovaTreeSelect.options
     .filter(option => this.selected.indexOf(option.key) !== -1)
     .map(option => 
-      <span class="option-selected" title={option.key}>{option.text}
+      <span 
+        class={"option-selected " + (this.toBeRemoved.indexOf(option.key) !== -1? "remove" : "")} 
+        title={option.key}>
+        { option.text }
         <span onClick={() => this._removeOption(option.key)}> 
           x 
         </span>

@@ -41,7 +41,11 @@ export class NovaTreeSelect {
   @Prop() selected: string[];
 
   componentWillLoad() {
-    this.selected = ["op1", "op4", "op7"]
+    this.selected = ["op3", "op6", "op7"]
+  }
+
+  private _removeAllOptions() {
+    this.selected = []; // to re-render
   }
 
   private _removeOption(key:string) {
@@ -65,10 +69,12 @@ export class NovaTreeSelect {
       <div>
         <span class="nova-select">
           <span class="nova-select-single nova-select-selection" tabindex="0">
+            <span 
+              class="options-remove-all"
+              onClick={() => this._removeAllOptions() }></span>
             { this._getOptions() }
           </span>
         </span>
-
       </div>
     );
   }

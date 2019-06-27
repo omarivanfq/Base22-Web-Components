@@ -1,5 +1,5 @@
 <!--
-  With the help of event listeners and the handleSelect method the 
+  With the help of event listeners and the handleSelect method the
   nova-transfer component can be customized so it can display a different
   view inside of each column as shown in the next example.
 -->
@@ -15,19 +15,19 @@
   <style>
     body { font-family: sans-serif; background-color: rgb(224, 60, 199);}
     p { margin: 0; padding: 0; }
-    h1 { color: #ffffff; text-align: center; font-size: 55px; 
+    h1 { color: #ffffff; text-align: center; font-size: 55px;
       text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none; }
     h1 span { font-size: 45px; margin: 0 10px; }
     table { width: 100%; text-align: center; }
-    *[slot] { visibility: hidden; } 
+    *[slot] { visibility: hidden; }
   </style>
 </head>
 <body>
   <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
-  <nova-transfer 
+  <nova-transfer
     show-search
     show-select-all>
-    <!-- source-column and target-column are the slots that allow the customization 
+    <!-- source-column and target-column are the slots that allow the customization
       of each column -->
     <table slot="source-column" id="source-table">
     </table>
@@ -39,7 +39,7 @@
   <script>
     var transfer = document.querySelector("nova-transfer");
     // event that is emitted each time the user requests to change items from one column to another
-    transfer.addEventListener('transferColumn', event => { 
+    transfer.addEventListener('transferColumn', event => {
       var { targetKeys } = event.detail; // keys of the items that must now be in the target column
       // updating the view of each column/table
       fillSourceTable(data.items.filter(item => targetKeys.indexOf(item.key) === -1));
@@ -64,7 +64,7 @@
     // function that handles the filtering of the items using the value from the searcbox
     transfer.filterOption = (value, item) => item.description.indexOf(value) !== -1
         || item.title.indexOf(value) !== -1;
-      
+
     // customized styles for the operation buttons (<,>)
     transfer.operationStyle = {
       padding: "7px",
@@ -76,7 +76,7 @@
     transfer.columnStyle = {
       width: "45%",
       boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)"
-    } 
+    }
     // customized styles for the wrapper of the component
     transfer.wrapperStyle = {
       width: "60%",
@@ -98,9 +98,9 @@
       configuration = response.data.configuration;
       transfer.configuration = configuration;
       fillSourceTable(data.items.filter(item => data.targetKeys.indexOf(item.key) === -1));
-      fillTargetTable(data.items.filter(item => data.targetKeys.indexOf(item.key) !== -1));   
+      fillTargetTable(data.items.filter(item => data.targetKeys.indexOf(item.key) !== -1));
     })
-    .catch(console.error); 
+    .catch(console.error);
   </script>
 
   <script>
@@ -110,13 +110,13 @@
       fillTargetTable = (items) => {
         fillTable("#target-table", items);
       }
-      
+
       // function that creates a table with data from the transfer-data json
       //   using the transfer method to handle the selection of items
       fillTable = (id, items) => {
         var table = document.querySelector(id);
         if (items.length > 0 && table) {
-          table.innerHTML = ''        
+          table.innerHTML = ''
           // getting items atributtes from json file
           var keys = Object.keys(items[0]);
           var noAttributes = keys.length;
@@ -125,7 +125,7 @@
           var tableHead = document.createElement("thead");
           var row_header = document.createElement("tr");
           var cell = document.createElement("th");
-          // appending checkbox header 
+          // appending checkbox header
           var cellText = document.createTextNode("select");
           cell.appendChild(cellText);
           row_header.appendChild(cell);
@@ -187,6 +187,6 @@
         }
       }
   </script>
-    
+
 </body>
 </html>

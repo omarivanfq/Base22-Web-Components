@@ -125,7 +125,6 @@ export class NovaTransfer {
   /* 
     HANDLERS
   */
-
   @Method()
   async handleSelect(key:string) {
     var item = this.data.items.find(item => item.key === key);

@@ -9,7 +9,7 @@
   <script nomodule src="/build/nova-transfer.js"></script>
   <style>
     body { font-family: sans-serif; background-color: rgb(138,43,226,0.7); }
-    h1 { color: #ffffff; text-align: center; font-size: 55px; 
+    h1 { color: #ffffff; text-align: center; font-size: 55px;
       text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none; }
     h1 span { font-size: 45px; margin: 0 10px; }
     p { margin: 0; padding: 0; }
@@ -18,7 +18,7 @@
 <body>
   <div>
     <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
-    <nova-transfer>   
+    <nova-transfer>
     </nova-transfer>
     <ul>
     </ul>
@@ -33,14 +33,14 @@
     transfer.addEventListener('select', event => console.log('selecting', event.detail));
     /* functions */
     // transfer.renderItem = item => item.title + '-' + item.description;
-    // transfer.filterOption = (value, item) =>  item.description.indexOf(value) !== -1 
+    // transfer.filterOption = (value, item) =>  item.description.indexOf(value) !== -1
   </script>
 
   <script>
     // customized styles for the columns
     transfer.columnStyle = {
       boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)"
-    } 
+    }
     // customized styles for the operation buttons (<,>)
     transfer.operationStyle = {
       zIndex: 999
@@ -64,7 +64,7 @@
         var configuration = response.data.configuration;
       //  transfer.configuration = configuration;
      })
-    .catch(console.error); 
+    .catch(console.error);
   </script>
 </body>
 </html>

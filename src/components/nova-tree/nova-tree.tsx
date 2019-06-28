@@ -166,7 +166,7 @@ export class NovaTree {
       text: "happy",
       nodeKey: "0",
       disableCheckbox: false,
-      disabled: false,
+      disabled: true,
       selected: false,
       checked: false,
       expanded: false,

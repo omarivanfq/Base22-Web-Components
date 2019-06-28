@@ -254,23 +254,23 @@ export class NovaTreeNode {
   }
 
   private _handleSubnodeOnCheck(e): void {
-    const nodeKey = e.target.nodeKey;
-    const checked = e.target.checked;
-    this.subnodes.map((node): void => {
+
+    const { nodeKey, checked } = e.target;
+
+  //  this.subnodes.find(node => node.nodeKey === nodeKey).checked = checked;
+    this.subnodes.forEach((node): void => {
       if (node.nodeKey === nodeKey) {
         node.checked = checked;
       }
-    });
-    if (this.checkStrictly) {
-      return;
-    }
-    if (checked) {
-      this.checked = this.subnodes.every((subnode): boolean => {
-        return subnode.checked;
-      });
-    } else {
-      if (this.checked) this.checkChangedFromChild = true;
-      this.checked = false;
+    }); 
+
+    if (!this.checkStrictly) {
+      if (checked) {
+        this.checked = this.subnodes.every(subnode => subnode.checked);
+      } else {
+        if (this.checked) this.checkChangedFromChild = true;
+        this.checked = false;
+      }
     }
   }
 }

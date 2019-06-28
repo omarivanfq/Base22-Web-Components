@@ -254,7 +254,7 @@ declare namespace LocalJSX {
     'disabled'?: boolean;
     'multiple'?: boolean;
     'nodeKey'?: string;
-    'onSelect'?: (event: CustomEvent<any>) => void;
+    'onCheck'?: (event: CustomEvent<any>) => void;
     'onSelectNode'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
     'selected'?: any;
@@ -277,7 +277,7 @@ declare namespace LocalJSX {
     'expanded'?: boolean;
     'multiple'?: boolean;
     'nodeKey'?: string;
-    'onCheck'?: (event: CustomEvent<any>) => void;
+    'onCheckNode'?: (event: CustomEvent<any>) => void;
     'onSelectingNode'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
     'selected'?: boolean;

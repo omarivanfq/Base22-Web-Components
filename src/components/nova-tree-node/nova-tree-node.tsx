@@ -22,7 +22,6 @@ export class NovaTreeNode {
 
   //Props
   @Prop() public text!: string;
-
   @Prop() public checkable?: boolean = false;
   @Prop() public selectable?: boolean = DEFAULT_CONFIGURATION.selectable;
   @Prop() public blockNode?: boolean = false;
@@ -40,10 +39,8 @@ export class NovaTreeNode {
   @Prop({ mutable: true }) public checked: boolean = false;
   @Prop({ mutable: true }) public expanded: boolean = false;
   @Prop({ mutable: true }) public subnodes: NovaTreeNode[] = [];
-
   @State() private isLeaf: boolean;
-
-  @Event() public check: EventEmitter;
+  @Event() public checkNode: EventEmitter;
   @Event() public selectingNode: EventEmitter;
 
   public checkChangedFromChild: boolean = false;
@@ -65,7 +62,7 @@ export class NovaTreeNode {
 
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
-    this.check.emit();
+    this.checkNode.emit();
     if (this.checkStrictly) {
       return;
     }
@@ -247,8 +244,8 @@ export class NovaTreeNode {
           multiple={this.multiple}
           expanded={node.expanded}
           subnodes={node.subnodes}
-          onCheck={(e): void => {
-            e.stopPropagation();
+          onCheckNode={(e): void => {
+          //  e.stopPropagation();
             this._handleSubnodeOnCheck(e);
           }}
         />

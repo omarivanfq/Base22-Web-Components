@@ -17,6 +17,7 @@
       auto-expand-parent
       default-expand-all
       block-node
+      selectable
     >
       <!--
       default-expand-all
@@ -26,11 +27,13 @@
       Favor de tomar en cuenta que tiene que llevar un - el texto cuhando son mayusculas
     pra el correcto llamado yfucnioonamiento de la funcion  -->
       <script>
-        document
-          .querySelector("nova-tree")
-          .addEventListener("selectNode", event => {
-            console.log(event.detail.selectedKeys);
-          });
+        var tree = document.querySelector("nova-tree");
+        tree.addEventListener("check", event => {
+          console.log(event.detail.checkedKeys);
+        });
+        tree.addEventListener("selectNode", event => {
+          console.log(event.detail.selectedKeys);
+        });
       </script>
     </nova-tree>
   </body>

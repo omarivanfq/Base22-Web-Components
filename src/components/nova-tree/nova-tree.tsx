@@ -45,7 +45,7 @@ export class NovaTree {
   @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
-  @Event() public select: EventEmitter;
+  @Event() public check: EventEmitter;
   @Prop() public selectedKeys: string[] = [];
   @Event() public selectNode: EventEmitter;
 
@@ -286,10 +286,10 @@ export class NovaTree {
     );
   }
 
-  private _handleSelectEvent(): void {
+  private _handleCheckEvent(): void {
     const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
     const nodesArr = Array.prototype.slice.call(nodes);
-    this.select.emit({
+    this.check.emit({
       checkedKeys: nodesArr
         .filter((node): boolean => node.checked)
         .map(node => node.nodeKey)
@@ -313,7 +313,7 @@ export class NovaTree {
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}
-          onCheck={(): void => this._handleSelectEvent()}
+          onCheckNode={(): void => this._handleCheckEvent()}
           onSelectingNode={e => this._handleSelectNode(e.detail.key, e.detail.selected)}
         />
       </li>

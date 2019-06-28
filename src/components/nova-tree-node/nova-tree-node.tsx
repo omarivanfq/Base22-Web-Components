@@ -169,7 +169,7 @@ export class NovaTreeNode {
   }
 
   private _updateCheckedState(e): void {
-    this.checked = e.checked;
+    this.checked = e.detail.checked;
   }
 
   private _generateTextbox(): HTMLSpanElement {

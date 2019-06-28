@@ -63,16 +63,16 @@ export class NovaTreeNode {
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
     this.checkNode.emit();
-    if (this.checkStrictly) {
-      return;
+    if (!this.checkStrictly) {
+      if (this.checkChangedFromChild) {
+        this.checkChangedFromChild = false;
+      }
+      else {
+        this.subnodes.map((nodo: NovaTreeNode): void => {
+          nodo.checked = newValue;
+        });
+      }
     }
-    if (this.checkChangedFromChild) {
-      this.checkChangedFromChild = false;
-      return;
-    }
-    this.subnodes.map((nodo: NovaTreeNode): void => {
-      nodo.checked = newValue;
-    });
   }
 
   //esta a a ser la de expanded
@@ -86,47 +86,16 @@ export class NovaTreeNode {
   }
 
   public render(): HTMLElement {
-    if (this.checkable) {
-      if (this.isLeaf) {
-        return (
-          <Host>
-            <span class="caretsecret" />
-            <label class="this-label">
-              {this._generateCheckbox()}
-              {this._generateTextbox()}
-            </label>
-          </Host>
-        );
-      } else {
-        return (
-          <Host>
-            {this._generateCaret()}
-            <label class="this-label">
-              {this._generateCheckbox()}
-              {this._generateTextbox()}
-            </label>
-            {this._generateListOfSubnodes()}
-          </Host>
-        );
-      }
-    } else {
-      if (this.isLeaf) {
-        return (
-          <Host>
-            <span class="caretsecret" />
-            <label class="this-label">{this._generateTextbox()}</label>
-          </Host>
-        );
-      } else {
-        return (
-          <Host>
-            {this._generateCaret()}
-            <label class="this-label">{this._generateTextbox()}</label>
-            {this._generateListOfSubnodes()}
-          </Host>
-        );
-      }
-    }
+    return(
+      <Host>
+        { this.isLeaf? <span class="caretsecret"/> : this._generateCaret() }
+        <label class="this-label">
+          { this.checkable? this._generateCheckbox() : null }
+          { this._generateTextbox() }
+        </label>
+        { this.isLeaf? null : this._generateListOfSubnodes() }
+      </Host>
+    );
   }
 
   /**
@@ -134,18 +103,12 @@ export class NovaTreeNode {
    */
 
   private _generateCaret(): HTMLSpanElement {
-    if (this.expanded) {
-      return (
-        <span
-          class="caret caret-down"
-          onClick={(): void => this._toggleExpandedState()}
-        />
-      );
-    } else {
-      return (
-        <span class="caret" onClick={(): void => this._toggleExpandedState()} />
-      );
-    }
+    return (
+      <span
+        class={"caret" + (this.expanded? " caret-down" : " ")}
+        onClick={(): void => this._toggleExpandedState()}
+      />
+    );
   }
 
   private _toggleExpandedState(): void {
@@ -170,44 +133,21 @@ export class NovaTreeNode {
   }
 
   private _generateTextbox(): HTMLSpanElement {
+    var classNames = '';
     if (this.blockNode) {
-      if (this.selected && this.selectable) {
-        return (
-          <span
-            class="blockNode selected"
-            onClick={(): void => this._toggleSelectedState()}
-          >
-            {this.text}
-          </span>
-        );
-      } else {
-        return (
-          <span
-            class="blockNode"
-            onClick={(): void => this._toggleSelectedState()}
-          >
-            {this.text}
-          </span>
-        );
-      }
-    } else {
-      if (this.selected && this.selectable) {
-        return (
-          <span
-            class="selected"
-            onClick={(): void => this._toggleSelectedState()}
-          >
-            {this.text}
-          </span>
-        );
-      } else {
-        return (
-          <span onClick={(): void => this._toggleSelectedState()}>
-            {this.text}
-          </span>
-        );
-      }
+      classNames += 'blockNode ';
     }
+    if (this.selectable && this.selected) {
+      classNames += 'selected';
+    }
+    return (
+      <span
+        class={classNames}
+        onClick={(): void => this._toggleSelectedState()}
+      >
+        {this.text}
+      </span>
+    );
   }
 
   private _toggleSelectedState(): void {
@@ -254,16 +194,12 @@ export class NovaTreeNode {
   }
 
   private _handleSubnodeOnCheck(e): void {
-
     const { nodeKey, checked } = e.target;
-
-  //  this.subnodes.find(node => node.nodeKey === nodeKey).checked = checked;
     this.subnodes.forEach((node): void => {
       if (node.nodeKey === nodeKey) {
         node.checked = checked;
       }
     }); 
-
     if (!this.checkStrictly) {
       if (checked) {
         this.checked = this.subnodes.every(subnode => subnode.checked);
@@ -273,4 +209,5 @@ export class NovaTreeNode {
       }
     }
   }
+
 }

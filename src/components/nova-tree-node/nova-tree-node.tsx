@@ -66,16 +66,13 @@ export class NovaTreeNode {
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
     this.check.emit();
-
     if (this.checkStrictly) {
       return;
     }
-
     if (this.checkChangedFromChild) {
       this.checkChangedFromChild = false;
       return;
     }
-
     this.subnodes.map((nodo: NovaTreeNode): void => {
       nodo.checked = newValue;
     });
@@ -177,7 +174,7 @@ export class NovaTreeNode {
 
   private _generateTextbox(): HTMLSpanElement {
     if (this.blockNode) {
-      if (this.selected) {
+      if (this.selected && this.selectable) {
         return (
           <span
             class="blockNode selected"
@@ -197,7 +194,7 @@ export class NovaTreeNode {
         );
       }
     } else {
-      if (this.selected) {
+      if (this.selected && this.selectable) {
         return (
           <span
             class="selected"

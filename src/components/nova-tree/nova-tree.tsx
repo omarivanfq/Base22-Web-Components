@@ -38,7 +38,7 @@ export class NovaTree {
   @Prop() public multiple: boolean;
   //@Prop() public autoExpandTopLevel: boolean = true;s
   @Prop() public checkable: boolean = false;
-  @Prop() public selectable: boolean;
+  @Prop() public selectable: boolean = false;
   @Prop() public checkStrictly: boolean;
   @Prop() public selected;
   @Prop() public checked: boolean;
@@ -58,26 +58,28 @@ export class NovaTree {
   }
 
   private _handleSelectNode(key:string, selected:boolean):void {
-    if (this.multiple) {
-      if (selected) {
-        this.selectedKeys.push(key);
+    if (this.selectable) {
+      if (this.multiple) {
+        if (selected) {
+          this.selectedKeys.push(key);
+        }
+        else {
+          this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
+        }
       }
       else {
-        this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
+        const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+        if (selected) {
+          nodes.forEach(node => node.selected = node.nodeKey === key);
+          this.selectedKeys = [key];
+        }
+        else {
+          nodes.forEach(node => node.selected = false);
+          this.selectedKeys = [];
+        }
       }
+      this.selectNode.emit({selectedKeys: this.selectedKeys});
     }
-    else {
-      const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
-      if (selected) {
-        nodes.forEach(node => node.selected = node.nodeKey === key);
-        this.selectedKeys = [key];
-      }
-      else {
-        nodes.forEach(node => node.selected = false);
-        this.selectedKeys = [];
-      }
-    }
-    this.selectNode.emit({selectedKeys: this.selectedKeys});
   }
 
   private _handleExpandOptions() {

@@ -29,9 +29,9 @@
       <script>
         document
           .querySelector("nova-tree")
-          .addEventListener("select", event =>
-            console.log(event.detail.checkedKeys)
-          );
+          .addEventListener("selectNode", event => {
+            console.log(event.detail.selectedKeys);
+          });
       </script>
     </nova-tree>
   </body>

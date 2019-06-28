@@ -46,6 +46,8 @@ export class NovaTree {
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
   @Event() public select: EventEmitter;
+  @Prop() public selectedKeys: string[] = [];
+  @Event() public selectNode: EventEmitter;
 
   @Watch("data")
   public dataChange(newValue: any, _oldValue: any): void {
@@ -53,6 +55,29 @@ export class NovaTree {
     const nodesArr = Array.prototype.slice.call(nodes);
     this._updateCheckboxes(newValue.items, nodesArr);
     this._handleExpandOptions();
+  }
+
+  private _handleSelectNode(key:string, selected:boolean):void {
+    if (this.multiple) {
+      if (selected) {
+        this.selectedKeys.push(key);
+      }
+      else {
+        this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
+      }
+    }
+    else {
+      const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+      if (selected) {
+        nodes.forEach(node => node.selected = node.nodeKey === key);
+        this.selectedKeys = [key];
+      }
+      else {
+        nodes.forEach(node => node.selected = false);
+        this.selectedKeys = [];
+      }
+    }
+    this.selectNode.emit({selectedKeys: this.selectedKeys});
   }
 
   private _handleExpandOptions() {
@@ -287,6 +312,7 @@ export class NovaTree {
           expanded={child.expanded}
           subnodes={child.subnodes}
           onCheck={(): void => this._handleSelectEvent()}
+          onSelectingNode={e => this._handleSelectNode(e.detail.key, e.detail.selected)}
         />
       </li>
     );
@@ -317,7 +343,6 @@ export class NovaTree {
   private autoSelectAllHandler(node, newValue): void {
     console.log(node.selected);
     node.selected = newValue;
-
     if (node.subnodes.length) {
       node.subnodes.map(subnode =>
         this.autoSelectAllHandler(subnode, newValue)

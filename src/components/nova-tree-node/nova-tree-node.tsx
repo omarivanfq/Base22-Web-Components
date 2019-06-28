@@ -44,6 +44,7 @@ export class NovaTreeNode {
   @State() private isLeaf: boolean;
 
   @Event() public check: EventEmitter;
+  @Event() public selectingNode: EventEmitter;
 
   public checkChangedFromChild: boolean = false;
 
@@ -217,6 +218,7 @@ export class NovaTreeNode {
 
   private _toggleSelectedState(): void {
     this.selected = !this.selected;
+    this.selectingNode.emit({key: this.nodeKey, selected: this.selected});
   }
 
   private _generateListOfSubnodes(): HTMLUListElement {

@@ -1,4 +1,5 @@
 import { Component, Element, h, Prop } from "@stencil/core";
+import { TREE_ITEMS, OPTIONS } from "./dummy-data";
 
 @Component({
   tag: "nova-tree-select",
@@ -7,44 +8,12 @@ import { Component, Element, h, Prop } from "@stencil/core";
 })
 export class NovaTreeSelect {
 
-  @Element() el;
-
-  private static options = [
-    {
-      key: "op1",
-      text: "Like a Prayer"
-    },
-    {
-      key: "op2",
-      text: "Express Yourself"
-    },
-    {
-      key: "op3",
-      text: "Love Song"
-    },
-    {
-      key: "op4",
-      text: "Till Death Do Us Part"
-    },
-    {
-      key: "op5",
-      text: "Promise to Try"
-    },
-    {
-      key: "op6",
-      text: "Cherish"
-    },
-    {
-      key: "op7",
-      text: "Dear Jessie"
-    }
-  ]
-
+  @Element() el; 
   @Prop() selected: string[];
   @Prop() toBeRemoved: string[];
 
   componentWillLoad() {
-    this.selected = []; //["op1", "op2", "op3", "op4", "op5", "op6", "op7"]
+    this.selected = []; 
     this.toBeRemoved = [];
   }
 
@@ -64,11 +33,11 @@ export class NovaTreeSelect {
 
   private _addOption(key:string) {
     this.selected.push(key);
-    this.selected = [...this.selected];
+    this.selected = [...this.selected]; // to re-render   
   }
 
   private _getOptionsSelected() {
-    return NovaTreeSelect.options
+    return OPTIONS
     .filter(option => this.selected.indexOf(option.key) !== -1)
     .map(option => 
       <span 
@@ -82,6 +51,16 @@ export class NovaTreeSelect {
       </span>);
   }
 
+  private _handleSelection(key:string, selected:boolean) {
+    if (selected) {
+      this._addOption(key);
+    }
+    else {
+      this._removeOption(key)
+    }
+  }
+
+ /* 
   private _getOptions() {
     return NovaTreeSelect.options.map(option => 
       <span 
@@ -92,6 +71,7 @@ export class NovaTreeSelect {
       </span>
     );
   }
+  */
 
   render() {
     return (
@@ -105,7 +85,16 @@ export class NovaTreeSelect {
           </span>
         </span>
         <div class="options">
-          { this._getOptions() }
+          {/* this._getOptions() */}
+          <nova-tree 
+            data = {{items: TREE_ITEMS}}
+            checkable
+            selectable
+            block-node
+            default-expand-all
+            multiple
+            onSelect={e => this._handleSelection(e.detail.key, e.detail.selected)}>
+            </nova-tree>
         </div>
       </div>
     );

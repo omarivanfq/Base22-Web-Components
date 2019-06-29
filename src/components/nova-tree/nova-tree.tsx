@@ -126,7 +126,7 @@ export class NovaTree {
   }
 
   public componentWillLoad(): void {
-    this.data.items = NovaTree.treeData;
+    // this.data.items = NovaTree.treeData;
 
     this._handleExpandOptions();
 
@@ -162,123 +162,6 @@ export class NovaTree {
     }
   }
 
-  private static treeData = [
-    {
-      text: "happy",
-      nodeKey: "0",
-      disableCheckbox: false,
-      disabled: false,
-      selected: false,
-      checked: false,
-      expanded: false,
-      subnodes: [
-        {
-          text: "Water",
-          nodeKey: "0-0",
-          disableCheckbox: false,
-          disabled: true,
-          selected: false,
-          checked: false,
-          expanded: false,
-          subnodes: []
-        },
-        {
-          text: "Coffee",
-          nodeKey: "0-1",
-          disableCheckbox: false,
-          disabled: false,
-          selected: false,
-          checked: false,
-          expanded: false,
-          subnodes: [
-            {
-              text: "Coffee",
-              nodeKey: "0-1-0",
-              disableCheckbox: false,
-              disabled: false,
-              selected: false,
-              checked: false,
-              expanded: false,
-              subnodes: []
-            },
-            {
-              text: "Whatever",
-              nodeKey: "0-1-1",
-              disableCheckbox: false,
-              disabled: false,
-              selected: false,
-              checked: false,
-              expanded: false,
-              subnodes: [
-                {
-                  text: "Coffee",
-                  nodeKey: "0-1-1-0",
-                  disableCheckbox: false,
-                  disabled: false,
-                  selected: false,
-                  checked: false,
-                  expanded: false,
-                  subnodes: []
-                },
-                {
-                  text: "Whatever",
-                  nodeKey: "0-1-1-1",
-                  disableCheckbox: false,
-                  disabled: true,
-                  selected: false,
-                  checked: false,
-                  expanded: false,
-                  subnodes: []
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      text: "bebidas",
-      nodeKey: "1",
-      disableCheckbox: false,
-      disabled: false,
-      selected: false,
-      checked: false,
-      expanded: false,
-      subnodes: [
-        {
-          text: "Water",
-          nodeKey: "1-0",
-          disableCheckbox: false,
-          disabled: false,
-          selected: false,
-          checked: false,
-          expanded: false,
-          subnodes: []
-        },
-        {
-          text: "Coffee",
-          nodeKey: "1-1",
-          disableCheckbox: false,
-          disabled: true,
-          selected: false,
-          checked: false,
-          expanded: false,
-          subnodes: []
-        },
-        {
-          text: "Tea",
-          nodeKey: "1-2",
-          disableCheckbox: false,
-          disabled: false,
-          selected: false,
-          checked: false,
-          expanded: false,
-          subnodes: []
-        }
-      ]
-    }
-  ];
-
   public render(): HTMLNovaTreeElement {
     return (
       <ul id="topLevelUL">
@@ -308,7 +191,7 @@ export class NovaTree {
       <li>
         <nova-tree-node
           blockNode={this.blockNode}
-          text={child.nodeKey}
+          text={child.text}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}
@@ -343,10 +226,12 @@ export class NovaTree {
   }
 
   @Watch("multiple")
-  public multipleWatchHandler(newValue: boolean): void {
+  public multipleWatchHandler(_newValue: boolean): void {
+    /*
     NovaTree.treeData.map((parent): void => {
       this.autoSelectAllHandler(parent, newValue);
     });
+    */
   }
 
   private autoSelectAllHandler(node, newValue): void {

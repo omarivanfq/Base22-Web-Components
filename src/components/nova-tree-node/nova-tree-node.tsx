@@ -43,10 +43,21 @@ export class NovaTreeNode {
   @Event() public checkNode: EventEmitter;
   @Event() public selectingNode: EventEmitter;
 
+  @Watch("disabled")
+  public disabledChange(_newValue: any, _oldValue: any): void {
+    if (_newValue) {
+      this.disableCheckbox = true;
+    }
+  }
+
   public checkChangedFromChild: boolean = false;
 
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
+    if (this.disabled) {
+      console.log(this.nodeKey, 'now disabledchhckbx');
+      this.disableCheckbox = true;
+    }
   }
 
   @Watch("subnodes")
@@ -68,8 +79,11 @@ export class NovaTreeNode {
         this.checkChangedFromChild = false;
       }
       else {
-        this.subnodes.map((nodo: NovaTreeNode): void => {
-          nodo.checked = newValue;
+        this.subnodes.map((node: NovaTreeNode): void => {
+          // if 'disabled' is true then 'disableCheckbox' should also be true, but for some reason it isn't
+          if (!node.disabled && !node.disableCheckbox) { //  if (!node.disabled) {
+            node.checked = newValue;
+          }
         });
       }
     }
@@ -101,7 +115,6 @@ export class NovaTreeNode {
   /**
    * Local methods
    */
-
   private _generateCaret(): HTMLSpanElement {
     return (
       <span
@@ -133,13 +146,10 @@ export class NovaTreeNode {
   }
 
   private _generateTextbox(): HTMLSpanElement {
-    var classNames = '';
-    if (this.blockNode) {
-      classNames += 'blockNode ';
-    }
-    if (this.selectable && this.selected) {
-      classNames += 'selected';
-    }
+    var classNames = 'textbox ';
+    if (this.blockNode) classNames += 'blockNode ';
+    if (this.selectable && this.selected) classNames += 'selected ';
+    if (this.disabled) classNames += 'disabled';
     return (
       <span
         class={classNames}
@@ -151,8 +161,10 @@ export class NovaTreeNode {
   }
 
   private _toggleSelectedState(): void {
-    this.selected = !this.selected;
-    this.selectingNode.emit({key: this.nodeKey, selected: this.selected});
+    if (this.selectable && !this.disabled) {
+      this.selected = !this.selected;
+      this.selectingNode.emit({key: this.nodeKey, selected: this.selected});  
+    }
   }
 
   private _generateListOfSubnodes(): HTMLUListElement {
@@ -171,7 +183,7 @@ export class NovaTreeNode {
         <nova-tree-node
           //meter en documentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
           blockNode={this.blockNode}
-          text={node.text}
+          text={node.nodeKey}
           key={node.nodeKey}
           nodeKey={node.nodeKey}
           checkable={this.checkable}
@@ -200,14 +212,14 @@ export class NovaTreeNode {
         node.checked = checked;
       }
     }); 
-    if (!this.checkStrictly) {
+    if (!this.checkStrictly && !this.disableCheckbox) {
       if (checked) {
-        this.checked = this.subnodes.every(subnode => subnode.checked);
+        this.checked = this.subnodes
+        .every(subnode => subnode.checked || subnode.disabled || subnode.disableCheckbox);
       } else {
         if (this.checked) this.checkChangedFromChild = true;
         this.checked = false;
       }
     }
   }
-
 }

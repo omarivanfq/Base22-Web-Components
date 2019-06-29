@@ -38,7 +38,7 @@ li {
 
 .selected {
   border-radius: 2px;
-  background-color: #96b6f5;
+  background-color: #bae7ff;
 }
 
 .this-label {
@@ -66,10 +66,17 @@ li {
 
 /* Hide the nested list */
 .nested {
-  display: none;
+  max-height: 0;
+  transition: all 0.2s ease-out;
+  opacity: 0;
 }
 
 /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
-.active {
-  display: block;
+.nested.active {
+  max-height: 100%;
+  opacity: 1;
+}
+
+.textbox.disabled {
+  color: rgba(0,0,0,0.25);
 }

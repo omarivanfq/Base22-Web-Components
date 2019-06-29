@@ -166,7 +166,7 @@ export class NovaTree {
       text: "happy",
       nodeKey: "0",
       disableCheckbox: false,
-      disabled: true,
+      disabled: false,
       selected: false,
       checked: false,
       expanded: false,
@@ -175,7 +175,7 @@ export class NovaTree {
           text: "Water",
           nodeKey: "0-0",
           disableCheckbox: false,
-          disabled: false,
+          disabled: true,
           selected: false,
           checked: false,
           expanded: false,
@@ -223,7 +223,7 @@ export class NovaTree {
                   text: "Whatever",
                   nodeKey: "0-1-1-1",
                   disableCheckbox: false,
-                  disabled: false,
+                  disabled: true,
                   selected: false,
                   checked: false,
                   expanded: false,
@@ -258,7 +258,7 @@ export class NovaTree {
           text: "Coffee",
           nodeKey: "1-1",
           disableCheckbox: false,
-          disabled: false,
+          disabled: true,
           selected: false,
           checked: false,
           expanded: false,
@@ -301,7 +301,7 @@ export class NovaTree {
       <li>
         <nova-tree-node
           blockNode={this.blockNode}
-          text={child.text}
+          text={child.nodeKey}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}

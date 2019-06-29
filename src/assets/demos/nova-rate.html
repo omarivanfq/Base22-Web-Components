@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
+    />
+    <title>Nova Rate Component</title>
+
+    <script type="module" src="/build/nova.esm.js"></script>
+    <script nomodule src="/build/nova.js"></script>
+  </head>
+  <body>
+    <nova-rate default-value="2.5" allow-clear allow-half></nova-rate>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      var rate = document.querySelector("nova-rate");
+
+      axios
+        .get("../data/rate-data.json")
+        .then(function(response) {
+          var config = response.data.configuration;
+          rate.configuration = config;
+          console.log(config);
+        })
+        .catch(console.error);
+      window.onload = function() {
+        // let rating = document.querySelector("nova-rate");
+        // rating.shadowRoot.children.item(1).focus();
+        // rating.focusComponent();
+        // rating.addEventListener("onChange", function(event) {
+        //   console.log(event.detail);
+        // });
+        // rating.addEventListener("onBlur", function(event) {
+        //   console.log(event);
+        // });
+        // rating.addEventListener("onKeyDown", function(event) {
+        //   console.log(event);
+        // });
+        // rating.addEventListener("onFocus", function(event) {
+        //   console.log(event);
+        // });
+        // rating.addEventListener("onHoverChange", function(event) {
+        //   console.log(event);
+        // });
+      };
+    </script>
+  </body>
+</html>

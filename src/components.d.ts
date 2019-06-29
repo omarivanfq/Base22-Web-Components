@@ -74,6 +74,7 @@ export namespace Components {
     'checkStrictly': boolean;
     'checkable': boolean;
     'checked': boolean;
+    'checkedKeys': string[];
     /**
     * Common attributes
     */
@@ -241,6 +242,7 @@ declare namespace LocalJSX {
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
     'checked'?: boolean;
+    'checkedKeys'?: string[];
     /**
     * Common attributes
     */
@@ -255,7 +257,7 @@ declare namespace LocalJSX {
     'multiple'?: boolean;
     'nodeKey'?: string;
     'onCheck'?: (event: CustomEvent<any>) => void;
-    'onSelectNode'?: (event: CustomEvent<any>) => void;
+    'onSelect'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
     'selected'?: any;
     'selectedKeys'?: string[];
@@ -278,7 +280,7 @@ declare namespace LocalJSX {
     'multiple'?: boolean;
     'nodeKey'?: string;
     'onCheckNode'?: (event: CustomEvent<any>) => void;
-    'onSelectingNode'?: (event: CustomEvent<any>) => void;
+    'onSelectNode'?: (event: CustomEvent<any>) => void;
     'selectable'?: boolean;
     'selected'?: boolean;
     'subnodes'?: NovaTreeNode[];

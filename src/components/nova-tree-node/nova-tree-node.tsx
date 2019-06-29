@@ -41,7 +41,7 @@ export class NovaTreeNode {
   @Prop({ mutable: true }) public subnodes: NovaTreeNode[] = [];
   @State() private isLeaf: boolean;
   @Event() public checkNode: EventEmitter;
-  @Event() public selectingNode: EventEmitter;
+  @Event() public selectNode: EventEmitter;
 
   @Watch("disabled")
   public disabledChange(_newValue: any, _oldValue: any): void {
@@ -55,7 +55,6 @@ export class NovaTreeNode {
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
     if (this.disabled) {
-      console.log(this.nodeKey, 'now disabledchhckbx');
       this.disableCheckbox = true;
     }
   }
@@ -73,7 +72,7 @@ export class NovaTreeNode {
 
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
-    this.checkNode.emit();
+    this.checkNode.emit({key: this.nodeKey, checked: newValue});
     if (!this.checkStrictly) {
       if (this.checkChangedFromChild) {
         this.checkChangedFromChild = false;
@@ -163,7 +162,7 @@ export class NovaTreeNode {
   private _toggleSelectedState(): void {
     if (this.selectable && !this.disabled) {
       this.selected = !this.selected;
-      this.selectingNode.emit({key: this.nodeKey, selected: this.selected});  
+      this.selectNode.emit({key: this.nodeKey, selected: this.selected});  
     }
   }
 

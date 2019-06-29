@@ -1,19 +1,60 @@
 {
-  "name": "c",
-  "version": "1.0.0",
+  "name": "team-hortons-webcomponents",
+  "version": "0.0.4",
   "description": "- Rate\r - Tree Select\r - Transfer\r - Tree",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eddyhdzg/Base22-TeamHortons.git"
   },
-  "author": "",
-  "license": "ISC",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/team-hortons-webcomponents/team-hortons-webcomponents.js",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "scripts": {
+    "dev": "vuepress dev",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "build": "stencil build --docs",
+    "start": "stencil build --dev --watch --serve",
+    "test": "jest --no-cache",
+    "test.watch": "jest --watch --no-cache",
+    "test.stencil": "stencil test --spec --e2e",
+    "test.watch.stencil": "stencil test --spec --e2e --watchAll"
+  },
+  "devDependencies": {
+    "@stencil/core": "^1.1.2",
+    "@stencil/sass": "^1.0.1",
+    "@types/jest": "^24.0.15",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-stencil": "0.0.1",
+    "jest": "^24.8.0",
+    "jest-cli": "^24.8.0",
+    "prettier": "^1.18.2",
+    "stencil-fragment": "^1.0.1",
+    "vuepress": "^1.0.2",
+    "vuepress-plugin-container": "^2.0.1"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "keywords": [],
+  "author": "Base22 Team Hortons",
   "bugs": {
     "url": "https://github.com/eddyhdzg/Base22-TeamHortons/issues"
   },
-  "homepage": "https://github.com/eddyhdzg/Base22-TeamHortons#readme"
+  "homepage": "https://github.com/eddyhdzg/Base22-TeamHortons#readme",
+  "directories": {
+    "doc": "docs"
+  }
 }

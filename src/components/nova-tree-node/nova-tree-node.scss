@@ -1,0 +1,82 @@
+nova-tree-node {
+  display: block;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+:host {
+  font-family: 'Lato', sans-serif;
+}
+
+li {
+  display: block;
+}
+
+.caretsecret {
+  display: inline-block;
+  padding-left: 18px;
+  background: none;
+}
+/* Style the caret/arrow */
+.caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+  /* Create the caret/arrow with a unicode, and style it */
+  &::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+    transition: all .07s linear;
+  }
+  /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+  &.caret-down::before {
+    transform: rotate(90deg);
+  }
+}
+
+.selected {
+  border-radius: 2px;
+  background-color: #bae7ff;
+}
+
+.this-label {
+  display: block;
+  width: 100%;
+  left: 14px;
+  top: 0;
+  position: absolute;
+}
+
+.this-label > span {
+  display: block;
+  left: 30px;
+  top: 0;
+  position: absolute;
+  box-sizing: border-box;
+  padding: 1px 2px;
+  transition: all 0.07s ease-in;
+  user-select: none;
+}
+
+.blockNode {
+  width: calc(100% - 40px);
+}
+
+/* Hide the nested list */
+.nested {
+  max-height: 0;
+  transition: all 0.2s ease-out;
+  opacity: 0;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.nested.active {
+  max-height: 100%;
+  opacity: 1;
+}
+
+.textbox.disabled {
+  color: rgba(0,0,0,0.25);
+}

@@ -6,8 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
     />
-    <title>Stencil Component Starter</title>
-
+    <title>Nova Tree</title>
     <script type="module" src="/build/nova.esm.js"></script>
     <script nomodule src="/build/nova.js"></script>
   </head>
@@ -16,8 +15,9 @@
       checkable
       auto-expand-parent
       default-expand-all
-      selectable
       block-node
+      multiple
+      selectable
     >
       <!--
       default-expand-all
@@ -27,11 +27,13 @@
       Favor de tomar en cuenta que tiene que llevar un - el texto cuhando son mayusculas
     pra el correcto llamado yfucnioonamiento de la funcion  -->
       <script>
-        document
-          .querySelector("nova-tree")
-          .addEventListener("select", event =>
-            console.log(event.detail.checkedKeys)
-          );
+     /*   var tree = document.querySelector("nova-tree");
+        tree.addEventListener("check", event => {
+          console.log(event.detail.checkedKeys);
+        });
+        tree.addEventListener("selectNode", event => {
+          console.log(event.detail.selectedKeys);
+        }); */
       </script>
     </nova-tree>
   </body>

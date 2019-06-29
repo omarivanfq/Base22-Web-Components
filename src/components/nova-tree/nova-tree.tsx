@@ -38,14 +38,16 @@ export class NovaTree {
   @Prop() public multiple: boolean;
   //@Prop() public autoExpandTopLevel: boolean = true;s
   @Prop() public checkable: boolean = false;
-  @Prop() public selectable: boolean;
+  @Prop() public selectable: boolean = false;
   @Prop() public checkStrictly: boolean;
   @Prop() public selected;
   @Prop() public checked: boolean;
   @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
-  @Event() public select: EventEmitter;
+  @Event() public check: EventEmitter;
+  @Prop() public selectedKeys: string[] = [];
+  @Event() public selectNode: EventEmitter;
 
   @Watch("data")
   public dataChange(newValue: any, _oldValue: any): void {
@@ -53,6 +55,31 @@ export class NovaTree {
     const nodesArr = Array.prototype.slice.call(nodes);
     this._updateCheckboxes(newValue.items, nodesArr);
     this._handleExpandOptions();
+  }
+
+  private _handleSelectNode(key:string, selected:boolean):void {
+    if (this.selectable) {
+      if (this.multiple) {
+        if (selected) {
+          this.selectedKeys.push(key);
+        }
+        else {
+          this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
+        }
+      }
+      else {
+        const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+        if (selected) {
+          nodes.forEach(node => node.selected = node.nodeKey === key);
+          this.selectedKeys = [key];
+        }
+        else {
+          nodes.forEach(node => node.selected = false);
+          this.selectedKeys = [];
+        }
+      }
+      this.selectNode.emit({selectedKeys: this.selectedKeys});
+    }
   }
 
   private _handleExpandOptions() {
@@ -148,7 +175,7 @@ export class NovaTree {
           text: "Water",
           nodeKey: "0-0",
           disableCheckbox: false,
-          disabled: false,
+          disabled: true,
           selected: false,
           checked: false,
           expanded: false,
@@ -196,7 +223,7 @@ export class NovaTree {
                   text: "Whatever",
                   nodeKey: "0-1-1-1",
                   disableCheckbox: false,
-                  disabled: false,
+                  disabled: true,
                   selected: false,
                   checked: false,
                   expanded: false,
@@ -231,7 +258,7 @@ export class NovaTree {
           text: "Coffee",
           nodeKey: "1-1",
           disableCheckbox: false,
-          disabled: false,
+          disabled: true,
           selected: false,
           checked: false,
           expanded: false,
@@ -259,10 +286,10 @@ export class NovaTree {
     );
   }
 
-  private _handleSelectEvent(): void {
+  private _handleCheckEvent(): void {
     const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
     const nodesArr = Array.prototype.slice.call(nodes);
-    this.select.emit({
+    this.check.emit({
       checkedKeys: nodesArr
         .filter((node): boolean => node.checked)
         .map(node => node.nodeKey)
@@ -274,7 +301,7 @@ export class NovaTree {
       <li>
         <nova-tree-node
           blockNode={this.blockNode}
-          text={child.text}
+          text={child.nodeKey}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}
@@ -286,7 +313,8 @@ export class NovaTree {
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}
-          onCheck={(): void => this._handleSelectEvent()}
+          onCheckNode={(): void => this._handleCheckEvent()}
+          onSelectingNode={e => this._handleSelectNode(e.detail.key, e.detail.selected)}
         />
       </li>
     );
@@ -317,7 +345,6 @@ export class NovaTree {
   private autoSelectAllHandler(node, newValue): void {
     console.log(node.selected);
     node.selected = newValue;
-
     if (node.subnodes.length) {
       node.subnodes.map(subnode =>
         this.autoSelectAllHandler(subnode, newValue)

@@ -202,7 +202,7 @@ export class NovaTree {
               subnodes: []
             },
             {
-              text: "Whatever",
+              text: "Whatever Whatever Whatever Whatever Whatever Whatever Whatever  Whatever  Whatever ",
               nodeKey: "0-1-1",
               disableCheckbox: false,
               disabled: false,

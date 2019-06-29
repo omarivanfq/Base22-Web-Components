@@ -12,9 +12,20 @@
     <script nomodule src="/build/nova.js"></script>
   </head>
   <body>
-    <nova-rate allow-clear allow-half default-value="2.5"></nova-rate>
+    <nova-rate default-value="2.5" allow-clear allow-half></nova-rate>
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+      var rate = document.querySelector("nova-rate");
+
+      axios
+        .get("../data/rate-data.json")
+        .then(function(response) {
+          var config = response.data.configuration;
+          rate.configuration = config;
+          console.log(config);
+        })
+        .catch(console.error);
       window.onload = function() {
         // let rating = document.querySelector("nova-rate");
         // rating.shadowRoot.children.item(1).focus();

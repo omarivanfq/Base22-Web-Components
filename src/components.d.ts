@@ -36,6 +36,7 @@ export namespace Components {
     * This property sets the caracter to display as symbol
     */
     'character': string;
+    'configuration'?: any;
     /**
     * This property sets the number of stars
     */
@@ -193,6 +194,7 @@ declare namespace LocalJSX {
     * This property sets the caracter to display as symbol
     */
     'character'?: string;
+    'configuration'?: any;
     /**
     * This property sets the number of stars
     */

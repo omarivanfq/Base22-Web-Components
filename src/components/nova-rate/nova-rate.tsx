@@ -18,7 +18,9 @@ import {
   styleUrl: "nova-rate.scss",
   shadow: true
 })
+
 export class NovaRate {
+  
   /**
    * Element
    */
@@ -55,8 +57,7 @@ export class NovaRate {
   /**
    *  This property makes the component "read only"
    */
-  @Prop()
-  disabled: boolean = false;
+  @Prop() disabled: boolean = false;
 
   /**
    *  This property sets the number of stars
@@ -68,6 +69,13 @@ export class NovaRate {
    */
   @Prop() defaultValue: number = 0;
 
+  @Prop({ mutable: true }) configuration?: any = {
+    count: 5,
+    allowHalf: true,
+    allowClear: true,
+    defaultValue: 0,
+    autoFocus: true
+  };
   /**
    *  State
    */
@@ -83,6 +91,8 @@ export class NovaRate {
   @Event() onFocus: EventEmitter;
   @Event() onHoverChange: EventEmitter;
   @Event() onKeyDown: EventEmitter;
+
+  
 
   /**
    *  Public API Methods

@@ -45,10 +45,10 @@ export class NovaTree {
   @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
-  @Event() public check: EventEmitter;
   @Prop() public selectedKeys: string[] = [];
   @Prop() public checkedKeys: string[] = [];
   @Event() public select: EventEmitter;
+  @Event() public check: EventEmitter;
 
   @Watch("data")
   public dataChange(newValue: any, _oldValue: any): void {
@@ -308,7 +308,7 @@ export class NovaTree {
       <li>
         <nova-tree-node
           blockNode={this.blockNode}
-          text={child.nodeKey}
+          text={child.text}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}

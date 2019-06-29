@@ -102,7 +102,7 @@ export class NovaTreeNode {
     return(
       <Host>
         { this.isLeaf? <span class="caretsecret"/> : this._generateCaret() }
-        <label class="this-label">
+        <label class={"node-label " + (this.checkable? "checked" : "")}>
           { this.checkable? this._generateCheckbox() : null }
           { this._generateTextbox() }
         </label>
@@ -182,7 +182,7 @@ export class NovaTreeNode {
         <nova-tree-node
           //meter en documentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
           blockNode={this.blockNode}
-          text={node.nodeKey}
+          text={node.text}
           key={node.nodeKey}
           nodeKey={node.nodeKey}
           checkable={this.checkable}

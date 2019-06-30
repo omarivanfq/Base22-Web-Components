@@ -1,5 +1,5 @@
-import { Component, Element, h, Prop } from "@stencil/core";
-import { TREE_ITEMS, OPTIONS } from "./dummy-data";
+import { Component, Element, Watch, h, Prop } from "@stencil/core";
+import { TREE_ITEMS } from "./dummy-data";
 
 @Component({
   tag: "nova-tree-select",
@@ -11,10 +11,36 @@ export class NovaTreeSelect {
   @Element() el; 
   @Prop() selected: string[];
   @Prop() toBeRemoved: string[];
+  @Prop({ mutable: true }) public data?: any = { items: TREE_ITEMS };
+  private flatItems:any [];
+
+  @Watch("data")
+  public dataChange(_newValue: any, _oldValue: any): void {
+    this.flatItems = this._getFlatItems(_newValue.items);
+  }
+
+  private _getFlatItems(items) {
+    var flatItems = [];
+    this._toFlatItemsRec(items, flatItems);
+    return flatItems;
+  }
+
+  private _toFlatItemsRec(items, array) {
+    items.forEach(item => {
+      array.push({
+        key: item.nodeKey,
+        text: item.text
+      });
+      if (item.subnodes.length > 0) {
+        this._toFlatItemsRec(item.subnodes, array);
+      }
+    });
+  }
 
   componentWillLoad() {
     this.selected = []; 
     this.toBeRemoved = [];
+    this.flatItems = this._getFlatItems(this.data.items);
   }
 
   private _removeAllOptions() {
@@ -37,7 +63,7 @@ export class NovaTreeSelect {
   }
 
   private _getOptionsSelected() {
-    return OPTIONS
+    return this.flatItems
     .filter(option => this.selected.indexOf(option.key) !== -1)
     .map(option => 
       <span 
@@ -85,9 +111,9 @@ export class NovaTreeSelect {
           </span>
         </span>
         <div class="options">
-          {/* this._getOptions() */}
+          {/*this._getOptions()*/}
           <nova-tree 
-            data = {{items: TREE_ITEMS}}
+            data = { this.data }
             checkable
             selectable
             block-node

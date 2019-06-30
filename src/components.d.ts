@@ -74,7 +74,6 @@ export namespace Components {
     'blockNode': boolean;
     'checkStrictly': boolean;
     'checkable': boolean;
-    'checked': boolean;
     'checkedKeys': string[];
     /**
     * Common attributes
@@ -116,6 +115,7 @@ export namespace Components {
     'text': string;
   }
   interface NovaTreeSelect {
+    'data'?: any;
     'selected': string[];
     'toBeRemoved': string[];
   }
@@ -243,7 +243,6 @@ declare namespace LocalJSX {
     'blockNode'?: boolean;
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
-    'checked'?: boolean;
     'checkedKeys'?: string[];
     /**
     * Common attributes
@@ -289,6 +288,7 @@ declare namespace LocalJSX {
     'text': string;
   }
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
+    'data'?: any;
     'selected'?: string[];
     'toBeRemoved'?: string[];
   }

@@ -197,7 +197,7 @@ export class NovaTree {
       <li>
         <nova-tree-node
           blockNode={this.blockNode}
-          text={child.nodeKey}
+          text={child.text}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}

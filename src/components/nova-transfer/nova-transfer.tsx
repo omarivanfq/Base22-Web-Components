@@ -10,6 +10,9 @@ import {
 } from "@stencil/core";
 import { DEFAULT_CONFIGURATION } from "./default-configuration";
 import { TransferSearchBox } from "./FunctionalComponents/nova-transfer-search-box";
+import { TransferOperationButtons } from "./FunctionalComponents/nova-transfer-operation-buttons";
+import { TransferColumnHeader } from "./FunctionalComponents/nova-transfer-column-header";
+import { TransferItem } from "./FunctionalComponents/nova-transfer-item";
 
 const RIGHT: string = "right";
 const LEFT: string = "left";
@@ -144,7 +147,7 @@ export class NovaTransfer {
     this.selected = [...this.selected]; // to force re-rendering
   }
 
-  private _handleSelectAll(direction: string) {
+  private _handleSelectAll = (direction: string) => {
     if (!this.disabled) {
       // number of items selected in the column
       var selectedCount =
@@ -258,94 +261,35 @@ export class NovaTransfer {
             (direction === RIGHT && this._isItemInTarget(item.key))
         )
         // querying all the items from the indicated direction
-        .map(item => {
-          // props for the checkbox
-          var checkboxProps = {
-            checked: this.selected.indexOf(item.key) !== -1,
-            disabled: item.disabled,
-            styles: { marginRight: "5px" }
-          };
-          // props for the item in the column
-          var spanProps = {
-            onClick: e => {
-              e.preventDefault();
-              this._handleSelect(item);
-            },
-            class:
-              "item " +
-              (item.disabled ? "disabled" : "") +
-              (this.transfered.indexOf(item.key) !== -1 ? " highlight" : "") // animation tha highlights items that were just transfered
-          };
+        .map(item => {        
           return (
-            <li>
-              <span {...spanProps}>
-                <nova-checkbox {...checkboxProps}></nova-checkbox>
-                {this.renderItem(item)}
-              </span>
-            </li>
+            <TransferItem
+              renderItem={() => this.renderItem(item)}
+              handleSelect={() => this._handleSelect(item)}
+              disabled={item.disabled}
+              highlight={this.transfered.indexOf(item.key) !== -1}
+              checked={this.selected.indexOf(item.key) !== -1}
+              >
+            </TransferItem>
           );
         })
     );
   }
 
-  private _getSourceCountSpan() {
-    // number of items selected in the source column
-    var selectedCount = this._getSourceSelected();
-    // number of all the items in the source column
-    var total = this.filteredItems.length - this.data.targetKeys.length;
-    return (
-      <span>
-        {selectedCount != 0 ? selectedCount + "/" : ""}
-        {total}{" "}
-        {total > 1
-          ? this.configuration.labels.units
-          : this.configuration.labels.unit}
-      </span>
-    );
-  }
-
-  private _getTargetCountSpan() {
-    // number of items selected in the target column
-    var selectedCount = this._getTargetSelected();
-    // number of all the items in the target column
-    var total = this.data.targetKeys.length;
-    return (
-      <span>
-        {selectedCount != 0 ? selectedCount + "/" : ""}
-        {total}{" "}
-        {total > 1
-          ? this.configuration.labels.units
-          : this.configuration.labels.unit}
-      </span>
-    );
-  }
-
-  private _getSelectAllCheckbox(direction: string) {
-    // number of items selected in the indicated column
-    var selectedCount =
-      direction === LEFT
-        ? this._getSourceSelected()
-        : this._getTargetSelected();
-    // number of non disabled items in the indicated column
-    var total = this.filteredItems.filter(
-      item =>
-        (direction === LEFT &&
-          !this._isItemInTarget(item.key) &&
-          !item.disabled) ||
-        (direction === RIGHT &&
-          this._isItemInTarget(item.key) &&
-          !item.disabled)
-    ).length;
-    var props = {
-      handleClick: () => this._handleSelectAll(direction),
-      checked: selectedCount === total && total > 0,
-      disabled: this.disabled
-    };
-    return <nova-checkbox {...props}></nova-checkbox>;
-  }
-
   private _handleItemsScroll(direction, event) {
     this.scrollColumn.emit({ direction, event });
+  }
+
+  private _getTotalEnabledFromSource() {
+    return this.filteredItems.filter(
+        item => !this._isItemInTarget(item.key) && !item.disabled
+      ).length
+  }
+
+  private _getTotalEnabledFromTarget() {
+    return this.filteredItems.filter(
+        item => this._isItemInTarget(item.key) && !item.disabled
+      ).length
   }
 
   render() {
@@ -355,30 +299,38 @@ export class NovaTransfer {
       <div class="wrapper" style={this.wrapperStyle}>
         <div class={"container" + (this.disabled ? " disabled" : "")}>
           <div class="column" style={this.columnStyle}>
-            <header class="column-header">
-              <span>
-                {this.showSelectAll ? this._getSelectAllCheckbox(LEFT) : null}
-                {this._getSourceCountSpan()}
-              </span>
-              <span> {this.configuration.labels.titleSource} </span>
-            </header>
+            <TransferColumnHeader
+              title={ this.configuration.labels.titleSource }
+              selectedCount={this._getSourceSelected()}
+              total={ this.filteredItems.length - this.data.targetKeys.length }
+              totalEnabled={ this._getTotalEnabledFromSource() }
+              handleSelectAll={ () => this._handleSelectAll(LEFT) }
+              disabled={this.disabled}
+              unit={this.configuration.labels.unit}
+              units={this.configuration.labels.units}
+              showSelectAll={this.showSelectAll}
+              >
+            </TransferColumnHeader>
             <div
               class={
                 "items-container " + (this._sourceIsEmpty() ? "empty" : "")
               }
             >
-              {this.showSearch ? (
-                <TransferSearchBox
-                  placeholder={"search"}
-                  handleQuery={this._handleSourceQuery}
-                  disabled={this.disabled}
-                />
-              ) : null}
+              <TransferSearchBox
+                placeholder={this.configuration.labels.searchPlaceholder}
+                handleQuery={this._handleSourceQuery}
+                disabled={this.disabled}
+                hidden={!this.showSearch }
+              />
               <div
                 class="items"
                 onScroll={event => this._handleItemsScroll(LEFT, event)}
               >
-                <slot name="source-column"><ul>{this._getItems(LEFT)}</ul></slot>
+                <slot name="source-column">
+                  <ul>
+                    {this._getItems(LEFT)}
+                  </ul>
+                </slot>
               </div>
               <span class="empty-msg">
                 {this.configuration.labels.notFoundContent}
@@ -391,48 +343,50 @@ export class NovaTransfer {
             </footer>
           </div>
 
-          <span class="operation-buttons" style={this.operationStyle}>
-            <button
-              class={this._getSourceSelected() > 0 ? "btn-active" : ""}
-              onClick={() => this._moveToTarget()}
-            >
-              {">"}
-              <span> {this.configuration.labels.operationRight}</span>
-            </button>
-            <button
-              class={this._getTargetSelected() > 0 ? "btn-active" : ""}
-              onClick={() => this._moveToSource()}
-            >
-              {"<"}
-              <span> {this.configuration.labels.operationLeft}</span>
-            </button>
-          </span>
+          <TransferOperationButtons
+            style={ this.operationStyle }
+            sourceIsActive={ this._getSourceSelected() > 0 }
+            targetIsActive={ this._getTargetSelected() > 0 }
+            moveToSource={ this._moveToSource }
+            moveToTarget={ this._moveToTarget }
+            sourceLabel={ this.configuration.labels.operationLeft }
+            targetLabel={ this.configuration.labels.operationRight }
+          >
+          </TransferOperationButtons>
 
           <div class="column" style={this.columnStyle}>
-            <header class="column-header">
-              <span>
-                {this.showSelectAll ? this._getSelectAllCheckbox(RIGHT) : null}
-                {this._getTargetCountSpan()}
-              </span>
-              <span>{this.configuration.labels.titleTarget}</span>
-            </header>
+            <TransferColumnHeader
+                title={ this.configuration.labels.titleTarget }
+                selectedCount={this._getTargetSelected()}
+                totalEnabled={ this._getTotalEnabledFromTarget() }
+                total={ this.data.targetKeys.length }
+                handleSelectAll={ () => this._handleSelectAll(RIGHT) }
+                disabled={this.disabled}
+                unit={this.configuration.labels.unit}
+                units={this.configuration.labels.units}
+                showSelectAll={this.showSelectAll}
+                >
+              </TransferColumnHeader>
             <div
               class={
                 "items-container " + (this._targetIsEmpty() ? "empty" : "")
               }
             >
-              {this.showSearch ? (
-                <TransferSearchBox
-                  placeholder={"search"}
-                  handleQuery={this._handleTargetQuery}
-                  disabled={this.disabled}
-                />
-              ) : null}
+              <TransferSearchBox
+                placeholder={this.configuration.labels.searchPlaceholder}
+                handleQuery={this._handleTargetQuery}
+                disabled={this.disabled}
+                hidden={!this.showSearch}
+              />
               <div
                 class="items"
                 onScroll={event => this._handleItemsScroll(RIGHT, event)}
               >
-                <slot name="target-column"><ul>{this._getItems(RIGHT) }</ul></slot>
+                <slot name="target-column">
+                  <ul>
+                    {this._getItems(RIGHT) }
+                  </ul>
+                </slot>
               </div>
               <span class="empty-msg">
                 {this.configuration.labels.notFoundContent}
@@ -511,7 +465,7 @@ export class NovaTransfer {
   }
 
   // transfers the selected items to the target (right)
-  private _moveToTarget() {
+  private _moveToTarget = () => {
     if (!this.disabled) {
       var alreadyInTarget = [];
       var moveKeys = []; // items that are transfering
@@ -533,7 +487,7 @@ export class NovaTransfer {
     }
   }
 
-  private _moveToSource() {
+  private _moveToSource = () => {
     if (!this.disabled) {
       var alreadyInSource = [];
       var moveKeys = []; // items that are transfering

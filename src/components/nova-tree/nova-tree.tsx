@@ -36,12 +36,12 @@ export class NovaTree {
   @Prop() public blockNode: boolean;
 
   @Prop() public multiple: boolean;
-  //@Prop() public autoExpandTopLevel: boolean = true;s
+  //@Prop() public autoExpandTopLevel: boolean = true;
   @Prop() public checkable: boolean = false;
   @Prop() public selectable: boolean = false;
   @Prop() public checkStrictly: boolean;
   @Prop() public selected;
-  @Prop() public checked: boolean;
+ // @Prop() public checked: boolean;
   @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
@@ -56,6 +56,18 @@ export class NovaTree {
     const nodesArr = Array.prototype.slice.call(nodes);
     this._updateCheckboxes(newValue.items, nodesArr);
     this._handleExpandOptions();
+  }
+
+  private _updateCheckboxes(updatedNodes, nodes) {
+    updatedNodes.forEach(updatedNode => {
+      var node = nodes.find(node => node.nodeKey === updatedNode.nodeKey);
+  //    console.log("updating " + updatedNode.nodeKey  + "(" + updatedNode.checked + ") checkbox as " + node.checked);
+      node.checked = updatedNode.checked;
+      node.disableCheckbox = updatedNode.disableCheckbox;
+      if (updatedNode.subnodes.length > 0) {
+        this._updateCheckboxes(updatedNode.subnodes, nodes);
+      }
+    });
   }
 
   private _handleSelectNode(key:string, selected:boolean):void {
@@ -98,17 +110,6 @@ export class NovaTree {
 
   public componentWillRender(): void {
     this._handleExpandOptions();
-  }
-
-  private _updateCheckboxes(updatedNodes, nodes) {
-    updatedNodes.forEach(updatedNode => {
-      var node = nodes.find(node => node.nodeKey === updatedNode.nodeKey);
-      node.checked = updatedNode.checked;
-      node.disableCheckbox = updatedNode.disableCheckbox;
-      if (updatedNode.subnodes.length > 0) {
-        this._updateCheckboxes(updatedNode.subnodes, nodes);
-      }
-    });
   }
 
   private autoExpandAllHandler(node): void {
@@ -171,14 +172,19 @@ export class NovaTree {
   }
 
   private _handleCheckEvent(key:string, checked:boolean): void {
-
+    // updating the items array if needed
+    var checkedParent = this.data.items.find(item => item.nodeKey === key);
+    if (checkedParent) {
+      checkedParent.checked = checked;
+    }
+    // updating checked array
     if (checked) {
       this.checkedKeys.push(key);
     }
     else {
       this.checkedKeys.splice(this.checkedKeys.indexOf(key), 1);
     }
-
+    // emitting check event
     this.check.emit({
       checkedKeys: this.checkedKeys,
       key,
@@ -191,7 +197,7 @@ export class NovaTree {
       <li>
         <nova-tree-node
           blockNode={this.blockNode}
-          text={child.text}
+          text={child.nodeKey}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}
@@ -203,7 +209,9 @@ export class NovaTree {
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}
-          onCheckNode={e => this._handleCheckEvent(e.detail.key, e.detail.checked)}
+          onCheckNode={e => {
+            this._handleCheckEvent(e.detail.key, e.detail.checked);
+          }}
           onSelectNode={e => this._handleSelectNode(e.detail.key, e.detail.selected)}
         />
       </li>

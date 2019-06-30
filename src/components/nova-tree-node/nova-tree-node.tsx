@@ -101,11 +101,13 @@ export class NovaTreeNode {
   public render(): HTMLElement {
     return(
       <Host>
-        { this.isLeaf? <span class="caretsecret"/> : this._generateCaret() }
-        <label class="this-label">
-          { this.checkable? this._generateCheckbox() : null }
-          { this._generateTextbox() }
-        </label>
+        <div class="flex-container">
+          { this._generateCaret() }
+          <label class={"node-label " + (this.checkable? "checkable" : "null")}>
+            { this.checkable? this._generateCheckbox() : null }
+            { this._generateTextbox() }
+          </label>
+        </div>
         { this.isLeaf? null : this._generateListOfSubnodes() }
       </Host>
     );
@@ -114,12 +116,14 @@ export class NovaTreeNode {
   /**
    * Local methods
    */
+
+   
   private _generateCaret(): HTMLSpanElement {
     return (
-      <span
-        class={"caret" + (this.expanded? " caret-down" : " ")}
-        onClick={(): void => this._toggleExpandedState()}
-      />
+      <span 
+        class={"car" + (this.expanded? " caret-down" : "")}
+        style={{visibility: (this.isLeaf? "hidden":"visible")}}
+        onClick={(): void => this._toggleExpandedState()}></span>
     );
   }
 

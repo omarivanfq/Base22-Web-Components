@@ -62,7 +62,7 @@
       subnodes: [
         {
           nodeKey: "op2-1",
-          text: "Express Yourself (Non-Stop)",// Express Mix)",
+          text: "Express Yourself (Non-Stop Express Mix)",
           disableCheckbox: false,
           disabled: false,
           selected: false,

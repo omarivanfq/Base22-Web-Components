@@ -63,7 +63,7 @@ export class NovaTreeSelect {
     }, 200); 
     this._updateItem(key, { selected: false });
   //  this.data = { ...this.data }; //this._copyObject(this.data);
-  //  console.log(this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data }));
+  //  console.log();
   }
 
   private _copyObject(obj:any) {
@@ -72,6 +72,7 @@ export class NovaTreeSelect {
 
   private _updateItem(key:string, attr:any) {
     this._updateItemRec(this.data.items, key, attr);
+    this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data })
   }
 
   private _updateItemRec(items:any[], key:string, attr:any) {

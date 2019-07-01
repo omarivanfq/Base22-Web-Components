@@ -116,7 +116,7 @@
       nodeKey: "op6",
       text: "Cherish",
       disableCheckbox: false,
-      disabled: false,
+      disabled: true,
       selected: false,
       checked: false,
       expanded: false,

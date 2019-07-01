@@ -74,7 +74,6 @@ export namespace Components {
     'blockNode': boolean;
     'checkStrictly': boolean;
     'checkable': boolean;
-    'checkedKeys': string[];
     /**
     * Common attributes
     */
@@ -251,7 +250,6 @@ declare namespace LocalJSX {
     'blockNode'?: boolean;
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
-    'checkedKeys'?: string[];
     /**
     * Common attributes
     */

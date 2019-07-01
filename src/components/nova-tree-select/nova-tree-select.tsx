@@ -61,17 +61,6 @@ export class NovaTreeSelect {
     this._updateAllItems({ selected: false });
   }
 
-  private _removeOption(key: string) {
-    this.toBeRemoved.push(key);
-    this.toBeRemoved = [...this.toBeRemoved];
-    setTimeout(() => {
-      this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
-      this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);
-      this.selectedKeys = [...this.selectedKeys]; // to re-render
-    }, 200);
-    this._updateItem(key, { selected: false });
-  }
-
   private _copyObject(obj: any) {
     return JSON.parse(JSON.stringify(obj));
   }
@@ -93,7 +82,7 @@ export class NovaTreeSelect {
 
   private _updateItem(key: string, attr: any) {
     this._updateItemRec(this.data.items, key, attr);
-    this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data });
+    this.el.shadowRoot.querySelector('nova-tree').updateData({...this.data});
   }
 
   private _updateItemRec(items: any[], key: string, attr: any) {
@@ -101,22 +90,14 @@ export class NovaTreeSelect {
       if (item.nodeKey === key) {
         var attrKeys = Object.keys(attr);
         attrKeys.forEach(attrKey => {
-          item[attrKey] = attr[attrKey];
+          if (!item.disabled) {
+            item[attrKey] = attr[attrKey];  
+          }
         });
       } else {
         this._updateItemRec(item.subnodes, key, attr);
       }
     });
-  }
-
-  private _addOption(key: string) {
-    if (this.multiple) {
-      this.selectedKeys.push(key);
-      this.selectedKeys = [...this.selectedKeys]; // to re-render
-    } else {
-      this.selectedKeys = [key];
-    }
-    this._updateItem(key, { selected: true });
   }
 
   private _getOptionsSelected() {
@@ -137,7 +118,11 @@ export class NovaTreeSelect {
             <span
               onClick={e => {
                 e.stopImmediatePropagation();
-                this._removeOption(option.key);
+                // this._removeOption(option.key);
+                this._updateItem(option.key, { 
+                  checked: this.selectedKeys.indexOf(option.key) === -1,
+                  selected: false
+                });
               }}
             >
               x
@@ -153,7 +138,27 @@ export class NovaTreeSelect {
     return undefined;
   }
 
-  private _handleSelection(key: string, selected: boolean) {
+  private _addOption(key: string) {
+    if (this.multiple) {
+      this.selectedKeys.push(key);
+      this.selectedKeys = [...this.selectedKeys]; // to re-render
+    } else {
+      this.selectedKeys = [key];
+    }
+  }
+
+  private _removeOption(key: string) {
+    this.toBeRemoved.push(key);
+    this.toBeRemoved = [...this.toBeRemoved];
+    setTimeout(() => {
+      this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
+      this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);
+      this.selectedKeys = [...this.selectedKeys]; // to re-render
+      this._updateItem(key, { checked: false, selected: false });
+    }, 200);
+  }
+
+  private _handleSelection(key: string, selected:boolean) {
     if (selected) {
       this._addOption(key);
     } else {
@@ -185,9 +190,20 @@ export class NovaTreeSelect {
             block-node={this.blockNode}
             default-expand-all
             multiple={this.multiple}
-            onSelect={e =>
-              this._handleSelection(e.detail.key, e.detail.selected)
-            }
+            onSelect={e => {
+              if (this.checkable) {
+                this._updateItem(e.detail.key, { 
+                  checked: this.selectedKeys.indexOf(e.detail.key) === -1,
+                  selected: false
+                });
+              }
+              else {
+                this._handleSelection(e.detail.key, e.detail.selected);
+              } 
+            }}
+            onCheck={e => { 
+              this._handleSelection(e.detail.key, e.detail.checked);
+            }}
             style={this.dropdownStyle}
           ></nova-tree>
         </div>

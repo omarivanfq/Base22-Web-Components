@@ -45,19 +45,27 @@ export class NovaTreeNode {
   @Event() public selectNode: EventEmitter;
   public checkChangedFromChild: boolean = false;
 
-
+  /*
   @Watch("disabled")
   public disabledChange(_newValue: any, _oldValue: any): void {
     if (_newValue) {
       this.disableCheckbox = true;
-    }
+    } 
+  }
+  */
+
+  @Watch("checked")
+  public checkedChange(_newValue: any, _oldValue: any): void {
+    this.checkNode.emit({key: this.nodeKey, checked: _newValue});
   }
 
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
+    /*
     if (this.disabled) {
       this.disableCheckbox = true;
-    }
+    } 
+    */
   }
 
   @Watch("subnodes")
@@ -73,17 +81,15 @@ export class NovaTreeNode {
 
   @Watch("checked")
   public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
-    this.checkNode.emit({key: this.nodeKey, checked: newValue});
     if (!this.checkStrictly) {
       if (this.checkChangedFromChild) {
         this.checkChangedFromChild = false;
       }
       else {
         this.subnodes.map((node: NovaTreeNode): void => {
-          // if 'disabled' is true then 'disableCheckbox' should also be true, but for some reason it isn't
-          if (!node.disabled && !node.disableCheckbox) { //  if (!node.disabled) {
+          if (!node.disabled && !node.disableCheckbox) {
             node.checked = newValue;
-          }
+          } 
         });
       }
     }
@@ -133,7 +139,7 @@ export class NovaTreeNode {
   private _generateCheckbox(): HTMLNovaCheckboxElement {
     return (
       <nova-checkbox
-        disabled={this.disableCheckbox}
+        disabled={this.disableCheckbox || this.disabled}
         checked={this.checked}
         onClicked={(e): void => {
           e.stopPropagation();
@@ -145,6 +151,7 @@ export class NovaTreeNode {
 
   private _updateCheckedState(e): void {
     this.checked = e.detail.checked;
+  //  this.checkNode.emit({key: this.nodeKey, checked: this.checked});
   }
 
   private _generateTextbox(): HTMLSpanElement {
@@ -207,8 +214,8 @@ export class NovaTreeNode {
     );
   }
 
-  private _handleSubnodeOnCheck(e): void {
-    const { nodeKey, checked } = e.target;
+  private _handleSubnodeOnCheck(event): void {
+    const { nodeKey, checked } = event.target;
     this.subnodes.forEach((node): void => {
       if (node.nodeKey === nodeKey) {
         node.checked = checked;
@@ -216,7 +223,7 @@ export class NovaTreeNode {
     }); 
     if (!this.checkStrictly && !this.disableCheckbox) {
       if (checked) {
-        this.checked = this.subnodes
+        this.checked = !this.disabled && !this.disableCheckbox && this.subnodes
         .every(subnode => subnode.checked || subnode.disabled || subnode.disableCheckbox);
       } else {
         if (this.checked) this.checkChangedFromChild = true;

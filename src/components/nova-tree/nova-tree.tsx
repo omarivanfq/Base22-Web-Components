@@ -64,7 +64,7 @@ export class NovaTree {
     this.data = data;
     const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
     const nodesArr = Array.prototype.slice.call(nodes);
-    this._updateCheckboxes(data.items, nodesArr);
+    this._updateCheckboxes(data.items, nodesArr); 
   }
 
   private _updateCheckboxes(updatedNodes, nodes) {

@@ -54,7 +54,6 @@ export class NovaTreeSelect {
   }
 
   private _removeOption(key:string) {
-    console.log("--", key);
     this.toBeRemoved.push(key);
     this.toBeRemoved = [...this.toBeRemoved];
     setTimeout(() => {
@@ -63,7 +62,8 @@ export class NovaTreeSelect {
       this.selectedKeys = [...this.selectedKeys]; // to re-render      
     }, 200); 
     this._updateItem(key, { selected: false });
-  //  this.data = this._copyObject(this.data);
+  //  this.data = { ...this.data }; //this._copyObject(this.data);
+  //  console.log(this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data }));
   }
 
   private _copyObject(obj:any) {
@@ -96,6 +96,7 @@ export class NovaTreeSelect {
     else {
       this.selectedKeys = [key];
     }
+    this._updateItem(key, { selected: true });
   }
 
   private _getOptionsSelected() {
@@ -111,7 +112,6 @@ export class NovaTreeSelect {
           { option.text }
           <span onClick={(e) =>{ 
             e.stopImmediatePropagation();
-            console.log("clicked");
             this._removeOption(option.key)
           }}> 
             x 

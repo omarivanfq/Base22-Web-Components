@@ -10,6 +10,9 @@ export class NovaTreeSelect {
 
   @Element() el; 
   @Prop() selected: string[];
+  @Prop() multiple: boolean;
+  @Prop() blockNode: boolean;
+  @Prop() checkable: boolean;
   @Prop() toBeRemoved: string[];
   @Prop({ mutable: true }) public data?: any = { items: TREE_ITEMS };
   private flatItems:any [];
@@ -58,23 +61,34 @@ export class NovaTreeSelect {
   }
 
   private _addOption(key:string) {
-    this.selected.push(key);
-    this.selected = [...this.selected]; // to re-render   
+    if (this.multiple) {
+      this.selected.push(key);
+      this.selected = [...this.selected]; // to re-render  
+    }
+    else {
+      this.selected = [key];
+    }
   }
 
   private _getOptionsSelected() {
-    return this.flatItems
-    .filter(option => this.selected.indexOf(option.key) !== -1)
-    .map(option => 
-      <span 
-        key={option.key}
-        class={"option-selected " + (this.toBeRemoved.indexOf(option.key) !== -1? "removed" : "")} 
-        title={option.key}>
-        { option.text }
-        <span onClick={() => this._removeOption(option.key)}> 
-          x 
-        </span>
-      </span>);
+    if (this.multiple) {
+      return this.flatItems
+      .filter(option => this.selected.indexOf(option.key) !== -1)
+      .map(option => 
+        <span 
+          key={option.key}
+          class={"option-selected " + (this.toBeRemoved.indexOf(option.key) !== -1? "removed" : "")} 
+          title={option.key}>
+          { option.text }
+          <span onClick={() => this._removeOption(option.key)}> 
+            x 
+          </span>
+        </span>);
+    }
+    else if (this.selected.length > 0) {
+      return this.flatItems.find(item => item.key === this.selected[0]).text;
+    }
+    return null;
   }
 
   private _handleSelection(key:string, selected:boolean) {
@@ -86,19 +100,6 @@ export class NovaTreeSelect {
     }
   }
 
- /* 
-  private _getOptions() {
-    return NovaTreeSelect.options.map(option => 
-      <span 
-        key={option.key} 
-        class={"option " + (this.selected.indexOf(option.key) !== -1? "disabled" : "")} 
-        onClick={() => this._addOption(option.key)}>
-          {option.text}
-      </span>
-    );
-  }
-  */
-
   render() {
     return (
       <div class="container">
@@ -107,21 +108,21 @@ export class NovaTreeSelect {
             <span 
               class="options-remove-all"
               onClick={() => this._removeAllOptions() }></span>
-            { this._getOptionsSelected() }
+              {this._getOptionsSelected()}
           </span>
         </span>
         <div class="options">
-          {/*this._getOptions()*/}
           <nova-tree 
-            data = { this.data }
-            checkable
+            data={ this.data }
+            checkable={this.checkable}
             selectable
-            block-node
+            block-node={this.blockNode}
             default-expand-all
-            multiple
+            multiple={this.multiple}
             onSelect={e => this._handleSelection(e.detail.key, e.detail.selected)}>
             </nova-tree>
         </div>
+        <h1>hola</h1>
       </div>
     );
   }

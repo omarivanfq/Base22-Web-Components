@@ -115,7 +115,10 @@ export namespace Components {
     'text': string;
   }
   interface NovaTreeSelect {
+    'blockNode': boolean;
+    'checkable': boolean;
     'data'?: any;
+    'multiple': boolean;
     'selected': string[];
     'toBeRemoved': string[];
   }
@@ -288,7 +291,10 @@ declare namespace LocalJSX {
     'text': string;
   }
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
+    'blockNode'?: boolean;
+    'checkable'?: boolean;
     'data'?: any;
+    'multiple'?: boolean;
     'selected'?: string[];
     'toBeRemoved'?: string[];
   }

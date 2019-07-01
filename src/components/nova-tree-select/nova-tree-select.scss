@@ -1,5 +1,5 @@
 .container {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -52,7 +52,7 @@
   }
 
   .options-remove-all {
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     color: #ffffff;
     border-radius: 100%;
     display: block;
@@ -62,7 +62,7 @@
     right: 7px;
     top: 10px;
     opacity: 0;
-    transition: all .1s linear;
+    transition: all 0.1s linear;
     &:hover {
       opacity: 1;
       cursor: pointer;
@@ -96,7 +96,7 @@
   border-radius: 2px;
   padding: 2px 5px;
   display: inline-block;
-  transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
   &:hover {
     cursor: default;
   }
@@ -117,17 +117,31 @@
 }
 
 .disabled {
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.disabled-color {
+  color: #bfbfbf;
+}
+
+.disabled-select .nova-select-selection {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.disabled-select.nova-select {
+  color: rgba(0, 0, 0, 0.25);
 }
 
 .options {
   width: 100%;
   max-width: 320px;
   font-size: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   padding: 10px;
-  transition: all .25s ease;
+  transition: all 0.25s ease;
   transform-origin: top;
   position: absolute;
   background-color: #ffffff;
@@ -136,7 +150,7 @@
     width: 100%;
     color: #929292;
     padding: 4px 6px;
-    transition: all .15s linear;
+    transition: all 0.15s linear;
     box-sizing: border-box;
     &:hover {
       cursor: pointer;

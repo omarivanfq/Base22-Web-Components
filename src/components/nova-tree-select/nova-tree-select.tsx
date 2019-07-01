@@ -8,15 +8,22 @@ import { taggedTemplateExpression } from "@babel/types";
   shadow: true
 })
 export class NovaTreeSelect {
-
-  @Element() el; 
+  @Element() el;
   @Prop() selectedKeys: string[];
   @Prop() multiple: boolean;
   @Prop() blockNode: boolean;
   @Prop() checkable: boolean;
   @Prop() toBeRemoved: string[];
+
+  @Prop() disabled: boolean = false;
+
+  @Prop() styles: any = {};
+  @Prop() dropdownStyle: any = {};
+
+  @Prop() placeholder: string = "";
+
   @Prop({ mutable: true }) public data?: any = { items: TREE_ITEMS };
-  private flatItems:any [];
+  private flatItems: any[];
   @State() open: boolean = false;
 
   @Watch("data")
@@ -43,7 +50,7 @@ export class NovaTreeSelect {
   }
 
   componentWillLoad() {
-    this.selectedKeys = []; 
+    this.selectedKeys = [];
     this.toBeRemoved = [];
     this.flatItems = this._getFlatItems(this.data.items);
   }
@@ -53,113 +60,122 @@ export class NovaTreeSelect {
     this.selectedKeys = []; // to re-render
   }
 
-  private _removeOption(key:string) {
+  private _removeOption(key: string) {
     this.toBeRemoved.push(key);
     this.toBeRemoved = [...this.toBeRemoved];
     setTimeout(() => {
       this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
-      this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);  
-      this.selectedKeys = [...this.selectedKeys]; // to re-render      
-    }, 200); 
+      this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);
+      this.selectedKeys = [...this.selectedKeys]; // to re-render
+    }, 200);
     this._updateItem(key, { selected: false });
-  //  this.data = { ...this.data }; //this._copyObject(this.data);
-  //  console.log();
+    //  this.data = { ...this.data }; //this._copyObject(this.data);
+    //  console.log();
   }
 
-  private _copyObject(obj:any) {
+  private _copyObject(obj: any) {
     return JSON.parse(JSON.stringify(obj));
   }
 
-  private _updateItem(key:string, attr:any) {
+  private _updateItem(key: string, attr: any) {
     this._updateItemRec(this.data.items, key, attr);
-    this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data })
+    this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data });
   }
 
-  private _updateItemRec(items:any[], key:string, attr:any) {
+  private _updateItemRec(items: any[], key: string, attr: any) {
     items.forEach(item => {
       if (item.nodeKey === key) {
         var attrKeys = Object.keys(attr);
         attrKeys.forEach(attrKey => {
           item[attrKey] = attr[attrKey];
         });
-      }
-      else {
+      } else {
         this._updateItemRec(item.subnodes, key, attr);
       }
     });
   }
 
-  private _addOption(key:string) {
+  private _addOption(key: string) {
     if (this.multiple) {
       this.selectedKeys.push(key);
-      this.selectedKeys = [...this.selectedKeys]; // to re-render  
-    }
-    else {
+      this.selectedKeys = [...this.selectedKeys]; // to re-render
+    } else {
       this.selectedKeys = [key];
     }
     this._updateItem(key, { selected: true });
   }
 
   private _getOptionsSelected() {
-    if (this.multiple) {
+    if (this.multiple && this.selectedKeys.length > 0) {
       return this.flatItems
-      .filter(option => this.selectedKeys.indexOf(option.key) !== -1)
-      .map(option => 
-        <span 
-          key={option.key}
-          class={"option-selected " + (this.toBeRemoved.indexOf(option.key) !== -1? "removed" : "")} 
-          title={option.key}
-          onClick={e => e.stopPropagation()}>
-          { option.text }
-          <span onClick={(e) =>{ 
-            e.stopImmediatePropagation();
-            this._removeOption(option.key)
-          }}> 
-            x 
+        .filter(option => this.selectedKeys.indexOf(option.key) !== -1)
+        .map(option => (
+          <span
+            key={option.key}
+            class={
+              "option-selected " +
+              (this.toBeRemoved.indexOf(option.key) !== -1 ? "removed" : "")
+            }
+            title={option.key}
+            onClick={e => e.stopPropagation()}
+          >
+            {option.text}
+            <span
+              onClick={e => {
+                e.stopImmediatePropagation();
+                this._removeOption(option.key);
+              }}
+            >
+              x
+            </span>
           </span>
-        </span>);
+        ));
+    } else if (this.multiple && this.selectedKeys.length === 0) {
+      return <span class="disabled-color">{this.placeholder}</span>;
+    } else if (this.selectedKeys.length > 0) {
+      return this.flatItems.find(item => item.key === this.selectedKeys[0])
+        .text;
     }
-    else if (this.selectedKeys.length > 0) {
-      return this.flatItems.find(item => item.key === this.selectedKeys[0]).text;
-    }
-    return null;
+    return undefined;
   }
 
-  private _handleSelection(key:string, selected:boolean) {
+  private _handleSelection(key: string, selected: boolean) {
     if (selected) {
       this._addOption(key);
-    }
-    else {
-      this._removeOption(key)
+    } else {
+      this._removeOption(key);
     }
   }
 
   render() {
     return (
-      <div class="container">
-        <span class="nova-select">
-          <span 
-            class="nova-select-single nova-select-selection" 
+      <div class="container" style={this.styles}>
+        <span class={"nova-select " + (this.disabled ? "disabled-select" : "")}>
+          <span
+            class="nova-select-single nova-select-selection"
             tabindex="0"
-            onClick={ () => this.open = !this.open }
-            >
-            <span 
+            onClick={() => (this.open = !this.open)}
+          >
+            <span
               class="options-remove-all"
-              onClick={event => this._removeAllOptions(event) }>
-            </span>
+              onClick={event => this._removeAllOptions(event)}
+            ></span>
             {this._getOptionsSelected()}
           </span>
         </span>
-        <div class={"options " + (this.open? '' : 'closed')}>
-          <nova-tree 
-            data={ this.data }
+        <div class={"options " + (this.open && !this.disabled ? "" : "closed")}>
+          <nova-tree
+            data={this.data}
             checkable={this.checkable}
             selectable
             block-node={this.blockNode}
             default-expand-all
             multiple={this.multiple}
-            onSelect={e => this._handleSelection(e.detail.key, e.detail.selected)}>
-            </nova-tree>
+            onSelect={e =>
+              this._handleSelection(e.detail.key, e.detail.selected)
+            }
+            style={this.dropdownStyle}
+          ></nova-tree>
         </div>
       </div>
     );

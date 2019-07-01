@@ -119,8 +119,12 @@ export namespace Components {
     'blockNode': boolean;
     'checkable': boolean;
     'data'?: any;
+    'disabled': boolean;
+    'dropdownStyle': any;
     'multiple': boolean;
+    'placeholder': string;
     'selectedKeys': string[];
+    'styles': any;
     'toBeRemoved': string[];
   }
 }
@@ -295,8 +299,12 @@ declare namespace LocalJSX {
     'blockNode'?: boolean;
     'checkable'?: boolean;
     'data'?: any;
+    'disabled'?: boolean;
+    'dropdownStyle'?: any;
     'multiple'?: boolean;
+    'placeholder'?: string;
     'selectedKeys'?: string[];
+    'styles'?: any;
     'toBeRemoved'?: string[];
   }
 

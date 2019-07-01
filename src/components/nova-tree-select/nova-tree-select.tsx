@@ -50,7 +50,8 @@ export class NovaTreeSelect {
 
   private _removeAllOptions(event) {
     event.stopPropagation();
-    this.selectedKeys = []; // to re-render
+    this.selectedKeys = [];
+    this._updateAllItems({ selected: false });
   }
 
   private _removeOption(key:string) {
@@ -62,12 +63,25 @@ export class NovaTreeSelect {
       this.selectedKeys = [...this.selectedKeys]; // to re-render      
     }, 200); 
     this._updateItem(key, { selected: false });
-  //  this.data = { ...this.data }; //this._copyObject(this.data);
-  //  console.log();
   }
 
   private _copyObject(obj:any) {
     return JSON.parse(JSON.stringify(obj));
+  }
+
+  private _updateAllItems(attr:any) {
+    this._updateAllItemsRec(this.data.items, attr);
+    this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data })
+  }
+
+  private _updateAllItemsRec(items:any[], attr:any) {
+    items.forEach(item => {
+        var attrKeys = Object.keys(attr);
+        attrKeys.forEach(attrKey => {
+          item[attrKey] = attr[attrKey];
+        });
+        this._updateAllItemsRec(item.subnodes, attr);
+    });
   }
 
   private _updateItem(key:string, attr:any) {

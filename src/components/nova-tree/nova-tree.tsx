@@ -54,9 +54,6 @@ export class NovaTree {
   @Watch("data")
   public dataChange(newValue: any, _oldValue: any): void {
     this._handleExpandOptions();
-    const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
-    const nodesArr = Array.prototype.slice.call(nodes);
-    this._updateCheckboxes(newValue.items, nodesArr);
   }
 
   @Method()
@@ -141,9 +138,6 @@ export class NovaTree {
     this._handleExpandOptions();
 
     if (this.disableTree) {
-      //console.log("entro");
-      //NovaTree.treeData.map(parent => {
-      //  parent.expanded = true;
       this.data.items.map(parent => {
         this.disableAllHandler(parent);
       });

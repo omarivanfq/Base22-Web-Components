@@ -121,11 +121,11 @@ export namespace Components {
     'data'?: any;
     'disabled': boolean;
     'dropdownStyle': any;
+    'maxTagCount': number;
     'multiple': boolean;
     'placeholder': string;
     'selectedKeys': string[];
     'styles': any;
-    'toBeRemoved': string[];
   }
 }
 
@@ -301,11 +301,11 @@ declare namespace LocalJSX {
     'data'?: any;
     'disabled'?: boolean;
     'dropdownStyle'?: any;
+    'maxTagCount'?: number;
     'multiple'?: boolean;
     'placeholder'?: string;
     'selectedKeys'?: string[];
     'styles'?: any;
-    'toBeRemoved'?: string[];
   }
 
   interface IntrinsicElements {

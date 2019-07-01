@@ -96,6 +96,7 @@ export namespace Components {
     * Common attributes
     */
     'styling'?: object;
+    'updateData': (data: any) => Promise<void>;
   }
   interface NovaTreeNode {
     'autoExpandParent': boolean;
@@ -119,7 +120,7 @@ export namespace Components {
     'checkable': boolean;
     'data'?: any;
     'multiple': boolean;
-    'selected': string[];
+    'selectedKeys': string[];
     'toBeRemoved': string[];
   }
 }
@@ -295,7 +296,7 @@ declare namespace LocalJSX {
     'checkable'?: boolean;
     'data'?: any;
     'multiple'?: boolean;
-    'selected'?: string[];
+    'selectedKeys'?: string[];
     'toBeRemoved'?: string[];
   }
 

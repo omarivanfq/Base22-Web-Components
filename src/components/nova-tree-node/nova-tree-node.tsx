@@ -3,6 +3,7 @@ import {
   Element,
   Host,
   h,
+  Method,
   State,
   Prop,
   Watch,
@@ -27,7 +28,7 @@ export class NovaTreeNode {
   @Prop() public blockNode?: boolean = false;
 
   @Prop() public nodeKey: string;
-  @Prop() public selected: boolean;
+  @Prop({ mutable: true }) public selected: boolean;
 
   @Prop() public autoExpandParent: boolean = true;
   @Prop() public defaultExpandAll: boolean = true;
@@ -42,6 +43,8 @@ export class NovaTreeNode {
   @State() private isLeaf: boolean;
   @Event() public checkNode: EventEmitter;
   @Event() public selectNode: EventEmitter;
+  public checkChangedFromChild: boolean = false;
+
 
   @Watch("disabled")
   public disabledChange(_newValue: any, _oldValue: any): void {
@@ -49,8 +52,6 @@ export class NovaTreeNode {
       this.disableCheckbox = true;
     }
   }
-
-  public checkChangedFromChild: boolean = false;
 
   public componentWillLoad(): void {
     this.isLeaf = !this.subnodes.length;
@@ -100,7 +101,7 @@ export class NovaTreeNode {
 
   public render(): HTMLElement {
     return(
-      <Host>
+      <Host key={this.nodeKey}>
         <div class="flex-container">
           { this._generateCaret() }
           <label class={"node-label " + (this.checkable? "checkable" : "null")}>
@@ -116,8 +117,6 @@ export class NovaTreeNode {
   /**
    * Local methods
    */
-
-   
   private _generateCaret(): HTMLSpanElement {
     return (
       <span 
@@ -166,7 +165,7 @@ export class NovaTreeNode {
   private _toggleSelectedState(): void {
     if (this.selectable && !this.disabled) {
       this.selected = !this.selected;
-      this.selectNode.emit({key: this.nodeKey, selected: this.selected});  
+      this.selectNode.emit({key: this.nodeKey, selected: this.selected});
     }
   }
 
@@ -182,12 +181,12 @@ export class NovaTreeNode {
 
   private _generateSubnode(node: NovaTreeNode): HTMLLIElement {
     return (
-      <li>
+      <li/* key={node.nodeKey}*/>
         <nova-tree-node
           //meter en documentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
           blockNode={this.blockNode}
           text={node.text}
-          key={node.nodeKey}
+//          key={node.nodeKey}
           nodeKey={node.nodeKey}
           checkable={this.checkable}
           disableCheckbox={node.disableCheckbox}

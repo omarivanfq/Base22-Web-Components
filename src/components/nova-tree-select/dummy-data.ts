@@ -135,4 +135,4 @@
     }
   ]
 
-  export { TREE_ITEMS };
+export { TREE_ITEMS };

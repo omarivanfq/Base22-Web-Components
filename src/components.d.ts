@@ -15,6 +15,15 @@ export namespace Components {
     'handleClick': Function;
     'styles': any;
   }
+  interface NovaFontAwesome {
+    /**
+    * Props
+    */
+    'iconName': string;
+    'options'?: string;
+    'size'?: string;
+    'stylePrefix'?: string;
+  }
   interface NovaRate {
     /**
     * Props This property allow to clear by setting value to 0
@@ -36,6 +45,13 @@ export namespace Components {
     * This property sets the caracter to display as symbol
     */
     'character': string;
+    /**
+    * This property sets the color
+    */
+    'color': string;
+    /**
+    * This property sets the initial value
+    */
     'configuration'?: any;
     /**
     * This property sets the number of stars
@@ -54,6 +70,10 @@ export namespace Components {
     * This property replaces character for an icon
     */
     'icon': string;
+    /**
+    * This property sets the size of the rate component
+    */
+    'size': number;
   }
   interface NovaTransfer {
     'columnStyle': any;
@@ -137,6 +157,12 @@ declare global {
     new (): HTMLNovaCheckboxElement;
   };
 
+  interface HTMLNovaFontAwesomeElement extends Components.NovaFontAwesome, HTMLStencilElement {}
+  var HTMLNovaFontAwesomeElement: {
+    prototype: HTMLNovaFontAwesomeElement;
+    new (): HTMLNovaFontAwesomeElement;
+  };
+
   interface HTMLNovaRateElement extends Components.NovaRate, HTMLStencilElement {}
   var HTMLNovaRateElement: {
     prototype: HTMLNovaRateElement;
@@ -168,6 +194,7 @@ declare global {
   };
   interface HTMLElementTagNameMap {
     'nova-checkbox': HTMLNovaCheckboxElement;
+    'nova-font-awesome': HTMLNovaFontAwesomeElement;
     'nova-rate': HTMLNovaRateElement;
     'nova-transfer': HTMLNovaTransferElement;
     'nova-tree': HTMLNovaTreeElement;
@@ -183,6 +210,15 @@ declare namespace LocalJSX {
     'handleClick'?: Function;
     'onClicked'?: (event: CustomEvent<any>) => void;
     'styles'?: any;
+  }
+  interface NovaFontAwesome extends JSXBase.HTMLAttributes<HTMLNovaFontAwesomeElement> {
+    /**
+    * Props
+    */
+    'iconName'?: string;
+    'options'?: string;
+    'size'?: string;
+    'stylePrefix'?: string;
   }
   interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
     /**
@@ -201,6 +237,13 @@ declare namespace LocalJSX {
     * This property sets the caracter to display as symbol
     */
     'character'?: string;
+    /**
+    * This property sets the color
+    */
+    'color'?: string;
+    /**
+    * This property sets the initial value
+    */
     'configuration'?: any;
     /**
     * This property sets the number of stars
@@ -226,6 +269,10 @@ declare namespace LocalJSX {
     'onOnFocus'?: (event: CustomEvent<any>) => void;
     'onOnHoverChange'?: (event: CustomEvent<any>) => void;
     'onOnKeyDown'?: (event: CustomEvent<any>) => void;
+    /**
+    * This property sets the size of the rate component
+    */
+    'size'?: number;
   }
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
     'columnStyle'?: any;
@@ -308,6 +355,7 @@ declare namespace LocalJSX {
 
   interface IntrinsicElements {
     'nova-checkbox': NovaCheckbox;
+    'nova-font-awesome': NovaFontAwesome;
     'nova-rate': NovaRate;
     'nova-transfer': NovaTransfer;
     'nova-tree': NovaTree;

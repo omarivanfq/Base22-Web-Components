@@ -182,6 +182,7 @@ export class NovaTree {
           //     key={child.nodeKey}
           blockNode={this.blockNode}
           text={child.text}
+          key={child.nodeKey}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}

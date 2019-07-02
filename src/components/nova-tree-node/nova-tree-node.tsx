@@ -45,18 +45,39 @@ export class NovaTreeNode {
   @Event() public selectNode: EventEmitter;
   public checkChangedFromChild: boolean = false;
 
+  @Prop() public refToSubnodes: HTMLNovaTreeNodeElement[] = [];
+
   /*
   @Watch("disabled")
   public disabledChange(_newValue: any, _oldValue: any): void {
     if (_newValue) {
       this.disableCheckbox = true;
-    } 
+    }
   }
   */
 
   @Watch("checked")
-  public checkedChange(_newValue: any, _oldValue: any): void {
-    this.checkNode.emit({ key: this.nodeKey, checked: _newValue });
+  public checkedChange(newValue: boolean, _oldValue: boolean): void {
+    this.checkNode.emit({ key: this.nodeKey, checked: newValue });
+
+    if (!this.checkStrictly) {
+      if (this.checkChangedFromChild) {
+        this.checkChangedFromChild = false;
+      } else {
+        if (!this.checkStrictly) {
+          this.subnodes.map((node: NovaTreeNode): void => {
+            if (!node.disabled && !node.disableCheckbox) {
+              node.checked = this.checked;
+            }
+          });
+          this.refToSubnodes.map((node: HTMLNovaTreeNodeElement): void => {
+            if (!node.disabled && !node.disableCheckbox) {
+              node.checked = this.checked;
+            }
+          });
+        }
+      }
+    }
   }
 
   public componentWillLoad(): void {
@@ -64,7 +85,7 @@ export class NovaTreeNode {
     /*
     if (this.disabled) {
       this.disableCheckbox = true;
-    } 
+    }
     */
   }
 
@@ -77,21 +98,6 @@ export class NovaTreeNode {
       return;
     }
     this.isLeaf = !newValue.length;
-  }
-
-  @Watch("checked")
-  public checkRecursivo(newValue: boolean, _oldValue: boolean): void {
-    if (!this.checkStrictly) {
-      if (this.checkChangedFromChild) {
-        this.checkChangedFromChild = false;
-      } else {
-        this.subnodes.map((node: NovaTreeNode): void => {
-          if (!node.disabled && !node.disableCheckbox) {
-            node.checked = newValue;
-          }
-        });
-      }
-    }
   }
 
   //esta a a ser la de expanded
@@ -153,11 +159,10 @@ export class NovaTreeNode {
 
   private _updateCheckedState(e): void {
     this.checked = e.detail.checked;
-    //  this.checkNode.emit({key: this.nodeKey, checked: this.checked});
   }
 
   private _generateTextbox(): HTMLSpanElement {
-    var classNames = "textbox ";
+    let classNames = "textbox ";
     if (this.blockNode) classNames += "blockNode ";
     if (this.selectable && this.selected) classNames += "selected ";
     if (this.disabled) classNames += "disabled";
@@ -182,20 +187,25 @@ export class NovaTreeNode {
     return (
       <ul class={this.expanded ? "nested active" : "nested"}>
         {this.subnodes.map(
-          (node: NovaTreeNode): HTMLLIElement => this._generateSubnode(node)
+          (node: NovaTreeNode, index: number): HTMLLIElement =>
+            this._generateSubnode(node, index)
         )}
       </ul>
     );
   }
 
-  private _generateSubnode(node: NovaTreeNode): HTMLLIElement {
+  private _generateSubnode(node: NovaTreeNode, index: number): HTMLLIElement {
+    console.log(node.nodeKey + ": " + node.checked);
     return (
-      <li /* key={node.nodeKey}*/>
+      <li key={node.nodeKey}>
         <nova-tree-node
           //meter en documentacion que es either qui o en el de treenod ------- ward ------ o pon ndamas el bool arriba
+          ref={(el: HTMLNovaTreeNodeElement): HTMLNovaTreeNodeElement => {
+            return (this.refToSubnodes[index] = el);
+          }}
           blockNode={this.blockNode}
           text={node.text}
-          //          key={node.nodeKey}
+          key={node.nodeKey}
           nodeKey={node.nodeKey}
           checkable={this.checkable}
           disableCheckbox={node.disableCheckbox}

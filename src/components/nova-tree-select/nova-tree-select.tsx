@@ -26,7 +26,11 @@ export class NovaTreeSelect {
 
   @Prop({ mutable: true }) public data?: any = { items: TREE_ITEMS };
 
+<<<<<<< HEAD
   @Prop() maxTagCount: number = 3;
+=======
+  @Prop() maxTagCount: number = 0;
+>>>>>>> d8a9ddb53e1d44094006d50423e465ae26b3baad
 
   @State() maxTagCountToBeRemove: string[];
   private flatItems: any[];
@@ -144,7 +148,7 @@ export class NovaTreeSelect {
         });
 */
       var itemsToDisplay = this.selectedKeys.map(key => {
-        if (pileCount++ < this.maxTagCount) {
+        if (pileCount++ < this.maxTagCount || this.maxTagCount <= 0) {
           var item = this.flatItems.find(item => item.key === key);
           return (
             <TreeSelectChip
@@ -177,7 +181,9 @@ export class NovaTreeSelect {
 
       return [
         ...itemsToDisplay,
-        pileCount > this.maxTagCount ? maxTag : undefined
+        pileCount > this.maxTagCount && this.maxTagCount > 0
+          ? maxTag
+          : undefined
       ];
     } else if (this.multiple && this.selectedKeys.length === 0) {
       return <span class="disabled-color">{this.placeholder}</span>;

@@ -27,7 +27,7 @@ export const TreeSelectChip: FunctionalComponent<TreeSelectChipProps> = ({
           removeHandler();
         }}
       >
-        x
+        <nova-font-awesome icon-name="times" size="lg" />
       </span>
     </span>
   );

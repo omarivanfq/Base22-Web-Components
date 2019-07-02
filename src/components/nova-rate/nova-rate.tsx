@@ -45,12 +45,12 @@ export class NovaRate {
   /**
    *  This property sets the caracter to display as symbol
    */
-  @Prop() character: string = "\u2605";
+  @Prop() character: string = "";
 
   /**
    *  This property replaces character for an icon
    */
-  @Prop() icon: string = "";
+  @Prop() icon: string = "star";
 
   /**
    *  This property makes the component "read only"
@@ -67,13 +67,21 @@ export class NovaRate {
    */
   @Prop() defaultValue: number = 0;
 
-  @Prop({ mutable: true }) configuration?: any = {
-    count: 5,
-    allowHalf: true,
-    allowClear: true,
-    defaultValue: 0,
-    autoFocus: true
-  };
+  /**
+   *  This property sets the size of the rate component
+   */
+  @Prop() size: number = 20;
+
+  /**
+   *  This property sets the color
+   */
+  @Prop() color: string = "#fadb14";
+
+  /**
+   *  This property sets the initial value
+   */
+
+  @Prop({ mutable: true }) configuration?: any = {};
   /**
    *  State
    */
@@ -129,10 +137,10 @@ export class NovaRate {
   }
 
   getCharacterOrIcon = () => {
-    return this.icon !== "" ? (
-      <nova-font-awesome iconName={this.icon} />
-    ) : (
+    return this.character !== "" ? (
       this.character
+    ) : (
+      <nova-font-awesome iconName={this.icon} />
     );
   };
 
@@ -170,6 +178,10 @@ export class NovaRate {
 
     let starList = [];
 
+    const color = {
+      color: `${this.color}`
+    };
+
     // Fill Star (allowHalf is false)
     let filledStar = i => {
       return (
@@ -179,6 +191,7 @@ export class NovaRate {
             onMouseOver={() => this.handleOnHover(i)}
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
+            style={color}
           >
             {this.getCharacterOrIcon()}
           </span>
@@ -212,6 +225,7 @@ export class NovaRate {
             onMouseOver={() => this.handleOnHover(i - 0.5)}
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i - 0.5)}
+            style={color}
           >
             {this.getCharacterOrIcon()}
           </span>
@@ -220,6 +234,7 @@ export class NovaRate {
             onMouseOver={() => this.handleOnHover(i)}
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
+            style={color}
           >
             {this.getCharacterOrIcon()}
           </span>
@@ -262,6 +277,7 @@ export class NovaRate {
             onMouseOver={() => this.handleOnHover(i - 0.5)}
             onMouseOut={() => this.handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i - 0.5)}
+            style={color}
           >
             {this.getCharacterOrIcon()}
           </span>
@@ -323,12 +339,19 @@ export class NovaRate {
   }
 
   render() {
+    const { size } = this;
+
+    const fontSize = {
+      fontSize: `${size}px`
+    };
+
     return (
       <ul
         tabindex="0"
         onKeyDown={e => this.handleOnKeyPressed(e)}
         onBlur={() => this.onBlur.emit()}
         onFocus={() => this.onFocus.emit()}
+        style={fontSize}
       >
         {this.starList}
       </ul>

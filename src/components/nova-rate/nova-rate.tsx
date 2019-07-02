@@ -18,9 +18,7 @@ import {
   styleUrl: "nova-rate.scss",
   shadow: true
 })
-
 export class NovaRate {
-  
   /**
    * Element
    */
@@ -91,8 +89,6 @@ export class NovaRate {
   @Event() onFocus: EventEmitter;
   @Event() onHoverChange: EventEmitter;
   @Event() onKeyDown: EventEmitter;
-
-  
 
   /**
    *  Public API Methods
@@ -283,7 +279,7 @@ export class NovaRate {
 
     if (this.allowHalf)
       for (let i = 1; i <= this.count; i++) {
-        if (numberOfStars - i + 1 === 0.5) {
+        if (numberOfStars - i + 1 >= 0.5 && numberOfStars - i + 1 < 1) {
           starList.push(leftFilledRightEmpty(i));
         } else if (i <= numberOfStars) {
           starList.push(filledHalves(i));

@@ -74,8 +74,6 @@ export namespace Components {
     'blockNode': boolean;
     'checkStrictly': boolean;
     'checkable': boolean;
-    'checked': boolean;
-    'checkedKeys': string[];
     /**
     * Common attributes
     */
@@ -97,6 +95,7 @@ export namespace Components {
     * Common attributes
     */
     'styling'?: object;
+    'updateData': (data: any) => Promise<void>;
   }
   interface NovaTreeNode {
     'autoExpandParent': boolean;
@@ -116,8 +115,16 @@ export namespace Components {
     'text': string;
   }
   interface NovaTreeSelect {
-    'selected': string[];
-    'toBeRemoved': string[];
+    'blockNode': boolean;
+    'checkable': boolean;
+    'data'?: any;
+    'disabled': boolean;
+    'dropdownStyle': any;
+    'maxTagCount': number;
+    'multiple': boolean;
+    'placeholder': string;
+    'selectedKeys': string[];
+    'styles': any;
   }
 }
 
@@ -243,8 +250,6 @@ declare namespace LocalJSX {
     'blockNode'?: boolean;
     'checkStrictly'?: boolean;
     'checkable'?: boolean;
-    'checked'?: boolean;
-    'checkedKeys'?: string[];
     /**
     * Common attributes
     */
@@ -289,8 +294,16 @@ declare namespace LocalJSX {
     'text': string;
   }
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
-    'selected'?: string[];
-    'toBeRemoved'?: string[];
+    'blockNode'?: boolean;
+    'checkable'?: boolean;
+    'data'?: any;
+    'disabled'?: boolean;
+    'dropdownStyle'?: any;
+    'maxTagCount'?: number;
+    'multiple'?: boolean;
+    'placeholder'?: string;
+    'selectedKeys'?: string[];
+    'styles'?: any;
   }
 
   interface IntrinsicElements {

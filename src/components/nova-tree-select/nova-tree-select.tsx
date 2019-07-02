@@ -146,7 +146,6 @@ export class NovaTreeSelect {
 */
       var itemsToDisplay = 
       this.selectedKeys
-    //  .filter(key => this.selectedKeys.indexOf(item.key) !== -1)
       .map(key => {
         if (pileCount++ < this.maxTagCount) {
           var item = this.flatItems.find(item => item.key === key);
@@ -155,7 +154,14 @@ export class NovaTreeSelect {
               key={item.key}
               toBeRemoved={this.toBeRemoved.indexOf(item.key) !== -1}
               text={item.text}
-              removeHandler={() => this._removeOption(item.key)}>
+              removeHandler={() => {
+                if (this.checkable) {
+                  this._updateItem(key, { checked: false, selected: false });
+                }
+                else {
+                  this._removeOption(item.key)}
+                }
+              }>
             </TreeSelectChip>
           );
         } else {
@@ -163,8 +169,6 @@ export class NovaTreeSelect {
           return undefined;
         }
       });
-
-     // console.log(this.maxTagCountToBeRemove);
       
       var maxTag = 
         <TreeSelectChip
@@ -200,7 +204,6 @@ export class NovaTreeSelect {
       this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
       this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);
       this.selectedKeys = [...this.selectedKeys]; // to re-render
-      console.log("b.selected", this.selectedKeys);
     }, 200);
     this._updateItem(key, { checked: false, selected: false });
   }

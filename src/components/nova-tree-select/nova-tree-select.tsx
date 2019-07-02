@@ -18,6 +18,7 @@ import { TreeSelectChip } from "./FunctionalComponents/nova-tree-select-chip";
   styleUrl: "nova-tree-select.scss",
   shadow: true
 })
+
 export class NovaTreeSelect {
   @Element() el;
   @Prop() selectedKeys: string[];
@@ -35,7 +36,7 @@ export class NovaTreeSelect {
 
   @Prop({ mutable: true }) public data?: any = { items: TREE_ITEMS };
 
-  @Prop() maxTagCount: number = 0;
+  @Prop() maxTagCount: number = 3;
 
   @State() maxTagCountToBeRemove: string[];
   private flatItems: any[];

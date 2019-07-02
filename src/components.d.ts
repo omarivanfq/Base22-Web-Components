@@ -129,6 +129,7 @@ export namespace Components {
     'expanded': boolean;
     'multiple': boolean;
     'nodeKey': string;
+    'refToSubnodes': HTMLNovaTreeNodeElement[];
     'selectable'?: boolean;
     'selected': boolean;
     'subnodes': NovaTreeNode[];
@@ -335,6 +336,7 @@ declare namespace LocalJSX {
     'nodeKey'?: string;
     'onCheckNode'?: (event: CustomEvent<any>) => void;
     'onSelectNode'?: (event: CustomEvent<any>) => void;
+    'refToSubnodes'?: HTMLNovaTreeNodeElement[];
     'selectable'?: boolean;
     'selected'?: boolean;
     'subnodes'?: NovaTreeNode[];

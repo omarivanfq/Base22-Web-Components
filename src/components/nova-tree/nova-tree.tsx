@@ -42,12 +42,12 @@ export class NovaTree {
   @Prop() public selectable: boolean = false;
   @Prop() public checkStrictly: boolean;
   @Prop() public selected;
- // @Prop() public checked: boolean;
+  // @Prop() public checked: boolean;
   @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
   @Prop() public selectedKeys: string[] = [];
- // @Prop() public checkedKeys: string[] = [];
+  // @Prop() public checkedKeys: string[] = [];
   @Event() public select: EventEmitter;
   @Event() public check: EventEmitter;
 
@@ -57,11 +57,11 @@ export class NovaTree {
   }
 
   @Method()
-  public async updateData(data:any) {
+  public async updateData(data: any) {
     this.data = data;
     const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
     const nodesArr = Array.prototype.slice.call(nodes);
-    this._updateCheckboxes(data.items, nodesArr); 
+    this._updateCheckboxes(data.items, nodesArr);
   }
 
   private _updateCheckboxes(updatedNodes, nodes) {
@@ -77,28 +77,25 @@ export class NovaTree {
     });
   }
 
-  private _handleSelectNode(key:string, selected:boolean):void {
+  private _handleSelectNode(key: string, selected: boolean): void {
     if (this.selectable) {
       if (this.multiple) {
         if (selected) {
           this.selectedKeys.push(key);
-        }
-        else {
+        } else {
           this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
         }
-      }
-      else {
+      } else {
         const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
         if (selected) {
-          nodes.forEach(node => node.selected = node.nodeKey === key);
+          nodes.forEach(node => (node.selected = node.nodeKey === key));
           this.selectedKeys = [key];
-        }
-        else {
-          nodes.forEach(node => node.selected = false);
+        } else {
+          nodes.forEach(node => (node.selected = false));
           this.selectedKeys = [];
         }
       }
-      this.select.emit({selectedKeys: this.selectedKeys, key, selected});
+      this.select.emit({ selectedKeys: this.selectedKeys, key, selected });
     }
   }
 
@@ -158,7 +155,7 @@ export class NovaTree {
     );
   }
 
-  private _handleCheckEvent(key:string, checked:boolean): void {
+  private _handleCheckEvent(key: string, checked: boolean): void {
     // updating the items array if needed
     var checkedParent = this.data.items.find(item => item.nodeKey === key);
     if (checkedParent) {
@@ -169,23 +166,23 @@ export class NovaTree {
     setTimeout(() => {
       // emitting check event
       this.check.emit({
-        checkedKeys:  nodesArr
-        .filter(node => node.checked)
-        .map(node => node.nodeKey),
+        checkedKeys: nodesArr
+          .filter(node => node.checked)
+          .map(node => node.nodeKey),
         key,
         checked
       });
     }, 100);
-    
   }
 
-  private handleChild(child): HTMLLIElement { 
+  private handleChild(child): HTMLLIElement {
     return (
       <li key={child.nodeKey}>
         <nova-tree-node
-     //     key={child.nodeKey}
+          //     key={child.nodeKey}
           blockNode={this.blockNode}
           text={child.text}
+          key={child.nodeKey}
           nodeKey={child.nodeKey}
           checkable={this.checkable}
           checkStrictly={this.checkStrictly}
@@ -197,8 +194,12 @@ export class NovaTree {
           checked={child.checked}
           expanded={child.expanded}
           subnodes={child.subnodes}
-          onCheckNode={e => this._handleCheckEvent(e.detail.key, e.detail.checked)}
-          onSelectNode={e => this._handleSelectNode(e.detail.key, e.detail.selected)}
+          onCheckNode={e =>
+            this._handleCheckEvent(e.detail.key, e.detail.checked)
+          }
+          onSelectNode={e =>
+            this._handleSelectNode(e.detail.key, e.detail.selected)
+          }
         />
       </li>
     );

@@ -58,7 +58,6 @@ export class NovaTree {
 
   @Method()
   public async updateData(data:any) {
-    console.log(data);
     this.data = data;
     const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
     const nodesArr = Array.prototype.slice.call(nodes);

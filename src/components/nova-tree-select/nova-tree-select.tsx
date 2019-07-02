@@ -2,6 +2,7 @@ import { Component, State, Element, Watch, h, Prop } from "@stencil/core";
 import { TREE_ITEMS } from "./dummy-data";
 import { taggedTemplateExpression } from "@babel/types";
 import { spawn } from "child_process";
+import { TreeSelectChip } from "./FunctionalComponents/nova-tree-select-chip";
 
 @Component({
   tag: "nova-tree-select",
@@ -68,17 +69,14 @@ export class NovaTreeSelect {
 
   private _removeMultipleOptions() {
     this.maxTagCountToBeRemove.forEach(key => {
-      this._updateItem(key, { 
-        checked: false, // this.selectedKeys.indexOf(key) === -1,
+     /* this._updateItem(key, { 
+        checked: false, 
         selected: false
-      });
+      });*/
+      this._removeOption(key);
     });
     this.maxTagCountToBeRemove = [];
   }
-
-  // private _copyObject(obj: any) {
-  //   return JSON.parse(JSON.stringify(obj));
-  // }
 
   private _updateAllItems(attr: any) {
     this._updateAllItemsRec(this.data.items, attr);
@@ -96,7 +94,6 @@ export class NovaTreeSelect {
   }
 
   private _updateItem(key: string, attr: any) {
-    console.log("...", this.data.items);
     this._updateItemRec(this.data.items, key, attr);
     this.el.shadowRoot.querySelector('nova-tree').updateData({...this.data});
   }
@@ -117,94 +114,60 @@ export class NovaTreeSelect {
   }
 
   private _getOptionsSelected() {
+
+    console.log(this.selectedKeys);
+
     if (this.multiple && this.selectedKeys.length > 0) {
       let pileCount = 0;
       this.maxTagCountToBeRemove = [];
-      return [
-        ...this.flatItems
-          .filter(option => this.selectedKeys.indexOf(option.key) !== -1)
-          .map(option => {
-            if (pileCount++ < this.maxTagCount) {
-              return (
-                <span
-                  key={option.key}
-                  class={
-                    "option-selected " +
-                    (this.toBeRemoved.indexOf(option.key) !== -1
-                      ? "removed"
-                      : "")
-                  }
-                  title={option.key}
-                  onClick={e => e.stopPropagation()}
-                >
-                  {option.text}
-                  <span
-                    onClick={e => {
-                      e.stopImmediatePropagation();
-                      this._removeOption(option.key);
-                    }}
-                  >
-                    x
-                  </span>
-                </span>
-              );
-            } else {
-              this.maxTagCountToBeRemove.push(option.key);
-            }
-          }),
 
-        pileCount > this.maxTagCount ? (
-          <span
-            key="maxTagCount"
-            class={
-              "option-selected " +
-              (this.toBeRemoved.indexOf("maxTagCount") !== -1 ? "removed" : "")
-            }
-            title={pileCount.toString()}
-            onClick={e => e.stopPropagation()}
-          >
-            {(pileCount - this.maxTagCount).toString()}...
-            <span
-              onClick={e => {
-                e.stopImmediatePropagation();
-                // this._removeOption(option.key);
-          /*      
-                this._updateItem(option.key, { 
-                  checked: this.selectedKeys.indexOf(option.key) === -1,
-                  selected: false
-                });
-          */
-                this._removeMultipleOptions();
-              }}
-            >
-              x
-            </span>
-          </span>
-        ) : (
-          undefined
-        )
+      var itemsToDisplay = 
+        this.flatItems
+        .filter(item => this.selectedKeys.indexOf(item.key) !== -1)
+        .map(item => {
+          if (pileCount++ < this.maxTagCount) {
+            return (
+              <TreeSelectChip
+                key={item.key}
+                toBeRemoved={this.toBeRemoved.indexOf(item.key) !== -1}
+                text={item.text}
+                removeHandler={() => this._removeOption(item.key)}>
+              </TreeSelectChip>
+            );
+          } else {
+            this.maxTagCountToBeRemove.push(item.key);
+            return undefined;
+          }
+        });
+
+      var maxTag = 
+        <TreeSelectChip
+          key={"maxTagCount"}
+          toBeRemoved={this.toBeRemoved.indexOf("maxTagCount") !== -1}
+          text={(pileCount - this.maxTagCount).toString() + "..."}
+          removeHandler={() => this._removeMultipleOptions()}>
+        </TreeSelectChip>  
+
+      console.log("-.-", pileCount, this.maxTagCount);
+
+      return [
+        ...itemsToDisplay,
+        pileCount > this.maxTagCount? maxTag : undefined
       ];
+
     } else if (this.multiple && this.selectedKeys.length === 0) {
-      return <span class="disabled-color">{this.placeholder}</span>;
+      return (
+        <span class="disabled-color">
+          {this.placeholder}
+        </span>);
     } else if (this.selectedKeys.length > 0) {
-      return this.flatItems.find(item => item.key === this.selectedKeys[0])
+      return this.flatItems
+        .find(item => item.key === this.selectedKeys[0])
         .text;
     }
     return undefined;
   }
 
-/*
-  private _removeOption(key: string) {
-    this.toBeRemoved.push(key);
-    this.toBeRemoved = [...this.toBeRemoved];
-    setTimeout(() => {
-      this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
-      this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);
-      this.selectedKeys = [...this.selectedKeys]; // to re-render
-    }, 200);
-    this._updateItem(key, { selected: false });
-  }
-*/
   private _removeOption(key: string) {
     this.toBeRemoved.push(key);
     this.toBeRemoved = [...this.toBeRemoved];

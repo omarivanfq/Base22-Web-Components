@@ -5,20 +5,23 @@ import { FunctionalComponent, h } from "@stencil/core";
 // };
 
 interface TransferSearchBoxProps {
-    placeholder: string;
-    disabled: boolean;
-    handleQuery: any;
+  placeholder: string;
+  disabled: boolean;
+  handleQuery: any;
 }
 
-export const TransferSearchBox: FunctionalComponent<
-TransferSearchBoxProps
-> = ({ disabled, placeholder, handleQuery }) => {
-    return (
-      <span class="search-container">
-        <input
-          disabled={ disabled }
-          onKeyUp={ handleQuery } 
-          placeholder={ placeholder }/>
-      </span>
-    );
-}
+export const TransferSearchBox: FunctionalComponent<TransferSearchBoxProps> = ({
+  disabled,
+  placeholder,
+  handleQuery
+}) => {
+  return (
+    <span class="search-container">
+      <input
+        disabled={disabled}
+        onKeyUp={handleQuery}
+        placeholder={placeholder}
+      />
+    </span>
+  );
+};

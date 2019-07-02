@@ -35,12 +35,11 @@ li {
   max-height: 0;
   transition: all 0.2s ease-out;
   opacity: 0;
-}
-
-/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
-.nested.active {
-  max-height: 100%;
-  opacity: 1;
+  /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+  &.active {
+    max-height: 100%;
+    opacity: 1;
+  }
 }
 
 nova-checkbox {

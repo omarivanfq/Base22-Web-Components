@@ -110,6 +110,30 @@ export class NovaTreeNode {
     }
   }
 
+  @Method()
+  public async getCheckedKeys(): Promise<string[]> {
+    if (this.checked) {
+      return [this.nodeKey];
+    }
+
+    if (this.isLeaf) {
+      return [];
+    }
+
+    const childKeys = await Promise.all(
+      this.refToSubnodes.map(
+        async (node: HTMLNovaTreeNodeElement): Promise<string[]> => {
+          return await node.getCheckedKeys();
+        }
+      )
+    );
+    const result = childKeys.reduce(
+      (acc, val): string[] => acc.concat(val),
+      []
+    );
+    return result;
+  }
+
   public render(): HTMLElement {
     return (
       <Host key={this.nodeKey}>

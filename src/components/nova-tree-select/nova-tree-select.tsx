@@ -1,4 +1,13 @@
-import { Component, State, Element, Watch, h, Prop } from "@stencil/core";
+import {
+  Component,
+  State,
+  Element,
+  Watch,
+  h,
+  Prop,
+  Event,
+  EventEmitter
+} from "@stencil/core";
 import { TREE_ITEMS } from "./dummy-data";
 import { taggedTemplateExpression } from "@babel/types";
 import { spawn } from "child_process";
@@ -9,6 +18,7 @@ import { TreeSelectChip } from "./FunctionalComponents/nova-tree-select-chip";
   styleUrl: "nova-tree-select.scss",
   shadow: true
 })
+
 export class NovaTreeSelect {
   @Element() public el;
   @Prop() public selectedKeys: string[];
@@ -26,13 +36,16 @@ export class NovaTreeSelect {
 
   @Prop({ mutable: true }) public data? = { items: TREE_ITEMS };
 
-  @Prop() public maxTagCount: number = 0;
+
 
   @State() public maxTagCountToBeRemove: string[];
   private flatItems: any[];
   @State() public open: boolean = false;
 
   private tree: HTMLNovaTreeElement;
+
+  @Event() onChange: EventEmitter;
+  @Event() onSelect: EventEmitter;
 
   @Watch("data")
   public dataChange(_newValue: any, _oldValue: any): void {
@@ -104,6 +117,7 @@ export class NovaTreeSelect {
   private _updateItem(key: string, attr: any) {
     this._updateItemRec(this.data.items, key, attr);
     this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data });
+    this.onChange.emit(this.data);
   }
 
   private _updateItemRec(items: any[], key: string, attr: any) {
@@ -257,6 +271,11 @@ export class NovaTreeSelect {
             multiple={this.multiple}
             onSelect={e => {
               if (this.checkable) {
+                this.onSelect.emit({
+                  key: e.detail.key,
+                  checked: this.selectedKeys.indexOf(e.detail.key) === -1
+                });
+
                 this._updateItem(e.detail.key, {
                   checked: this.selectedKeys.indexOf(e.detail.key) === -1,
                   selected: false

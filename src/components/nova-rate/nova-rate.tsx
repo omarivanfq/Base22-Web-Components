@@ -166,7 +166,7 @@ export class NovaRate {
     // If value changes, generate new StarList and emit onChange
     if (aux !== this.value) {
       this.handleGenerateStarList(this.value);
-      // this.onChange.emit(this.value);
+      this.onChange.emit(this.value);
     }
   }
 

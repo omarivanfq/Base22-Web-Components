@@ -352,6 +352,8 @@ declare namespace LocalJSX {
     'dropdownStyle'?: {};
     'maxTagCount'?: number;
     'multiple'?: boolean;
+    'onOnChange'?: (event: CustomEvent<any>) => void;
+    'onOnSelect'?: (event: CustomEvent<any>) => void;
     'placeholder'?: string;
     'selectedKeys'?: string[];
     'styles'?: {};

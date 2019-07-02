@@ -6,6 +6,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="/assets/fontAwesome/font-awesome.css" />
         <script type="module" src="/build/nova.esm.js"></script>
         <script nomodule src="/build/nova.js"></script>
         <style>
@@ -48,10 +49,19 @@
                 cursor: pointer;
                 transform: scale(1.1);
                 box-shadow: 0px 0px 46px 1px rgba(0,0,0,0.7);
-             }
-            .fab-1 { background-color: #f49542; }
-            .fab-2 { background-color: #d18038; }
-            .fab-3 { background-color: #945b28; }
+            }
+            .fab-text {
+              font-family: Verdana;
+            }
+            .fab-1 { 
+              background-color: #0277bd; 
+            }
+            .fab-1  i {
+              margin-top:24px;
+            }
+            .fab-2 { background-color: #f49542; }
+            .fab-3 { background-color: #d18038; }
+            .fab-4 { background-color: #945b28; }
             h1 { color: #ffffff; text-align: center; font-size: 55px;
                 text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none;
                 position: absolute; left: 0; top: 0; width: 100%;}
@@ -65,9 +75,10 @@
     <body>
         <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
         <div class="fabs">
-            <a href="./nova-transfer-basic.html" class="fab fab-1">basic</a>
-            <a href="./nova-transfer-advanced.html"class="fab fab-2" >advanced</a>
-            <a class="fab fab-3">custom</a>                                            
+            <a href="../../" class="fab fab-1"><nova-font-awesome icon-name="arrow-left" size="2x"/></a>
+            <a href="./nova-transfer-basic.html" class="fab-text fab fab-2">basic</a>
+            <a href="./nova-transfer-advanced.html"class="fab-text fab fab-3" >advanced</a>
+            <a class="fab-text fab fab-4">custom</a>                                            
         </div>
         <nova-transfer show-search show-select-all>
           <!-- source-column and target-column are the slots that allow the customization

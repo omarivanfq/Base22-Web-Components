@@ -101,7 +101,7 @@ export namespace Components {
     /**
     * Common attributes
     */
-    'data'?: any;
+    'data'?: { items: any[]; };
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
@@ -305,7 +305,7 @@ declare namespace LocalJSX {
     /**
     * Common attributes
     */
-    'data'?: any;
+    'data'?: { items: any[]; };
     'defaultExpandAll'?: boolean;
     'disableTree'?: boolean;
     'disabled'?: boolean;

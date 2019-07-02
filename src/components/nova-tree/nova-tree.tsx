@@ -22,7 +22,7 @@ export class NovaTree {
   /**
    *  Common attributes
    */
-  @Prop({ mutable: true }) public data?: any = { items: [] };
+  @Prop({ mutable: true }) public data? = { items: [] };
   /**
    *  Common attributes
    */
@@ -52,21 +52,23 @@ export class NovaTree {
   @Event() public check: EventEmitter;
 
   @Watch("data")
-  public dataChange(newValue: any, _oldValue: any): void {
+  public dataChange(_newValue, _oldValue): void {
     this._handleExpandOptions();
   }
 
   @Method()
-  public async updateData(data: any) {
+  public async updateData(data) {
     this.data = data;
     const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
     const nodesArr = Array.prototype.slice.call(nodes);
     this._updateCheckboxes(data.items, nodesArr);
   }
 
-  private _updateCheckboxes(updatedNodes, nodes) {
-    updatedNodes.forEach(updatedNode => {
-      var node = nodes.find(node => node.nodeKey === updatedNode.nodeKey);
+  private _updateCheckboxes(updatedNodes, nodes): void {
+    updatedNodes.forEach((updatedNode): void => {
+      const node = nodes.find(
+        (node): boolean => node.nodeKey === updatedNode.nodeKey
+      );
       node.checked = updatedNode.checked;
       node.selected = updatedNode.selected;
       node.disableCheckbox = updatedNode.disableCheckbox;
@@ -88,10 +90,12 @@ export class NovaTree {
       } else {
         const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
         if (selected) {
-          nodes.forEach(node => (node.selected = node.nodeKey === key));
+          nodes.forEach(
+            (node): boolean => (node.selected = node.nodeKey === key)
+          );
           this.selectedKeys = [key];
         } else {
-          nodes.forEach(node => (node.selected = false));
+          nodes.forEach((node): boolean => (node.selected = false));
           this.selectedKeys = [];
         }
       }
@@ -150,25 +154,27 @@ export class NovaTree {
   public render(): HTMLNovaTreeElement {
     return (
       <ul id="topLevelUL">
-        {this.data.items.map(child => this.handleChild(child))}
+        {this.data.items.map((child): HTMLLIElement => this.handleChild(child))}
       </ul>
     );
   }
 
   private _handleCheckEvent(key: string, checked: boolean): void {
     // updating the items array if needed
-    var checkedParent = this.data.items.find(item => item.nodeKey === key);
+    const checkedParent = this.data.items.find(
+      (item): boolean => item.nodeKey === key
+    );
     if (checkedParent) {
       checkedParent.checked = checked;
     }
-    var nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
-    var nodesArr = Array.prototype.slice.call(nodes);
-    setTimeout(() => {
+    const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+    const nodesArr = Array.prototype.slice.call(nodes);
+    setTimeout((): void => {
       // emitting check event
       this.check.emit({
         checkedKeys: nodesArr
-          .filter(node => node.checked)
-          .map(node => node.nodeKey),
+          .filter((node): boolean => node.checked)
+          .map((node): void => node.nodeKey),
         key,
         checked
       });

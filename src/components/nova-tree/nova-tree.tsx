@@ -58,6 +58,7 @@ export class NovaTree {
 
   @Method()
   public async updateData(data:any) {
+    console.log(data);
     this.data = data;
     const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
     const nodesArr = Array.prototype.slice.call(nodes);
@@ -67,16 +68,10 @@ export class NovaTree {
   private _updateCheckboxes(updatedNodes, nodes) {
     updatedNodes.forEach(updatedNode => {
       var node = nodes.find(node => node.nodeKey === updatedNode.nodeKey);
-      if (node.nodeKey === "op6") {
-        console.log(updatedNode.disabled, updatedNode.checked, updatedNode.selected)  
-      }
       node.checked = updatedNode.checked;
       node.selected = updatedNode.selected;
       node.disableCheckbox = updatedNode.disableCheckbox;
       node.disabled = updatedNode.disabled;
-      if (node.nodeKey === "op6") {
-        console.log(updatedNode.disabled, updatedNode.checked, updatedNode.selected)  
-      }
       if (updatedNode.subnodes.length > 0) {
         this._updateCheckboxes(updatedNode.subnodes, nodes);
       }
@@ -186,9 +181,6 @@ export class NovaTree {
   }
 
   private handleChild(child): HTMLLIElement { 
-    if (child.nodeKey === "op6") {
-      console.log(child);
-    }
     return (
       <li key={child.nodeKey}>
         <nova-tree-node

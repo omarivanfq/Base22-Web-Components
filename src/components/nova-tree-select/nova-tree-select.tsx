@@ -1,6 +1,7 @@
 import { Component, State, Element, Watch, h, Prop } from "@stencil/core";
 import { TREE_ITEMS } from "./dummy-data";
 import { taggedTemplateExpression } from "@babel/types";
+import { spawn } from "child_process";
 
 @Component({
   tag: "nova-tree-select",
@@ -13,7 +14,7 @@ export class NovaTreeSelect {
   @Prop() multiple: boolean;
   @Prop() blockNode: boolean;
   @Prop() checkable: boolean;
-  @Prop() toBeRemoved: string[];
+  @State() toBeRemoved: string[];
 
   @Prop() disabled: boolean = false;
 
@@ -23,6 +24,10 @@ export class NovaTreeSelect {
   @Prop() placeholder: string = "";
 
   @Prop({ mutable: true }) public data?: any = { items: TREE_ITEMS };
+
+  @Prop() maxTagCount: number = 3;
+
+  @State() maxTagCountToBeRemove: string[];
   private flatItems: any[];
   @State() open: boolean = false;
 
@@ -61,9 +66,19 @@ export class NovaTreeSelect {
     this._updateAllItems({ selected: false });
   }
 
-  private _copyObject(obj: any) {
-    return JSON.parse(JSON.stringify(obj));
+  private _removeMultipleOptions() {
+    this.maxTagCountToBeRemove.forEach(key => {
+      this._updateItem(key, { 
+        checked: false, // this.selectedKeys.indexOf(key) === -1,
+        selected: false
+      });
+    });
+    this.maxTagCountToBeRemove = [];
   }
+
+  // private _copyObject(obj: any) {
+  //   return JSON.parse(JSON.stringify(obj));
+  // }
 
   private _updateAllItems(attr: any) {
     this._updateAllItemsRec(this.data.items, attr);
@@ -81,6 +96,7 @@ export class NovaTreeSelect {
   }
 
   private _updateItem(key: string, attr: any) {
+    console.log("...", this.data.items);
     this._updateItemRec(this.data.items, key, attr);
     this.el.shadowRoot.querySelector('nova-tree').updateData({...this.data});
   }
@@ -102,33 +118,72 @@ export class NovaTreeSelect {
 
   private _getOptionsSelected() {
     if (this.multiple && this.selectedKeys.length > 0) {
-      return this.flatItems
-        .filter(option => this.selectedKeys.indexOf(option.key) !== -1)
-        .map(option => (
+      let pileCount = 0;
+      this.maxTagCountToBeRemove = [];
+      return [
+        ...this.flatItems
+          .filter(option => this.selectedKeys.indexOf(option.key) !== -1)
+          .map(option => {
+            if (pileCount++ < this.maxTagCount) {
+              return (
+                <span
+                  key={option.key}
+                  class={
+                    "option-selected " +
+                    (this.toBeRemoved.indexOf(option.key) !== -1
+                      ? "removed"
+                      : "")
+                  }
+                  title={option.key}
+                  onClick={e => e.stopPropagation()}
+                >
+                  {option.text}
+                  <span
+                    onClick={e => {
+                      e.stopImmediatePropagation();
+                      this._removeOption(option.key);
+                    }}
+                  >
+                    x
+                  </span>
+                </span>
+              );
+            } else {
+              this.maxTagCountToBeRemove.push(option.key);
+            }
+          }),
+
+        pileCount > this.maxTagCount ? (
           <span
-            key={option.key}
+            key="maxTagCount"
             class={
               "option-selected " +
-              (this.toBeRemoved.indexOf(option.key) !== -1 ? "removed" : "")
+              (this.toBeRemoved.indexOf("maxTagCount") !== -1 ? "removed" : "")
             }
-            title={option.key}
+            title={pileCount.toString()}
             onClick={e => e.stopPropagation()}
           >
-            {option.text}
+            {(pileCount - this.maxTagCount).toString()}...
             <span
               onClick={e => {
                 e.stopImmediatePropagation();
                 // this._removeOption(option.key);
+          /*      
                 this._updateItem(option.key, { 
                   checked: this.selectedKeys.indexOf(option.key) === -1,
                   selected: false
                 });
+          */
+                this._removeMultipleOptions();
               }}
             >
               x
             </span>
           </span>
-        ));
+        ) : (
+          undefined
+        )
+      ];
     } else if (this.multiple && this.selectedKeys.length === 0) {
       return <span class="disabled-color">{this.placeholder}</span>;
     } else if (this.selectedKeys.length > 0) {
@@ -138,15 +193,18 @@ export class NovaTreeSelect {
     return undefined;
   }
 
-  private _addOption(key: string) {
-    if (this.multiple) {
-      this.selectedKeys.push(key);
+/*
+  private _removeOption(key: string) {
+    this.toBeRemoved.push(key);
+    this.toBeRemoved = [...this.toBeRemoved];
+    setTimeout(() => {
+      this.selectedKeys.splice(this.selectedKeys.indexOf(key), 1);
+      this.toBeRemoved.splice(this.toBeRemoved.indexOf(key), 1);
       this.selectedKeys = [...this.selectedKeys]; // to re-render
-    } else {
-      this.selectedKeys = [key];
-    }
+    }, 200);
+    this._updateItem(key, { selected: false });
   }
-
+*/
   private _removeOption(key: string) {
     this.toBeRemoved.push(key);
     this.toBeRemoved = [...this.toBeRemoved];
@@ -156,6 +214,19 @@ export class NovaTreeSelect {
       this.selectedKeys = [...this.selectedKeys]; // to re-render
       this._updateItem(key, { checked: false, selected: false });
     }, 200);
+  }
+
+  private _addOption(key: string) {
+    if (this.multiple) {
+      this.selectedKeys.push(key);
+      this.selectedKeys = [...this.selectedKeys]; // to re-render
+    } else {
+      if (this.selectedKeys.length != 0) {
+      //  this._updateItem(this.selectedKeys[0], { selected: false });
+      }
+      this.selectedKeys = [key];
+    }
+    this._updateItem(key, { selected: !this.checkable });
   }
 
   private _handleSelection(key: string, selected:boolean) {

@@ -80,19 +80,21 @@
             <a href="./nova-transfer-advanced.html"class="fab-text fab fab-3" >advanced</a>
             <a class="fab-text fab fab-4">custom</a>                                            
         </div>
-        <nova-transfer show-search show-select-all>
-          <!-- source-column and target-column are the slots that allow the customization
-          of each column -->
-          <table slot="source-column" id="source-table"></table>
-          <table slot="target-column" id="target-table"></table>
-          <p slot="source-footer" style="text-align:center; padding: 10px 0;">
-            footer 1
-          </p>
-          <p slot="target-footer" style="text-align:center; padding: 10px 0;">
-            footer 2
-          </p>
-        </nova-transfer>
-     <script>
+        <div class="container">
+          <nova-transfer show-search show-select-all>
+            <!-- source-column and target-column are the slots that allow the customization
+            of each column -->
+            <table slot="source-column" id="source-table"></table>
+            <table slot="target-column" id="target-table"></table>
+            <p slot="source-footer" style="text-align:center; padding: 10px 0;">
+              footer 1
+            </p>
+            <p slot="target-footer" style="text-align:center; padding: 10px 0;">
+              footer 2
+            </p>
+          </nova-transfer>
+        </div>
+    <script>
       var transfer = document.querySelector("nova-transfer");
       // event that is emitted each time the user requests to change items from one column to another
       transfer.addEventListener("transferColumn", event => {

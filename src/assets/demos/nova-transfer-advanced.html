@@ -87,6 +87,24 @@
         height: 100vh;
         z-index: -999;
       }
+      figure {
+        background-color: #282c34;
+        color:#d19a66;
+        line-height: 1.5;
+        font-size: 14px;
+      }
+
+      figure .chevron {
+        color: #ffffff;
+      }
+
+      figure .tag {
+        color: #FD6F6B;
+      }
+      figure .string {
+        color: #98c379;
+      }
+
       </style>
     </head>
     <body>
@@ -104,9 +122,30 @@
               Footer 1
             </p>
             <p slot="target-footer" style="padding: 8px 0; text-align: center;">
-              Footer 1
+              Footer 2
             </p>
           </nova-transfer>
+<figure>
+    <pre>
+      <code>
+    <span class="chevron">&lt;</span><span class="tag">nova-transfer</span>     
+      show-slect-all 
+      show-search
+    <span class="chevron">&gt;
+      <span class="chevron">&lt;</span><span class="tag">p</span>     
+        slot=<span class="string">"source-footer"</span>  
+        style=<span class="string">"padding: 8px 0px; 
+              text-align:center"</span>
+      <span class="chevron">&gt; Footer 1 &lt;/</span><span class="tag">p</span><span class="chevron">&gt;</span>
+      <span class="chevron">&lt;</span><span class="tag">p</span>     
+        slot=<span class="string">"source-footer"</span>  
+        style=<span class="string">"padding: 8px 0px; 
+              text-align:center"</span>
+      <span class="chevron">&gt; Footer 2 &lt;/</span><span class="tag">p</span><span class="chevron">&gt;</span>      
+    &lt;/</span><span class="tag">nova-transfer</span><span class="chevron">&gt;</span>
+      </code> 
+  </pre>
+</figure>
         </div>
         <script>
           /* event listeners */
@@ -162,7 +201,6 @@
               transfer.data = data;
               var configuration = response.data.configuration;
               transfer.configuration = configuration;
-              console.log(configuration.labels);
             })
             .catch(console.error);
         </script>

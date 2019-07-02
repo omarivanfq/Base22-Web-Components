@@ -99,19 +99,31 @@
     </head>
     <body>
         <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
-        <div class="fabs">
+        <span class="fabs">
             <a href="../../" class="fab fab-1"><nova-font-awesome icon-name="arrow-left" size="2x"/></a>
             <a class="fab fab-2 fab-text">basic</a>
             <a href="./nova-transfer-advanced.html" class="fab-text fab fab-3">advanced</a>
             <a href="./nova-transfer-custom.html" class="fab-text fab fab-4">custom</a>                                            
-        </div>
+        </span>
         <div class="container">
             <nova-transfer></nova-transfer>
 <figure style="padding-right:35px;">
     <pre>
         <code>
-        <span class="chevron">&lt;</span><span class="tag">nova-transfer</span>
-        <span class="chevron">&gt;&lt;/</span><span class="tag">nova-transfer</span><span class="chevron">&gt;</span>
+    <span class="chevron">&lt;</span><span class="tag">nova-transfer</span><span class="chevron">&gt;&lt;/</span><span class="tag">nova-transfer</span><span class="chevron">&gt;</span>
+    <span class="chevron">&lt;</span><span class="tag">script</span>
+        src=<span class="string">"https://unpkg.com/axios/dist/axios.min.js"</span>  
+    <span class="chevron">&gt;</span>
+    <span class="chevron">&lt;</span><span class="tag">script</span><span class="chevron">&gt;</span>
+        axios
+        .get("../data/transfer-data.json")
+        .then(function(response) {
+            var data = response.data.data;
+            transfer.data = data;
+            var configuration = response.data.configuration;
+        })
+        .catch(console.error);
+    <span class="chevron">&lt;/</span><span class="tag">script</span><span class="chevron">&gt;</span>
         </code> 
     </pre>
 </figure>
@@ -153,7 +165,6 @@
                var data = response.data.data;
                transfer.data = data;
                var configuration = response.data.configuration;
-             //  transfer.configuration = configuration;
             })
            .catch(console.error);
          </script>

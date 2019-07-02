@@ -1,4 +1,13 @@
-import { Component, State, Element, Watch, h, Prop } from "@stencil/core";
+import {
+  Component,
+  State,
+  Element,
+  Watch,
+  h,
+  Prop,
+  Event,
+  EventEmitter
+} from "@stencil/core";
 import { TREE_ITEMS } from "./dummy-data";
 import { taggedTemplateExpression } from "@babel/types";
 import { spawn } from "child_process";
@@ -31,6 +40,9 @@ export class NovaTreeSelect {
   @State() maxTagCountToBeRemove: string[];
   private flatItems: any[];
   @State() open: boolean = false;
+
+  @Event() onChange: EventEmitter;
+  @Event() onSelect: EventEmitter;
 
   @Watch("data")
   public dataChange(_newValue: any, _oldValue: any): void {
@@ -68,8 +80,8 @@ export class NovaTreeSelect {
   }
 
   private _removeMultipleOptions() {
-    console.log("a.selected", this.selectedKeys);
-    console.log("to be removed", this.maxTagCountToBeRemove);
+    // console.log("a.selected", this.selectedKeys);
+    // console.log("to be removed", this.maxTagCountToBeRemove);
 
     if (this.checkable) {
       this.maxTagCountToBeRemove.forEach(key => {
@@ -102,6 +114,7 @@ export class NovaTreeSelect {
   private _updateItem(key: string, attr: any) {
     this._updateItemRec(this.data.items, key, attr);
     this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data });
+    this.onChange.emit(this.data);
   }
 
   private _updateItemRec(items: any[], key: string, attr: any) {
@@ -191,7 +204,7 @@ export class NovaTreeSelect {
   }
 
   private _removeOption(key: string) {
-    console.log("removing", key);
+    // console.log("removing", key);
     this.toBeRemoved.push(key);
     this.toBeRemoved = [...this.toBeRemoved];
     setTimeout(() => {
@@ -249,6 +262,11 @@ export class NovaTreeSelect {
             multiple={this.multiple}
             onSelect={e => {
               if (this.checkable) {
+                this.onSelect.emit({
+                  key: e.detail.key,
+                  checked: this.selectedKeys.indexOf(e.detail.key) === -1
+                });
+
                 this._updateItem(e.detail.key, {
                   checked: this.selectedKeys.indexOf(e.detail.key) === -1,
                   selected: false

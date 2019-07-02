@@ -195,7 +195,7 @@ export class NovaTreeNode {
   }
 
   private _generateSubnode(node: NovaTreeNode, index: number): HTMLLIElement {
-    console.log(node.nodeKey + ": " + node.checked);
+    // console.log(node.nodeKey + ": " + node.checked);
     return (
       <li key={node.nodeKey}>
         <nova-tree-node

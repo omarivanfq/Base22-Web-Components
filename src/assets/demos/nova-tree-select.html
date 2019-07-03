@@ -14,9 +14,20 @@
     <script nomodule src="/build/nova.js"></script>
   </head>
   <body>
-    <nova-tree-select
-      multiple
-      checkable
-      ></nova-tree-select>
+    <nova-tree-select multiple max-tag-count="10" checkable></nova-tree-select>
+
+    <script>
+      window.onload = function() {
+        let treeSelect = document.querySelector("nova-tree-select");
+
+        treeSelect.addEventListener("onChange", function(event) {
+          console.log(event.detail);
+        });
+
+        treeSelect.addEventListener("onSelect", function(event) {
+          console.log(event.detail);
+        });
+      };
+    </script>
   </body>
 </html>

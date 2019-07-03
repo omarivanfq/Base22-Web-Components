@@ -1,4 +1,13 @@
-import { Component, State, Element, Watch, h, Prop } from "@stencil/core";
+import {
+  Component,
+  State,
+  Element,
+  Watch,
+  h,
+  Prop,
+  Event,
+  EventEmitter
+} from "@stencil/core";
 import { TREE_ITEMS } from "./dummy-data";
 import { taggedTemplateExpression } from "@babel/types";
 import { spawn } from "child_process";
@@ -9,29 +18,33 @@ import { TreeSelectChip } from "./FunctionalComponents/nova-tree-select-chip";
   styleUrl: "nova-tree-select.scss",
   shadow: true
 })
-
 export class NovaTreeSelect {
-  @Element() el;
-  @Prop() selectedKeys: string[];
-  @Prop() multiple: boolean;
-  @Prop() blockNode: boolean;
-  @Prop() checkable: boolean;
-  @State() toBeRemoved: string[];
+  @Element() public el;
+  @Prop() public selectedKeys: string[];
+  @Prop() public multiple: boolean;
+  @Prop() public blockNode: boolean;
+  @Prop() public checkable: boolean;
+  @State() public toBeRemoved: string[];
 
-  @Prop() disabled: boolean = false;
+  @Prop() public disabled: boolean = false;
 
-  @Prop() styles: any = {};
-  @Prop() dropdownStyle: any = {};
+  @Prop() public styles = {};
+  @Prop() public dropdownStyle = {};
 
-  @Prop() placeholder: string = "";
+  @Prop() public placeholder: string = "";
 
-  @Prop({ mutable: true }) public data?: any = { items: TREE_ITEMS };
+  @Prop({ mutable: true }) public data? = { items: TREE_ITEMS };
 
-  @Prop() maxTagCount: number = 3;
+  @Prop() public maxTagCount: number = 5;
 
-  @State() maxTagCountToBeRemove: string[];
+  @State() public maxTagCountToBeRemove: string[];
   private flatItems: any[];
-  @State() open: boolean = false;
+  @State() public open: boolean = false;
+
+  private tree: HTMLNovaTreeElement;
+
+  @Event() public onChange: EventEmitter;
+  @Event() public onSelect: EventEmitter;
 
   @Watch("data")
   public dataChange(_newValue: any, _oldValue: any): void {
@@ -44,7 +57,7 @@ export class NovaTreeSelect {
     return flatItems;
   }
 
-  private _toFlatItemsRec(items, array) {
+  private _toFlatItemsRec(items, array): void {
     items.forEach(item => {
       array.push({
         key: item.nodeKey,
@@ -56,19 +69,19 @@ export class NovaTreeSelect {
     });
   }
 
-  componentWillLoad() {
+  public componentWillLoad(): void {
     this.selectedKeys = [];
     this.toBeRemoved = [];
     this.flatItems = this._getFlatItems(this.data.items);
   }
 
-  private _removeAllOptions(event) {
+  private _removeAllOptions(event): void {
     event.stopPropagation();
     this.selectedKeys = [];
     this._updateAllItems({ selected: false });
   }
 
-  private _removeMultipleOptions() {
+  private _removeMultipleOptions(): void {
     console.log("a.selected", this.selectedKeys);
     console.log("to be removed", this.maxTagCountToBeRemove);
 
@@ -103,6 +116,7 @@ export class NovaTreeSelect {
   private _updateItem(key: string, attr: any) {
     this._updateItemRec(this.data.items, key, attr);
     this.el.shadowRoot.querySelector("nova-tree").updateData({ ...this.data });
+    this.onChange.emit(this.data);
   }
 
   private _updateItemRec(items: any[], key: string, attr: any) {
@@ -120,12 +134,12 @@ export class NovaTreeSelect {
     });
   }
 
-  private _getOptionsSelected() {
+  private _getOptionsSelected(): any[] {
     if (this.multiple && this.selectedKeys.length > 0) {
       let pileCount = 0;
       this.maxTagCountToBeRemove = [];
       /*
-      var itemsToDisplay = 
+      var itemsToDisplay =
         this.flatItems
         .filter(item => this.selectedKeys.indexOf(item.key) !== -1)
         .map(item => {
@@ -144,7 +158,7 @@ export class NovaTreeSelect {
           }
         });
 */
-      var itemsToDisplay = this.selectedKeys.map(key => {
+      const itemsToDisplay = this.selectedKeys.map(key => {
         if (pileCount++ < this.maxTagCount || this.maxTagCount <= 0) {
           var item = this.flatItems.find(item => item.key === key);
           return (
@@ -167,7 +181,7 @@ export class NovaTreeSelect {
         }
       });
 
-      var maxTag = (
+      const maxTag = (
         <TreeSelectChip
           key={"maxTagCount"}
           toBeRemoved={this.toBeRemoved.indexOf("maxTagCount") !== -1}
@@ -191,7 +205,7 @@ export class NovaTreeSelect {
     return undefined;
   }
 
-  private _removeOption(key: string) {
+  private _removeOption(key: string): void {
     console.log("removing", key);
     this.toBeRemoved.push(key);
     this.toBeRemoved = [...this.toBeRemoved];
@@ -203,10 +217,9 @@ export class NovaTreeSelect {
     this._updateItem(key, { checked: false, selected: false });
   }
 
-  private _addOption(key: string) {
+  private _addOption(key: string): void {
     if (this.multiple) {
-      this.selectedKeys.push(key);
-      this.selectedKeys = [...this.selectedKeys]; // to re-render
+      this.selectedKeys = [...this.selectedKeys, key]; // to re-render
     } else {
       if (this.selectedKeys.length != 0) {
         //  this._updateItem(this.selectedKeys[0], { selected: false });
@@ -216,7 +229,11 @@ export class NovaTreeSelect {
     this._updateItem(key, { selected: !this.checkable });
   }
 
-  private _handleSelection(key: string, selected: boolean) {
+  private _handleSelection(key: string, selected: boolean): void {
+    if (this.checkable) {
+      this.tree.getCheckedKeys().then(keys => (this.selectedKeys = keys));
+      return;
+    }
     if (selected) {
       this._addOption(key);
     } else {
@@ -224,7 +241,7 @@ export class NovaTreeSelect {
     }
   }
 
-  render() {
+  public render(): HTMLNovaTreeSelectElement {
     return (
       <div class="container" style={this.styles}>
         <span class={"nova-select " + (this.disabled ? "disabled-select" : "")}>
@@ -242,6 +259,9 @@ export class NovaTreeSelect {
         </span>
         <div class={"options " + (this.open && !this.disabled ? "" : "closed")}>
           <nova-tree
+            ref={(el: HTMLNovaTreeElement) => {
+              this.tree = el;
+            }}
             data={this.data}
             checkable={this.checkable}
             selectable
@@ -250,6 +270,11 @@ export class NovaTreeSelect {
             multiple={this.multiple}
             onSelect={e => {
               if (this.checkable) {
+                this.onSelect.emit({
+                  key: e.detail.key,
+                  checked: this.selectedKeys.indexOf(e.detail.key) === -1
+                });
+
                 this._updateItem(e.detail.key, {
                   checked: this.selectedKeys.indexOf(e.detail.key) === -1,
                   selected: false

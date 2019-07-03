@@ -28,75 +28,75 @@ export class NovaRate {
    */
 
   /**
-   *  This property allow to clear by setting value to 0
+   *  This property allows clearing by setting the value to 0
    */
-  @Prop() allowClear: boolean = true;
+  @Prop() public allowClear: boolean = true;
 
   /**
    *  This property allow half values
    */
-  @Prop() allowHalf: boolean = false;
+  @Prop() public allowHalf: boolean = false;
 
   /**
    *  This property focus the ul when component is mounted
    */
-  @Prop() autoFocus: boolean = false;
+  @Prop() public autoFocus: boolean = false;
 
   /**
    *  This property sets the caracter to display as symbol
    */
-  @Prop() character: string = "";
+  @Prop() public character: string = "";
 
   /**
    *  This property replaces character for an icon
    */
-  @Prop() icon: string = "star";
+  @Prop() public icon: string = "star";
 
   /**
    *  This property makes the component "read only"
    */
-  @Prop() disabled: boolean = false;
+  @Prop() public disabled: boolean = false;
 
   /**
    *  This property sets the number of stars
    */
-  @Prop() count: number = 5;
+  @Prop() public count: number = 5;
 
   /**
    *  This property sets the initial value
    */
-  @Prop() defaultValue: number = 0;
+  @Prop() public defaultValue: number = 0;
 
   /**
    *  This property sets the size of the rate component
    */
-  @Prop() size: number = 20;
+  @Prop() public size: number = 20;
 
   /**
    *  This property sets the color
    */
-  @Prop() color: string = "#fadb14";
+  @Prop() public color: string = "#fadb14";
 
   /**
    *  This property sets the initial value
    */
 
-  @Prop({ mutable: true }) configuration?: any = {};
+  @Prop({ mutable: true }) public configuration?: any = {};
   /**
    *  State
    */
-  @State() starList: Array<object> = [];
-  @State() value: number = this.defaultValue;
-  @State() isComponentReady: boolean = false;
+  @State() public starList: Array<object> = [];
+  @State() public value: number = this.defaultValue;
+  @State() public isComponentReady: boolean = false;
 
   /**
    *  Public API Events
    */
-  @Event() onBlur: EventEmitter;
-  @Event() onChange: EventEmitter;
-  @Event() onFocus: EventEmitter;
-  @Event() onHoverChange: EventEmitter;
-  @Event() onKeyDown: EventEmitter;
+  @Event() public onBlur: EventEmitter;
+  @Event() public onChange: EventEmitter;
+  @Event() public onFocus: EventEmitter;
+  @Event() public onHoverChange: EventEmitter;
+  @Event() public onKeyDown: EventEmitter;
 
   /**
    *  Public API Methods
@@ -110,13 +110,13 @@ export class NovaRate {
   // }
 
   @Method()
-  async blurComponent() {
+  public async blurComponent() {
     const ul: any = this.el.shadowRoot.children.item(1);
     ul.blur();
   }
 
   @Method()
-  async focusComponent() {
+  public async focusComponent() {
     const ul: any = this.el.shadowRoot.children.item(1);
     ul.focus();
   }
@@ -124,19 +124,19 @@ export class NovaRate {
   /**
    * Lifecycle methods
    */
-  componentWillLoad() {
+  public componentWillLoad() {
     // this._init();
     this.handleGenerateStarList(this.value);
     this.isComponentReady = true;
   }
 
-  componentDidLoad() {
+  public componentDidLoad() {
     if (this.autoFocus) {
       this.focusComponent(); // AutoFocus
     }
   }
 
-  getCharacterOrIcon = () => {
+  private getCharacterOrIcon = () => {
     return this.character !== "" ? (
       this.character
     ) : (
@@ -147,7 +147,7 @@ export class NovaRate {
   /**
    * Event handlers
    */
-  handleSetValue(newValue) {
+  private handleSetValue(newValue) {
     // Checks input is number
     if (!Number(newValue) || newValue === true || newValue === false) {
       return;
@@ -166,17 +166,17 @@ export class NovaRate {
     // If value changes, generate new StarList and emit onChange
     if (aux !== this.value) {
       this.handleGenerateStarList(this.value);
-      // this.onChange.emit(this.value);
+      this.onChange.emit(this.value);
     }
   }
 
-  handleGenerateStarList(numberOfStars: number) {
+  private handleGenerateStarList(numberOfStars: number): void {
     if (this.isComponentReady && this.disabled) return; // Disable Changes
 
     // Eliminate Reminder if half stars are not allowed
     if (!this.allowHalf) numberOfStars = Math.floor(numberOfStars);
 
-    let starList = [];
+    const starList = [];
 
     const color = {
       color: `${this.color}`
@@ -188,8 +188,8 @@ export class NovaRate {
         <li>
           <span
             class="on"
-            onMouseOver={() => this.handleOnHover(i)}
-            onMouseOut={() => this.handleOnHover(this.value)}
+            onMouseOver={() => this._handleOnHover(i)}
+            onMouseOut={() => this._handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
             style={color}
           >
@@ -205,8 +205,8 @@ export class NovaRate {
         <li>
           <span
             class="off"
-            onMouseOver={() => this.handleOnHover(i)}
-            onMouseOut={() => this.handleOnHover(this.value)}
+            onMouseOver={() => this._handleOnHover(i)}
+            onMouseOut={() => this._handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
           >
             {this.getCharacterOrIcon()}
@@ -222,8 +222,8 @@ export class NovaRate {
           <span class="background"> {this.getCharacterOrIcon()}</span>
           <span
             class="on left"
-            onMouseOver={() => this.handleOnHover(i - 0.5)}
-            onMouseOut={() => this.handleOnHover(this.value)}
+            onMouseOver={() => this._handleOnHover(i - 0.5)}
+            onMouseOut={() => this._handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i - 0.5)}
             style={color}
           >
@@ -231,8 +231,8 @@ export class NovaRate {
           </span>
           <span
             class="on right"
-            onMouseOver={() => this.handleOnHover(i)}
-            onMouseOut={() => this.handleOnHover(this.value)}
+            onMouseOver={() => this._handleOnHover(i)}
+            onMouseOut={() => this._handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
             style={color}
           >
@@ -249,16 +249,16 @@ export class NovaRate {
           <span class="background"> {this.getCharacterOrIcon()}</span>
           <span
             class="left"
-            onMouseOver={() => this.handleOnHover(i - 0.5)}
-            onMouseOut={() => this.handleOnHover(this.value)}
+            onMouseOver={() => this._handleOnHover(i - 0.5)}
+            onMouseOut={() => this._handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i - 0.5)}
           >
             {this.getCharacterOrIcon()}
           </span>
           <span
             class="right"
-            onMouseOver={() => this.handleOnHover(i)}
-            onMouseOut={() => this.handleOnHover(this.value)}
+            onMouseOver={() => this._handleOnHover(i)}
+            onMouseOut={() => this._handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
           >
             {this.getCharacterOrIcon()}
@@ -274,8 +274,8 @@ export class NovaRate {
           <span class="background">{this.getCharacterOrIcon()}</span>
           <span
             class="on left"
-            onMouseOver={() => this.handleOnHover(i - 0.5)}
-            onMouseOut={() => this.handleOnHover(this.value)}
+            onMouseOver={() => this._handleOnHover(i - 0.5)}
+            onMouseOut={() => this._handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i - 0.5)}
             style={color}
           >
@@ -283,8 +283,8 @@ export class NovaRate {
           </span>
           <span
             class="right"
-            onMouseOver={() => this.handleOnHover(i)}
-            onMouseOut={() => this.handleOnHover(this.value)}
+            onMouseOver={() => this._handleOnHover(i)}
+            onMouseOut={() => this._handleOnHover(this.value)}
             onClick={() => this.handleSetValue(i)}
           >
             {this.getCharacterOrIcon()}
@@ -333,12 +333,12 @@ export class NovaRate {
     }
   }
 
-  handleOnHover(value) {
+  private _handleOnHover(value) {
     this.handleGenerateStarList(value);
     this.onHoverChange.emit(value);
   }
 
-  render() {
+  public render(): HTMLNovaRateElement {
     const { size } = this;
 
     const fontSize = {
@@ -348,9 +348,9 @@ export class NovaRate {
     return (
       <ul
         tabindex="0"
-        onKeyDown={e => this.handleOnKeyPressed(e)}
-        onBlur={() => this.onBlur.emit()}
-        onFocus={() => this.onFocus.emit()}
+        onKeyDown={(e): void => this.handleOnKeyPressed(e)}
+        onBlur={(): CustomEvent => this.onBlur.emit()}
+        onFocus={(): CustomEvent => this.onFocus.emit()}
         style={fontSize}
       >
         {this.starList}

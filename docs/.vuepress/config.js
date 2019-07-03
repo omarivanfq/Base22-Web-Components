@@ -30,6 +30,12 @@ module.exports = {
       {
         src: "https://unpkg.com/nova-rate@0.0.1/dist/nova-rate.js"
       }
+    ],
+    [
+      "script",
+      {
+        src: "https://unpkg.com/team-hortons-webcomponents@0.0.4/dist/nova.js"
+      }
     ]
   ]
 };

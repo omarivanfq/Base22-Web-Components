@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="/assets/fontAwesome/font-awesome.css" />
+    <script type="module" src="/build/nova.esm.js"></script>
+    <script nomodule src="/build/nova.js"></script>
+    <style>
+      a {
+        text-decoration: none;
+      }
+      body {
+        background-color: #d18038;
+        height: 100vh;
+        font-family: sans-serif;
+        padding: 0;
+        margin: 0;
+        position: relative;
+      }
+      *[slot] { visibility: hidden; }
+      .fabs {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 999;
+      }
+      .fab {
+        color: #ffffff;
+        font-size: 14px;
+        vertical-align: center;
+        line-height: 75px;
+        text-align: center;
+        border-radius: 100%;
+        height: 75px;
+        width: 75px;
+        box-shadow: 0px 0px 26px 1px rgba(0,0,0,0.4);
+        margin: 15px;
+        transition: all .5s ease;
+      }
+      .fab:hover { 
+        cursor: pointer;
+        transform: scale(1.1);
+        box-shadow: 0px 0px 46px 1px rgba(0,0,0,0.7);
+      }
+      .fab-text {
+        font-family: Verdana;
+      }
+      .fab-1 { 
+        background-color: #0277bd; 
+      }
+
+      .fab-1  i {
+        margin-top:24px;
+      }
+      .fab-2 { background-color: #f49542; }
+      .fab-3 { background-color: #d18038; }
+      .fab-4 { background-color: #945b28; }
+      h1 { color: #ffffff; text-align: center; font-size: 55px;
+        text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none;
+        position: absolute; left: 0; top: 0; width: 100%;}
+      h1 span { font-size: 45px; margin: 0 10px; }
+      .container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+      }
+      .back {
+        display: block;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background-color: #3a6ece;
+        height: 100vh;
+        z-index: -999;
+      }
+      figure {
+        background-color: #282c34;
+        color:#d19a66;
+        line-height: 1.5;
+        font-size: 14px;
+      }
+
+      figure .chevron {
+        color: #ffffff;
+      }
+
+      figure .tag {
+        color: #FD6F6B;
+      }
+      figure .string {
+        color: #98c379;
+      }
+
+      </style>
+    </head>
+    <body>
+      <div class="back"></div>
+      <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
+      <div class="fabs">
+        <a class="fab fab-1" href="../../"><nova-font-awesome icon-name="arrow-left" size="2x"/></a>
+        <a class="fab-text fab fab-2" href="./nova-transfer-basic.html">basic</a>
+        <a class="fab-text fab fab-3" >advanced</a>
+        <a class="fab-text fab fab-4" href="./nova-transfer-custom.html">custom</a>                                            
+      </div>
+        <div class="container">
+          <nova-transfer show-select-all show-search>
+            <p slot="source-footer" style="padding: 8px 0; text-align: center;">
+              Footer 1
+            </p>
+            <p slot="target-footer" style="padding: 8px 0; text-align: center;">
+              Footer 2
+            </p>
+          </nova-transfer>
+<figure>
+    <pre>
+      <code>
+    <span class="chevron">&lt;</span><span class="tag">nova-transfer</span>     
+      show-slect-all 
+      show-search
+    <span class="chevron">&gt;
+      <span class="chevron">&lt;</span><span class="tag">p</span>     
+        slot=<span class="string">"source-footer"</span>  
+        style=<span class="string">"padding: 8px 0px; 
+              text-align:center"</span>
+      <span class="chevron">&gt; Footer 1 &lt;/</span><span class="tag">p</span><span class="chevron">&gt;</span>
+      <span class="chevron">&lt;</span><span class="tag">p</span>     
+        slot=<span class="string">"source-footer"</span>  
+        style=<span class="string">"padding: 8px 0px; 
+              text-align:center"</span>
+      <span class="chevron">&gt; Footer 2 &lt;/</span><span class="tag">p</span><span class="chevron">&gt;</span>      
+    &lt;/</span><span class="tag">nova-transfer</span><span class="chevron">&gt;</span>
+      </code> 
+  </pre>
+</figure>
+        </div>
+        <script>
+          /* event listeners */
+          var transfer = document.querySelector("nova-transfer");
+          transfer.addEventListener("search", event =>
+            console.log("searching", event.detail)
+          );
+          transfer.addEventListener("filter", event =>
+            console.log("filtering", event.detail)
+          );
+          transfer.addEventListener("transferColumn", event =>
+            console.log("transfering", event.detail)
+          );
+          transfer.addEventListener("select", event =>
+            console.log("selecting", event.detail)
+          );
+          var backWidth = 0;
+          transfer.addEventListener("scrollColumn", event => {
+            backWidth = backWidth + 1;
+            if (backWidth > 100) backWidth = 0;
+            document.querySelector(".back").style.width = backWidth + "%";
+          });
+          /* functions */
+          transfer.renderItem = item => item.title + "-" + item.description;
+          transfer.filterOption = (value, item) =>
+            item.description.indexOf(value) !== -1;
+        </script>
+        <script>
+          // customized styles for the columns
+          transfer.columnStyle = {
+            boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)",
+            width: "45%"
+          };
+          // customized styles for the operation buttons (<,>)
+          transfer.operationStyle = {
+            width: "10%",
+            zIndex: 777
+          };
+          // customized styles for the wrapper of the component
+          transfer.wrapperStyle = {
+            width: "600px",
+            height: "340px",
+            margin: "0 auto"
+          };
+        </script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+          // JSON load
+          axios
+            .get("../data/transfer-data.json")
+            .then(function(response) {
+              var data = response.data.data;
+              transfer.data = data;
+              var configuration = response.data.configuration;
+              transfer.configuration = configuration;
+            })
+            .catch(console.error);
+        </script>
+    </body>
+</html>
+          

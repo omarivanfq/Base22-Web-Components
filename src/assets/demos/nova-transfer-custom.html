@@ -1,68 +1,99 @@
-<!--
-  With the help of event listeners and the handleSelect method the
-  nova-transfer component can be customized so it can display a different
-  view inside of each column as shown in the next example.
--->
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
-    />
-    <title>Stencil Component Starter</title>
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
-      integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
-      crossorigin="anonymous"
-    />
-    <script type="module" src="/build/nova.esm.js"></script>
-    <script nomodule src="/build/nova.js"></script>
-    <style>
-      body {
-        font-family: sans-serif;
-        background-color: rgb(224, 60, 199);
-      }
-      p {
-        margin: 0;
-        padding: 0;
-      }
-      h1 {
-        color: #ffffff;
-        text-align: center;
-        font-size: 55px;
-        text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72);
-        user-select: none;
-      }
-      h1 span {
-        font-size: 45px;
-        margin: 0 10px;
-      }
-      table {
-        width: 100%;
-        text-align: center;
-      }
-      *[slot] {
-        visibility: hidden;
-      }
-    </style>
-  </head>
-  <body>
-    <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
-    <nova-transfer show-search show-select-all>
-      <!-- source-column and target-column are the slots that allow the customization
-      of each column -->
-      <table slot="source-column" id="source-table"></table>
-      <table slot="target-column" id="target-table"></table>
-      <p slot="source-footer" style="text-align:center; padding: 10px 0;">
-        footer 1
-      </p>
-      <p slot="target-footer" style="text-align:center; padding: 10px 0;">
-        footer 2
-      </p>
-    </nova-transfer>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="/assets/fontAwesome/font-awesome.css" />
+        <script type="module" src="/build/nova.esm.js"></script>
+        <script nomodule src="/build/nova.js"></script>
+        <style>
+            a {
+              text-decoration: none;
+            }
+            body {
+                background-color: #945b28;
+                font-family: sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+            *[slot] { visibility: hidden; }
+            .fabs {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                justify-content: center;
+                align-items: center;
+                width: 200px;
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 999;
+            }
+            .fab {
+                color: #ffffff;
+                font-size: 14px;
+                vertical-align: center;
+                line-height: 75px;
+                text-align: center;
+                border-radius: 100%;
+                height: 75px;
+                width: 75px;
+                box-shadow: 0px 0px 26px 1px rgba(0,0,0,0.4);
+                margin: 15px;
+                transition: all .5s ease;
+            }
+            .fab:hover { 
+                cursor: pointer;
+                transform: scale(1.1);
+                box-shadow: 0px 0px 46px 1px rgba(0,0,0,0.7);
+            }
+            .fab-text {
+              font-family: Verdana;
+            }
+            .fab-1 { 
+              background-color: #0277bd; 
+            }
+            .fab-1  i {
+              margin-top:24px;
+            }
+            .fab-2 { background-color: #f49542; }
+            .fab-3 { background-color: #d18038; }
+            .fab-4 { background-color: #945b28; }
+            h1 { color: #ffffff; text-align: center; font-size: 55px;
+                text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none;
+                position: absolute; left: 0; top: 0; width: 100%;}
+            h1 span { font-size: 45px; margin: 0 10px; }
+            table {
+              width: 100%;
+              text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
+        <div class="fabs">
+            <a href="../../" class="fab fab-1"><nova-font-awesome icon-name="arrow-left" size="2x"/></a>
+            <a href="./nova-transfer-basic.html" class="fab-text fab fab-2">basic</a>
+            <a href="./nova-transfer-advanced.html"class="fab-text fab fab-3" >advanced</a>
+            <a class="fab-text fab fab-4">custom</a>                                            
+        </div>
+        <div class="container">
+          <nova-transfer show-search show-select-all>
+            <!-- source-column and target-column are the slots that allow the customization
+            of each column -->
+            <table slot="source-column" id="source-table"></table>
+            <table slot="target-column" id="target-table"></table>
+            <p slot="source-footer" style="text-align:center; padding: 10px 0;">
+              footer 1
+            </p>
+            <p slot="target-footer" style="text-align:center; padding: 10px 0;">
+              footer 2
+            </p>
+          </nova-transfer>
+        </div>
     <script>
       var transfer = document.querySelector("nova-transfer");
       // event that is emitted each time the user requests to change items from one column to another
@@ -117,7 +148,8 @@
         width: "60%",
         height: "340px",
         minWidth: "500px",
-        margin: "0 auto"
+        margin: "0 auto",
+        marginTop: "150px"
       };
     </script>
 

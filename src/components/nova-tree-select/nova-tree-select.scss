@@ -1,5 +1,5 @@
 .container {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -10,7 +10,7 @@
 
 .nova-select {
   width: 100%;
-  max-width: 400px;
+  max-width: 320px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   margin: 0;
@@ -36,6 +36,7 @@
   outline: 0;
   -webkit-box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  // user-select: none;
 }
 
 .nova-select-single {
@@ -45,6 +46,27 @@
   .option-selected {
     margin-right: 4px;
     margin-bottom: 4px;
+  }
+  &:hover .options-remove-all {
+    opacity: 0.4;
+  }
+
+  .options-remove-all {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    border-radius: 100%;
+    display: block;
+    height: 12px;
+    width: 12px;
+    position: absolute;
+    right: 7px;
+    top: 10px;
+    opacity: 0;
+    transition: all 0.1s linear;
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
   }
 }
 
@@ -63,6 +85,9 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .option-selected {
@@ -71,7 +96,10 @@
   border-radius: 2px;
   padding: 2px 5px;
   display: inline-block;
-  transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
+  &:hover {
+    cursor: default;
+  }
   span {
     margin: 2px 2px 2px 6px;
     font-size: 12px;
@@ -84,45 +112,45 @@
   }
 }
 
-.options-remove-all {
-  background-color: rgba(0,0,0,0.3);
-  color: #ffffff;
-  border-radius: 100%;
-  display: block;
-  height: 12px;
-  width: 12px;
-  position: absolute;
-  right: 7px;
-  top: 10px;
-  opacity: 0;
-  transition: all .1s linear;
-  &:hover {
-    opacity: 1;
-    cursor: pointer;
-  }
-}
-
 .removed {
   transform: scale(0);
 }
 
 .disabled {
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.disabled-color {
+  color: #bfbfbf;
+}
+
+.disabled-select .nova-select-selection {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.disabled-select.nova-select {
+  color: rgba(0, 0, 0, 0.25);
 }
 
 .options {
   width: 100%;
-  max-width: 400px;
+  max-width: 320px;
   font-size: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   padding: 10px;
+  transition: all 0.25s ease;
+  transform-origin: top;
+  position: absolute;
+  background-color: #ffffff;
   .option {
     display: block;
     width: 100%;
     color: #929292;
     padding: 4px 6px;
-    transition: all .15s linear;
+    transition: all 0.15s linear;
     box-sizing: border-box;
     &:hover {
       cursor: pointer;
@@ -133,4 +161,8 @@
       margin-bottom: 4px;
     }
   }
+}
+
+.options.closed {
+  transform: scaleY(0);
 }

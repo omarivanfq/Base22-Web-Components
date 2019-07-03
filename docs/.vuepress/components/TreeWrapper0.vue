@@ -2,7 +2,7 @@
   <div class="nova-tree">
     <h2>Demo</h2>
 
-    <nova-tree checkable auto-expand-parent default-expand-all> </nova-tree>
+    <nova-tree checkable auto-expand-parent multiple selectable> </nova-tree>
     <input
       type="button"
       value="Cambiar checkable"

@@ -44,6 +44,19 @@ module.exports = {
       "script",
       {
         src:
+          "https://unpkg.com/team-hortons-webcomponents@0.0.5/dist/collection/components/nova-tree-node/nova-tree-node.js"
+      }
+    ],
+    [
+      "script",
+      {
+        src: "https://unpkg.com/nova-tree@0.0.5/dist/nova-tree.js"
+      }
+    ],
+    [
+      "script",
+      {
+        src:
           "https://unpkg.com/team-hortons-webcomponents@0.0.5/dist/collection/components/nova-tree-select/nova-tree-select.js"
       }
     ]

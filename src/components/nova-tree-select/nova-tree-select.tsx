@@ -221,7 +221,8 @@ export class NovaTreeSelect {
             <span
               class="options-remove-all"
               onClick={event => this._removeAllOptions(event)}
-            ></span>
+            >
+            </span>
             {this._getOptionsSelected()}
           </span>
         </span>

@@ -6,6 +6,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="/assets/fontAwesome/font-awesome.css" />
         <script type="module" src="/build/nova.esm.js"></script>
         <script nomodule src="/build/nova.js"></script>
         <style>
@@ -20,17 +21,22 @@
             a {
                 text-decoration: none;
             }
-            .fabs {
+            .fabs-menu {
+                width: 100%;
                 display: flex;
-                flex-direction: column;
-                height: 100%;
                 justify-content: center;
                 align-items: center;
-                width: 200px;
-                position: absolute;
-                left: 0;
-                top: 0;
-                z-index: 999;
+                margin-top:100px;
+            }
+            .fabs {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                z-index:0;
+            }
+            .fabs li {
+                float: left;
             }
             .fab {
                 display: block;
@@ -42,24 +48,33 @@
                 border-radius: 100%;
                 height: 75px;
                 width: 75px;
-                box-shadow: 0px 0px 26px 1px rgba(0,0,0,0.4);
+                box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.4);
                 margin: 15px;
                 transition: all .5s ease;
             }
             .fab:hover { 
                 cursor: pointer;
                 transform: scale(1.1);
-                box-shadow: 0px 0px 46px 1px rgba(0,0,0,0.7);
+                box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.7);
              }
-            .fab-1 { background-color: #f49542; }
-            .fab-2 { background-color: #d18038; }
-            .fab-3 { background-color: #945b28; }
+            .fab-text {
+                font-family: Verdana;
+            }
+            .fab-1 { 
+                background-color: #0277bd; 
+            }
+
+            .fab-1  i {
+                margin-top:24px;
+            }
+            .fab-2 { background-color: #f49542; }
+            .fab-3 { background-color: #d18038; }
+            .fab-4 { background-color: #945b28; }
             h1 { color: #ffffff; text-align: center; font-size: 55px;
                 text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none;
-                position: absolute; left: 0; top: 0; width: 100%;}
+                position: absolute; left: 0; top: 0; width: 100%; z-index:0;}
             h1 span { font-size: 45px; margin: 0 10px; }
             .container {
-                height: 100%;
                 width: 100%;
                 display: flex;
                 flex-direction: row;
@@ -67,17 +82,59 @@
                 align-items: center;
                 position: absolute;
             }
+            figure {
+                background-color: #282c34;
+                color:#d19a66;
+                line-height: 1.5;
+                font-size: 14px;
+            }
+
+            figure .chevron {
+                color: #ffffff;
+            }
+
+            figure .tag {
+                color: #FD6F6B;
+            }
+            figure .string {
+                color: #98c379;
+            }
         </style>
     </head>
     <body>
-        <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
-        <div class="fabs">
-            <a class="fab fab-1">basic</a>
-            <a href="./nova-transfer-advanced.html" class="fab fab-2">advanced</a>
-            <a href="./nova-transfer-custom.html" class="fab fab-3">custom</a>                                            
+        <h1><span>&lt;</span>nova-transfer<span>/&gt;</span></h1>
+        
+        <br>
+        <div class="fabs-menu">
+            <ul class="fabs">
+                <li><a href="../../" class="fab fab-1"><nova-font-awesome icon-name="arrow-left" size="2x"/></a></li>
+                <li><a class="fab fab-2 fab-text">basic</a></li>
+                <li><a href="./nova-transfer-advanced.html" class="fab-text fab fab-3">advanced</a></li>
+                <li><a href="./nova-transfer-custom.html" class="fab-text fab fab-4">custom</a></li>                                       
+            </ul>
         </div>
+       
         <div class="container">
             <nova-transfer></nova-transfer>
+<figure style="padding-right:35px;">
+    <pre>
+        <code>
+    <span class="chevron">&lt;</span><span class="tag">nova-transfer</span><span class="chevron">&gt;&lt;/</span><span class="tag">nova-transfer</span><span class="chevron">&gt;</span>
+    <span class="chevron">&lt;</span><span class="tag">script</span>
+        src=<span class="string">"https://unpkg.com/axios/dist/axios.min.js"</span>  
+    <span class="chevron">&gt;</span>
+        axios
+        .get("../data/transfer-data.json")
+        .then(function(response) {
+            var data = response.data.data;
+            transfer.data = data;
+            var configuration = response.data.configuration;
+        })
+        .catch(console.error);
+    <span class="chevron">&lt;/</span><span class="tag">script</span><span class="chevron">&gt;</span>
+        </code> 
+    </pre>
+</figure>
         </div>
         <script>
             /* event listeners */
@@ -110,15 +167,17 @@
          <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
          <script>
            // JSON load
-           axios
-           .get("../data/transfer-data.json")
-           .then(function(response) {
-               var data = response.data.data;
-               transfer.data = data;
-               var configuration = response.data.configuration;
-             //  transfer.configuration = configuration;
-            })
-           .catch(console.error);
+        //   window.onload = function() {
+              axios
+              .get("../data/transfer-data.json")
+              .then(function(response) {
+                  var data = response.data.data;
+                  transfer.data = data;
+                  var configuration = response.data.configuration;
+                  transger.configuration = configuration;
+               })
+              .catch(console.error);
+        //    }      
          </script>
     </body>
 </html>

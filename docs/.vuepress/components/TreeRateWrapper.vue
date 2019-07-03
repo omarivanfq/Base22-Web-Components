@@ -2,7 +2,16 @@
   <div class="nova-rate">
     <h2>Demo</h2>
 
-    <nova-rate class="js-nova-rate"></nova-rate>
+    <nova-rate
+      class="nova-rate"
+      allow-clear="false"
+      allow-half
+      auto-focus
+      count="10"
+      default-value="5"
+      size="40"
+      color="#f44336"
+    ></nova-rate>
     <p></p>
     <input
       type="button"
@@ -19,7 +28,6 @@
       value="Cambiar disabled"
       onClick="document.querySelector('nova-rate').disabled= !document.querySelector('nova-rate').disabled"
     />
-
   </div>
 </template>
 

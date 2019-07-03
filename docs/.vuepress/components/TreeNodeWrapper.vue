@@ -2,13 +2,7 @@
   <div class="nova-tree">
     <h2>Demo</h2>
 
-    <nova-tree
-      class="js-nova-tree"
-      checkable
-      auto-expand-parent
-      default-expand-all
-    >
-    </nova-tree>
+    <nova-tree checkable auto-expand-parent default-expand-all> </nova-tree>
     <input
       type="button"
       value="Cambiar checkable"
@@ -38,7 +32,7 @@
 </template>
 <script>
 customElements.whenDefined("nova-tree").then(function() {
-  var transfer = document.querySelector(".js-nova-transfer");
+  var transfer = document.querySelector(".js-nova-tree");
   transfer.componentOnReady().then(function(instanceComponent) {
     // Do something
     // instanceComponent.configuration = configuration;

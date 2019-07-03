@@ -26,7 +26,7 @@ export namespace Components {
   }
   interface NovaRate {
     /**
-    * Props Allow to clear by setting value to 0
+    * Props <<<<<<< HEAD      Allow to clear by setting value to 0 =======      This property allows clearing by setting the value to 0 >>>>>>> 415f5cbc2572b371020888be68cc67e7d8859083
     */
     'allowClear': boolean;
     /**
@@ -105,6 +105,8 @@ export namespace Components {
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
+    'getAllCheckedKeys': () => Promise<any>;
+    'getCheckedKeys': () => Promise<string[]>;
     'multiple': boolean;
     'nodeKey': string;
     'selectable': boolean;
@@ -127,6 +129,7 @@ export namespace Components {
     'disableCheckbox': boolean;
     'disabled': boolean;
     'expanded': boolean;
+    'getCheckedKeys': () => Promise<string[]>;
     'multiple': boolean;
     'nodeKey': string;
     'refToSubnodes': HTMLNovaTreeNodeElement[];
@@ -138,14 +141,14 @@ export namespace Components {
   interface NovaTreeSelect {
     'blockNode': boolean;
     'checkable': boolean;
-    'data'?: any;
+    'data'?: { items: any[]; };
     'disabled': boolean;
-    'dropdownStyle': any;
+    'dropdownStyle': {};
     'maxTagCount': number;
     'multiple': boolean;
     'placeholder': string;
     'selectedKeys': string[];
-    'styles': any;
+    'styles': {};
   }
 }
 
@@ -223,7 +226,7 @@ declare namespace LocalJSX {
   }
   interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
     /**
-    * Props Allow to clear by setting value to 0
+    * Props <<<<<<< HEAD      Allow to clear by setting value to 0 =======      This property allows clearing by setting the value to 0 >>>>>>> 415f5cbc2572b371020888be68cc67e7d8859083
     */
     'allowClear'?: boolean;
     /**
@@ -345,16 +348,16 @@ declare namespace LocalJSX {
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
     'blockNode'?: boolean;
     'checkable'?: boolean;
-    'data'?: any;
+    'data'?: { items: any[]; };
     'disabled'?: boolean;
-    'dropdownStyle'?: any;
+    'dropdownStyle'?: {};
     'maxTagCount'?: number;
     'multiple'?: boolean;
     'onOnChange'?: (event: CustomEvent<any>) => void;
     'onOnSelect'?: (event: CustomEvent<any>) => void;
     'placeholder'?: string;
     'selectedKeys'?: string[];
-    'styles'?: any;
+    'styles'?: {};
   }
 
   interface IntrinsicElements {

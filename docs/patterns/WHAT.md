@@ -26,3 +26,7 @@ module.exports = {
   description: "oh yhea"
 };
 ```
+
+Como correrlo ;
+
+npm run docs:dev

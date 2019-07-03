@@ -26,15 +26,15 @@ export namespace Components {
   }
   interface NovaRate {
     /**
-    * Props This property allows clearing by setting the value to 0
+    * Props <<<<<<< HEAD      Allow to clear by setting value to 0 =======      This property allows clearing by setting the value to 0 >>>>>>> 415f5cbc2572b371020888be68cc67e7d8859083
     */
     'allowClear': boolean;
     /**
-    * This property allow half values
+    * Allow half values
     */
     'allowHalf': boolean;
     /**
-    * This property focus the ul when component is mounted
+    * Focus the component when mounted
     */
     'autoFocus': boolean;
     /**
@@ -42,36 +42,36 @@ export namespace Components {
     */
     'blurComponent': () => Promise<void>;
     /**
-    * This property sets the caracter to display as symbol
+    * Replace the icon for a caracter, empty will set the icon
     */
     'character': string;
     /**
-    * This property sets the color
+    * Sets the color
     */
     'color': string;
     /**
-    * This property sets the initial value
+    * Sets the initial configuration
     */
     'configuration'?: any;
     /**
-    * This property sets the number of stars
+    * Sets the number of stars
     */
     'count': number;
     /**
-    * This property sets the initial value
+    * Sets the initial value
     */
     'defaultValue': number;
     /**
-    * This property makes the component "read only"
+    * Makes the component "read only"
     */
     'disabled': boolean;
     'focusComponent': () => Promise<void>;
     /**
-    * This property replaces character for an icon
+    * Sets font awesome icon
     */
     'icon': string;
     /**
-    * This property sets the size of the rate component
+    * Sets the size of the rate component
     */
     'size': number;
   }
@@ -105,6 +105,7 @@ export namespace Components {
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
+    'getAllCheckedKeys': () => Promise<any>;
     'getCheckedKeys': () => Promise<string[]>;
     'multiple': boolean;
     'nodeKey': string;
@@ -140,7 +141,7 @@ export namespace Components {
   interface NovaTreeSelect {
     'blockNode': boolean;
     'checkable': boolean;
-    'data'?: { items: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: any[]; }[]; }[]; }[]; }[]; };
+    'data'?: { items: any[]; };
     'disabled': boolean;
     'dropdownStyle': {};
     'maxTagCount': number;
@@ -225,43 +226,43 @@ declare namespace LocalJSX {
   }
   interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
     /**
-    * Props This property allows clearing by setting the value to 0
+    * Props <<<<<<< HEAD      Allow to clear by setting value to 0 =======      This property allows clearing by setting the value to 0 >>>>>>> 415f5cbc2572b371020888be68cc67e7d8859083
     */
     'allowClear'?: boolean;
     /**
-    * This property allow half values
+    * Allow half values
     */
     'allowHalf'?: boolean;
     /**
-    * This property focus the ul when component is mounted
+    * Focus the component when mounted
     */
     'autoFocus'?: boolean;
     /**
-    * This property sets the caracter to display as symbol
+    * Replace the icon for a caracter, empty will set the icon
     */
     'character'?: string;
     /**
-    * This property sets the color
+    * Sets the color
     */
     'color'?: string;
     /**
-    * This property sets the initial value
+    * Sets the initial configuration
     */
     'configuration'?: any;
     /**
-    * This property sets the number of stars
+    * Sets the number of stars
     */
     'count'?: number;
     /**
-    * This property sets the initial value
+    * Sets the initial value
     */
     'defaultValue'?: number;
     /**
-    * This property makes the component "read only"
+    * Makes the component "read only"
     */
     'disabled'?: boolean;
     /**
-    * This property replaces character for an icon
+    * Sets font awesome icon
     */
     'icon'?: string;
     /**
@@ -273,7 +274,7 @@ declare namespace LocalJSX {
     'onOnHoverChange'?: (event: CustomEvent<any>) => void;
     'onOnKeyDown'?: (event: CustomEvent<any>) => void;
     /**
-    * This property sets the size of the rate component
+    * Sets the size of the rate component
     */
     'size'?: number;
   }
@@ -347,7 +348,7 @@ declare namespace LocalJSX {
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
     'blockNode'?: boolean;
     'checkable'?: boolean;
-    'data'?: { items: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: any[]; }[]; }[]; }[]; }[]; };
+    'data'?: { items: any[]; };
     'disabled'?: boolean;
     'dropdownStyle'?: {};
     'maxTagCount'?: number;

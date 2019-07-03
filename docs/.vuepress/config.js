@@ -16,19 +16,48 @@ module.exports = {
     [
       "script",
       {
-        src: "https://unpkg.com/nova-tree@0.0.4/dist/nova-tree.js"
+        src: "https://unpkg.com/team-hortons-webcomponents@0.0.5/dist/nova.js"
       }
     ],
     [
       "script",
       {
-        src: "https://unpkg.com/nova-transfer@0.0.1/dist/nova-transfer.js"
+        src:
+          "https://unpkg.com/team-hortons-webcomponents@0.0.5/dist/collection/components/nova-rate/nova-rate.js"
       }
     ],
     [
       "script",
       {
-        src: "https://unpkg.com/nova-rate@0.0.1/dist/nova-rate.js"
+        src:
+          "https://unpkg.com/team-hortons-webcomponents@0.0.5/dist/collection/components/nova-transfer/nova-transfer.js"
+      }
+    ],
+    [
+      "script",
+      {
+        src:
+          "https://unpkg.com/team-hortons-webcomponents@0.0.5/dist/collection/components/nova-tree/nova-tree.js"
+      }
+    ],
+    [
+      "script",
+      {
+        src:
+          "https://unpkg.com/team-hortons-webcomponents@0.0.5/dist/collection/components/nova-tree-node/nova-tree-node.js"
+      }
+    ],
+    [
+      "script",
+      {
+        src: "https://unpkg.com/nova-tree@0.0.5/dist/nova-tree.js"
+      }
+    ],
+    [
+      "script",
+      {
+        src:
+          "https://unpkg.com/team-hortons-webcomponents@0.0.5/dist/collection/components/nova-tree-select/nova-tree-select.js"
       }
     ]
   ]
@@ -41,7 +70,7 @@ function getPAtternsSidebar() {
       // y esto es un objeto
       title: "Componentes NOVA",
       collapsable: true,
-      children: ["Tree", "Rate", "TreeNode", "Checkbox", "General", "Transfer"]
+      children: ["Treeselect", "Rate", "Transfer", "Tree"]
     }
   ];
 }

@@ -6,28 +6,145 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
     />
-    <title>Stencil Component Starter</title>
-
+    <title>Nova Tree Select</title>
     <link rel="stylesheet" href="/assets/fontAwesome/font-awesome.css" />
-
     <script type="module" src="/build/nova.esm.js"></script>
     <script nomodule src="/build/nova.js"></script>
-  </head>
-  <body>
-    <nova-tree-select multiple max-tag-count="10" checkable></nova-tree-select>
-
+    <style>
+        body {
+            background-color: #1769aa;
+            height: 100vh;
+            font-family: sans-serif;
+            padding: 0;
+            margin: 0;
+            position: relative;
+        }
+        a {
+            text-decoration: none;
+        }
+        .fabs {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 999;
+        }
+        .fab {
+            display: block;
+            color: #ffffff;
+            font-size: 14px;
+            vertical-align: center;
+            line-height: 75px;
+            text-align: center;
+            border-radius: 100%;
+            height: 75px;
+            width: 75px;
+            box-shadow: 0px 0px 26px 1px rgba(0,0,0,0.4);
+            margin: 15px;
+            transition: all .5s ease;
+        }
+        .fab:hover { 
+            cursor: pointer;
+            transform: scale(1.1);
+            box-shadow: 0px 0px 46px 1px rgba(0,0,0,0.7);
+        }
+        .fab-text {
+            font-family: Verdana;
+        }
+        .fab-1 { background-color: #0277bd;  }
+  
+        .fab-1  i{
+            margin-top:24px;
+        }
+        .fab-2 { background-color: #f44336; }
+        .fab-3 { background-color: #e53935; }
+        .fab-4 { background-color: #d32f2f; }
+        h1 { color: #ffffff; text-align: center; font-size: 55px;
+            text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none;
+            position: absolute; left: 0; top: 0; width: 100%;}
+        h1 span { font-size: 45px; margin: 0 10px; }
+        .container {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+        }
+        .tree-container {
+          margin-top:50px;
+          background-color:white;
+          padding:0px 30px 30px 30px;
+          width: 360px;
+          height:70%;
+          border-radius:10px;
+          box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.7);
+        }
+        figure{
+          background-color: #282c34;
+          color:#d19a66;
+          line-height: 1.5;
+          font-size: 14px;
+          padding-left:15px;
+        }
+        figure .chevron{
+          color: #ffffff;
+        }
+        figure .tag{
+          color: #FD6F6B;
+        }
+        figure .string{
+          color: #98c379;
+        }
+      </style>
+    </head>
+    <body>
+      <h1><span>&lt</span>nova-tree-select<span>/&gt</span></h1>
+      <div class="fabs">
+        <a href="../../"class="fab fab-1"><nova-font-awesome icon-name="arrow-left" size="2x"/></a>
+      </div>
+      <div class="container">
+        <div class="tree-container">
+          <nova-tree-select checkable max-tag-count="3"></nova-tree-select>
+        </div>
+      <figure>
+        <pre>
+            <code>
+              <span class="chevron">&lt;</span><span class="tag">nova-tree-select</span>
+                multiple
+                max-tag-count=<span class="string">"10"</span>
+                checkable
+              <span class="chevron">&gt;
+              &lt;/</span><span class="tag">nova-tree-select</span><span class="chevron">&gt;</span>     
+            </code> 
+        </pre>
+      </figure>
+      </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
       window.onload = function() {
         let treeSelect = document.querySelector("nova-tree-select");
-
         treeSelect.addEventListener("onChange", function(event) {
           console.log(event.detail);
         });
-
         treeSelect.addEventListener("onSelect", function(event) {
           console.log(event.detail);
         });
-      };
+        // JSON load
+        axios
+        .get("../data/tree-select-data.json")
+        .then(function(response) {
+          console.log(response.data.data);
+          treeSelect.data = response.data.data;
+        })
+        .catch(console.error);
+      }
     </script>
   </body>
 </html>

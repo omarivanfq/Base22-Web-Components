@@ -167,14 +167,17 @@
          <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
          <script>
            // JSON load
-           axios
-           .get("../data/transfer-data.json")
-           .then(function(response) {
-               var data = response.data.data;
-               transfer.data = data;
-               var configuration = response.data.configuration;
-            })
-           .catch(console.error);
+        //   window.onload = function() {
+              axios
+              .get("../data/transfer-data.json")
+              .then(function(response) {
+                  var data = response.data.data;
+                  transfer.data = data;
+                  var configuration = response.data.configuration;
+                  transger.configuration = configuration;
+               })
+              .catch(console.error);
+        //    }      
          </script>
     </body>
 </html>

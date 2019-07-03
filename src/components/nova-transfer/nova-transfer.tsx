@@ -6,6 +6,7 @@ import {
   Prop,
   h,
   State,
+  Watch,
   Method
 } from "@stencil/core";
 import { DEFAULT_CONFIGURATION } from "./default-configuration";
@@ -92,7 +93,6 @@ export class NovaTransfer {
       event that is emitted when items are filtered
     */
   @Event() filter: EventEmitter;
-
   /*
     STATES
   */
@@ -114,6 +114,11 @@ export class NovaTransfer {
   @State() targetFooter: boolean;
 
   @Element() el: HTMLElement;
+
+  @Watch("data")
+  public dataChange(_newValue: any, _oldValue: any): void {
+   this._init();
+  }
 
   componentWillLoad() {
     this._init();

@@ -11,7 +11,7 @@
         "key": "key2",
         "title": "Title2",
         "description": "Description2",
-        "disabled": true
+        "disabled": false
       },
       {
         "key": "key3",
@@ -41,7 +41,7 @@
         "key": "key7",
         "title": "Title7",
         "description": "Description7",
-        "disabled": true
+        "disabled": false
       },
       {
         "key": "key9",
@@ -59,7 +59,7 @@
         "key": "key11",
         "title": "Title11",
         "description": "Description11",
-        "disabled": true
+        "disabled": false
       },
       {
         "key": "key12",

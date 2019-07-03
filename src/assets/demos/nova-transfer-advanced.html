@@ -171,7 +171,8 @@
           /* functions */
           transfer.renderItem = item => item.title + "-" + item.description;
           transfer.filterOption = (value, item) =>
-            item.description.indexOf(value) !== -1;
+            item.title.toUpperCase().indexOf(value.toUpperCase()) !== -1 
+             || item.description.toUpperCase().indexOf(value.toUpperCase()) !== -1 
         </script>
         <script>
           // customized styles for the columns

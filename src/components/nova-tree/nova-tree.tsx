@@ -51,6 +51,8 @@ export class NovaTree {
   @Event() public select: EventEmitter;
   @Event() public check: EventEmitter;
 
+  private refToTopLevelNodes: HTMLNovaTreeNodeElement[] = [];
+
   @Watch("data")
   public dataChange(_newValue, _oldValue): void {
     this._handleExpandOptions();
@@ -77,6 +79,20 @@ export class NovaTree {
         this._updateCheckboxes(updatedNode.subnodes, nodes);
       }
     });
+  }
+
+  @Method()
+  public async getCheckedKeys(): Promise<string[]> {
+    const childKeys = await Promise.all(
+      this.refToTopLevelNodes.map(async (node: HTMLNovaTreeNodeElement) => {
+        return await node.getCheckedKeys();
+      })
+    );
+    const result = childKeys.reduce(
+      (acc, val): string[] => acc.concat(val),
+      []
+    );
+    return result;
   }
 
   private _handleSelectNode(key: string, selected: boolean): void {
@@ -154,7 +170,9 @@ export class NovaTree {
   public render(): HTMLNovaTreeElement {
     return (
       <ul id="topLevelUL">
-        {this.data.items.map((child): HTMLLIElement => this.handleChild(child))}
+        {this.data.items.map(
+          (child, index): HTMLLIElement => this.handleChild(child, index)
+        )}
       </ul>
     );
   }
@@ -181,11 +199,14 @@ export class NovaTree {
     }, 100);
   }
 
-  private handleChild(child): HTMLLIElement {
+  private handleChild(child, index): HTMLLIElement {
     return (
       <li key={child.nodeKey}>
         <nova-tree-node
           //     key={child.nodeKey}
+          ref={(el: HTMLNovaTreeNodeElement): HTMLNovaTreeNodeElement =>
+            (this.refToTopLevelNodes[index] = el)
+          }
           blockNode={this.blockNode}
           text={child.text}
           key={child.nodeKey}

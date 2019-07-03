@@ -26,7 +26,7 @@ export namespace Components {
   }
   interface NovaRate {
     /**
-    * Props This property allow to clear by setting value to 0
+    * Props This property allows clearing by setting the value to 0
     */
     'allowClear': boolean;
     /**
@@ -105,6 +105,7 @@ export namespace Components {
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
+    'getCheckedKeys': () => Promise<string[]>;
     'multiple': boolean;
     'nodeKey': string;
     'selectable': boolean;
@@ -127,6 +128,7 @@ export namespace Components {
     'disableCheckbox': boolean;
     'disabled': boolean;
     'expanded': boolean;
+    'getCheckedKeys': () => Promise<string[]>;
     'multiple': boolean;
     'nodeKey': string;
     'refToSubnodes': HTMLNovaTreeNodeElement[];
@@ -138,14 +140,14 @@ export namespace Components {
   interface NovaTreeSelect {
     'blockNode': boolean;
     'checkable': boolean;
-    'data'?: any;
+    'data'?: { items: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: any[]; }[]; }[]; }[]; }[]; };
     'disabled': boolean;
-    'dropdownStyle': any;
+    'dropdownStyle': {};
     'maxTagCount': number;
     'multiple': boolean;
     'placeholder': string;
     'selectedKeys': string[];
-    'styles': any;
+    'styles': {};
   }
 }
 
@@ -223,7 +225,7 @@ declare namespace LocalJSX {
   }
   interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
     /**
-    * Props This property allow to clear by setting value to 0
+    * Props This property allows clearing by setting the value to 0
     */
     'allowClear'?: boolean;
     /**
@@ -345,14 +347,16 @@ declare namespace LocalJSX {
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
     'blockNode'?: boolean;
     'checkable'?: boolean;
-    'data'?: any;
+    'data'?: { items: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: any[]; }[]; }[]; }[]; }[]; };
     'disabled'?: boolean;
-    'dropdownStyle'?: any;
+    'dropdownStyle'?: {};
     'maxTagCount'?: number;
     'multiple'?: boolean;
+    'onOnChange'?: (event: CustomEvent<any>) => void;
+    'onOnSelect'?: (event: CustomEvent<any>) => void;
     'placeholder'?: string;
     'selectedKeys'?: string[];
-    'styles'?: any;
+    'styles'?: {};
   }
 
   interface IntrinsicElements {

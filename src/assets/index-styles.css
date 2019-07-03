@@ -44,7 +44,7 @@ a {
   border-radius: 100%;
   height: 100px;
   width: 100px;
-  box-shadow: 0px 0px 26px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.8);
   transition: all 0.5s ease;
   background-repeat: no-repeat;
   background-size: 40px;
@@ -53,7 +53,7 @@ a {
 .fab:hover {
   cursor: pointer;
   transform: scale(1.1);
-  box-shadow: 0px 0px 46px 1px rgba(0, 0, 0, 0.7);
+  box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.7);
 }
 .fab-demo {
   background-color: #083856;

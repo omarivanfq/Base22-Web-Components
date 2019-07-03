@@ -26,9 +26,9 @@ export class NovaTreeSelect {
   @Prop() public disabled: boolean = false;
   @Prop() public styles = {};
   @Prop() public dropdownStyle = {};
-  @Prop() public placeholder: string = "";
+  @Prop() public placeholder: string = "Select an option";
   @Prop({ mutable: true }) public data? = { items: TREE_ITEMS };
-  @Prop() public maxTagCount: number = 5;
+  @Prop() public maxTagCount: number = 3;
   @State() public maxTagCountToBeRemove: string[];
   private flatItems: any[];
   @State() public open: boolean = false;
@@ -122,7 +122,7 @@ export class NovaTreeSelect {
   }
 
   private _getOptionsSelected(): any[] {
-    if (this.multiple && this.selectedKeys.length > 0) {
+    if ((this.multiple || this.checkable) && this.selectedKeys.length > 0) {
       let pileCount = 0;
       this.maxTagCountToBeRemove = [];
       const itemsToDisplay = this.selectedKeys.map(key => {
@@ -163,7 +163,7 @@ export class NovaTreeSelect {
           ? maxTag
           : undefined
       ];
-    } else if (this.multiple && this.selectedKeys.length === 0) {
+    } else if ((this.multiple || this.checkable) && this.selectedKeys.length === 0) {
       return <span class="disabled-color">{this.placeholder}</span>;
     } else if (this.selectedKeys.length > 0) {
       return this.flatItems.find(item => item.key === this.selectedKeys[0])
@@ -184,11 +184,11 @@ export class NovaTreeSelect {
   }
 
   private _addOption(key: string): void {
-    if (this.multiple) {
+    if (this.multiple || this.checkable) {
       this.selectedKeys = [...this.selectedKeys, key]; // to re-render
     } else {
       if (this.selectedKeys.length != 0) {
-        //  this._updateItem(this.selectedKeys[0], { selected: false });
+        this._updateItem(this.selectedKeys[0], { selected: false });
       }
       this.selectedKeys = [key];
     }
@@ -235,7 +235,7 @@ export class NovaTreeSelect {
             selectable
             block-node={this.blockNode}
             default-expand-all
-            multiple={this.multiple}
+            multiple={this.multiple || this.checkable}
             onSelect={e => {
               if (this.checkable) {
                 this.onSelect.emit({

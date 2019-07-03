@@ -1,3 +1,4 @@
+// This needs to be the tag instead of :host since this element does not utilize shadow root.
 nova-tree-node {
   display: block;
   width: 100%;

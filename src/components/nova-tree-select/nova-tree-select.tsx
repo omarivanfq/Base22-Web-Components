@@ -35,7 +35,7 @@ export class NovaTreeSelect {
   private tree: HTMLNovaTreeElement;
   @Event() public onChange: EventEmitter;
   @Event() public onSelect: EventEmitter;
-  private allSelectedKeys: string[];
+  private allSelectedKeys: string[] = [];
 
   @Watch("data")
   public dataChange(_newValue: any, _oldValue: any): void {

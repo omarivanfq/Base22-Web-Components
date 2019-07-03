@@ -95,6 +95,15 @@ export class NovaTree {
     return result;
   }
 
+  @Method()
+  public async getAllCheckedKeys() {
+    const nodes = this.el.shadowRoot.querySelectorAll("nova-tree-node");
+    const nodesArr = Array.prototype.slice.call(nodes);
+    return nodesArr
+      .filter((node): boolean => node.checked)
+      .map((node): void => node.nodeKey)
+  }
+
   private _handleSelectNode(key: string, selected: boolean): void {
     if (this.selectable) {
       if (this.multiple) {

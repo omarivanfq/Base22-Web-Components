@@ -105,6 +105,7 @@ export namespace Components {
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
+    'getAllCheckedKeys': () => Promise<any>;
     'getCheckedKeys': () => Promise<string[]>;
     'multiple': boolean;
     'nodeKey': string;

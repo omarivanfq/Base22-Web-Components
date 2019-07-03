@@ -3,14 +3,13 @@ import {
   State,
   Element,
   Watch,
+  Host,
   h,
   Prop,
   Event,
   EventEmitter
 } from "@stencil/core";
 import { TREE_ITEMS } from "./dummy-data";
-import { taggedTemplateExpression } from "@babel/types";
-import { spawn } from "child_process";
 import { TreeSelectChip } from "./FunctionalComponents/nova-tree-select-chip";
 
 @Component({

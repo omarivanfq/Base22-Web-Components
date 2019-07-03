@@ -8,7 +8,6 @@ import {
   Event,
   EventEmitter
 } from "@stencil/core";
-import { TREE_ITEMS } from "./dummy-data";
 import { TreeSelectChip } from "./FunctionalComponents/nova-tree-select-chip";
 
 @Component({
@@ -22,13 +21,14 @@ export class NovaTreeSelect {
   @Prop() public multiple: boolean;
   @Prop() public blockNode: boolean;
   @Prop() public checkable: boolean;
-  @State() public toBeRemoved: string[];
   @Prop() public disabled: boolean = false;
   @Prop() public styles = {};
   @Prop() public dropdownStyle = {};
   @Prop() public placeholder: string = "Select an option";
-  @Prop({ mutable: true }) public data? = { items: TREE_ITEMS };
+  @Prop({ mutable: true }) public data? = { items: [] };
   @Prop() public maxTagCount: number = 3;
+  @State() public toBeRemoved: string[];
+
   @State() public maxTagCountToBeRemove: string[];
   private flatItems: any[];
   @State() public open: boolean = false;
@@ -201,7 +201,6 @@ export class NovaTreeSelect {
       this.tree.getAllCheckedKeys().then(keys => { this.allSelectedKeys = [...keys]});
       return;
     } 
-  
     if (selected) {
       this._addOption(key);
     } else {

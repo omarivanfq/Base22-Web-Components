@@ -7,9 +7,7 @@
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
     />
     <title>Nova Tree Select</title>
-
     <link rel="stylesheet" href="/assets/fontAwesome/font-awesome.css" />
-
     <script type="module" src="/build/nova.esm.js"></script>
     <script nomodule src="/build/nova.js"></script>
     <style>
@@ -95,11 +93,9 @@
           font-size: 14px;
           padding-left:15px;
         }
-  
         figure .chevron{
           color: #ffffff;
         }
-  
         figure .tag{
           color: #FD6F6B;
         }
@@ -117,20 +113,20 @@
         <div class="tree-container">
           <nova-tree-select checkable max-tag-count="3"></nova-tree-select>
         </div>
-<figure>
-  <pre>
-      <code>
-  <span class="chevron">&lt;</span><span class="tag">nova-tree-select</span>
-    multiple
-    max-tag-count=<span class="string">"10"</span>
-    checkable
-  <span class="chevron">&gt;
-  &lt;/</span><span class="tag">nova-tree-select</span><span class="chevron">&gt;</span>     
-      </code> 
-  </pre>
-</figure>
+      <figure>
+        <pre>
+            <code>
+              <span class="chevron">&lt;</span><span class="tag">nova-tree-select</span>
+                multiple
+                max-tag-count=<span class="string">"10"</span>
+                checkable
+              <span class="chevron">&gt;
+              &lt;/</span><span class="tag">nova-tree-select</span><span class="chevron">&gt;</span>     
+            </code> 
+        </pre>
+      </figure>
       </div>
-
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
       window.onload = function() {
         let treeSelect = document.querySelector("nova-tree-select");
@@ -140,7 +136,15 @@
         treeSelect.addEventListener("onSelect", function(event) {
           console.log(event.detail);
         });
-      };
+        // JSON load
+        axios
+        .get("../data/tree-select-data.json")
+        .then(function(response) {
+          console.log(response.data.data);
+          treeSelect.data = response.data.data;
+        })
+        .catch(console.error);
+      }
     </script>
   </body>
 </html>

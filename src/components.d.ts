@@ -141,7 +141,7 @@ export namespace Components {
   interface NovaTreeSelect {
     'blockNode': boolean;
     'checkable': boolean;
-    'data'?: { items: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: any[]; }[]; }[]; }[]; }[]; };
+    'data'?: { items: any[]; };
     'disabled': boolean;
     'dropdownStyle': {};
     'maxTagCount': number;
@@ -348,7 +348,7 @@ declare namespace LocalJSX {
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
     'blockNode'?: boolean;
     'checkable'?: boolean;
-    'data'?: { items: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: any[]; }[]; }[]; }[]; }[]; };
+    'data'?: { items: any[]; };
     'disabled'?: boolean;
     'dropdownStyle'?: {};
     'maxTagCount'?: number;

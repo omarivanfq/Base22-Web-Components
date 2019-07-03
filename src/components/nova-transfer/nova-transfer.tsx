@@ -384,7 +384,6 @@ export class NovaTransfer {
                 title={ this.configuration.labels.titleTarget }
                 selectedCount={ this._getTargetSelected() }
                 totalEnabled={ this._getTotalEnabledFromTarget() }
-             //   total={ this.data.targetKeys.length }
                 total={ this.filteredItems.filter(i => this._isItemInTarget(i.key)).length }
                 handleSelectAll={ () => this._handleSelectAll(RIGHT) }
                 disabled={ this.disabled }

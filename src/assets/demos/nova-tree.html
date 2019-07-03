@@ -395,16 +395,15 @@
   } 
 ]
   </script>
-
     <script>
       var tree = document.querySelector("nova-tree");
       tree.addEventListener("check", event => {
-        console.log(event.detail.key, event.detail.checked); //, event.detail.checkedKeys);
+        console.log("on check", event.detail.key, event.detail.checked); //, event.detail.checkedKeys);
       });
       tree.addEventListener("select", event => {
-        console.log(event.detail.key, event.detail.selected); //, event.detail.selectedKeys);
+        console.log("on select", event.detail.key, event.detail.selected); //, event.detail.selectedKeys);
       });
-      tree.data = {items: TREE_ITEMS}
+      tree.data = { items: TREE_ITEMS }
     </script>
   </body>
 </html>

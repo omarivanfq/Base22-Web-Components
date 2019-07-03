@@ -111,7 +111,10 @@
       </div>
       <div class="container">
         <div class="tree-container">
-          <nova-tree-select checkable max-tag-count="3"></nova-tree-select>
+          <nova-tree-select 
+            checkable
+            max-tag-count="3"
+            ></nova-tree-select>
         </div>
       <figure>
         <pre>
@@ -130,17 +133,19 @@
     <script>
       window.onload = function() {
         let treeSelect = document.querySelector("nova-tree-select");
-        treeSelect.addEventListener("onChange", function(event) {
-          console.log(event.detail);
+        treeSelect.addEventListener("check", function(event) {
+     //     console.log("on check", event.detail.key, event.detail.checked); //, event.detail.checkedKeys);
         });
-        treeSelect.addEventListener("onSelect", function(event) {
-          console.log(event.detail);
+        treeSelect.addEventListener("select", function(event) {
+     //    console.log("on select", event.detail.key, event.detail.selected); //, event.detail.selectedKeys);
+        });
+        treeSelect.addEventListener("change", function(event) {
+          console.log("on change", event.detail.keys);
         });
         // JSON load
         axios
         .get("../data/tree-select-data.json")
         .then(function(response) {
-          console.log(response.data.data);
           treeSelect.data = response.data.data;
         })
         .catch(console.error);

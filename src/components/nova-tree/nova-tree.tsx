@@ -42,12 +42,10 @@ export class NovaTree {
   @Prop() public selectable: boolean = false;
   @Prop() public checkStrictly: boolean;
   @Prop() public selected;
-  // @Prop() public checked: boolean;
   @Prop() public nodeKey: string;
   @Prop() public disabled: boolean;
   @Prop() public styles: object = {};
   @Prop() public selectedKeys: string[] = [];
-  // @Prop() public checkedKeys: string[] = [];
   @Event() public select: EventEmitter;
   @Event() public check: EventEmitter;
 

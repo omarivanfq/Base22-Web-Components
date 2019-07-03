@@ -28,13 +28,11 @@ export class NovaTreeSelect {
   @Prop({ mutable: true }) public data? = { items: [] };
   @Prop() public maxTagCount: number = 3;
   @State() public toBeRemoved: string[];
-
   @State() public maxTagCountToBeRemove: string[];
   private flatItems: any[];
   @State() public open: boolean = false;
   private tree: HTMLNovaTreeElement;
-  @Event() public onChange: EventEmitter;
-  @Event() public onSelect: EventEmitter;
+  @Event() public change: EventEmitter;
   private allSelectedKeys: string[] = [];
 
   @Watch("data")
@@ -69,7 +67,7 @@ export class NovaTreeSelect {
   private _removeAllOptions(event): void {
     event.stopPropagation();
     this.selectedKeys = [];
-    this._updateAllItems({ selected: false });
+    this._updateAllItems({ checked: false, selected: false });
   }
 
   private _removeMultipleOptions(): void {
@@ -102,8 +100,7 @@ export class NovaTreeSelect {
 
   private _updateItem(key: string, attr: any) {
     this._updateItemRec(this.data.items, key, attr);
-    this.el.shadowRoot.querySelector('nova-tree').updateData({ ...this.data });
-    this.onChange.emit(this.data);
+    this.el.shadowRoot.querySelector('nova-tree').updateData({...this.data});
   }
 
   private _updateItemRec(items: any[], key: string, attr: any) {
@@ -121,7 +118,7 @@ export class NovaTreeSelect {
     });
   }
 
-  private _getOptionsSelected(): any[] {
+  private _getOptionsSelected() {
     if ((this.multiple || this.checkable) && this.selectedKeys.length > 0) {
       let pileCount = 0;
       this.maxTagCountToBeRemove = [];
@@ -169,7 +166,7 @@ export class NovaTreeSelect {
       return this.flatItems.find(item => item.key === this.selectedKeys[0])
         .text;
     }
-    return undefined;
+    return this.placeholder;
   }
 
   private _removeOption(key: string): void {
@@ -197,7 +194,10 @@ export class NovaTreeSelect {
 
   private _handleSelection(key: string, selected: boolean): void {
     if (this.checkable) {
-      this.tree.getCheckedKeys().then(keys => (this.selectedKeys = keys));
+      this.tree.getCheckedKeys().then(keys => {
+        this.selectedKeys = keys;
+        this.change.emit({ keys: this.selectedKeys });
+      });
       this.tree.getAllCheckedKeys().then(keys => { this.allSelectedKeys = [...keys]});
       return;
     } 
@@ -206,6 +206,7 @@ export class NovaTreeSelect {
     } else {
       this._removeOption(key);
     } 
+    this.change.emit({ keys: this.selectedKeys });
   }
 
   public render(): HTMLNovaTreeSelectElement {
@@ -238,10 +239,6 @@ export class NovaTreeSelect {
             multiple={this.multiple || this.checkable}
             onSelect={e => {
               if (this.checkable) {
-                this.onSelect.emit({
-                  key: e.detail.key,
-                  checked: this.selectedKeys.indexOf(e.detail.key) === -1
-                });
                 this._updateItem(e.detail.key, {
                   checked: this.allSelectedKeys.indexOf(e.detail.key) === -1,// this.selectedKeys.indexOf(e.detail.key) === -1,
                   selected: false
@@ -253,7 +250,7 @@ export class NovaTreeSelect {
             onCheck={e => {
               this._handleSelection(e.detail.key, e.detail.checked);
             }}
-            style={this.dropdownStyle}
+            style={ this.dropdownStyle }
           ></nova-tree>
         </div>
       </div>

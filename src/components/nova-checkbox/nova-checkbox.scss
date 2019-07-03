@@ -19,7 +19,6 @@ label {
   &:hover .checkmark {
     border: 1px solid #1890ff;
   }
-  
 }
 
 .disabled {
@@ -92,7 +91,6 @@ input {
     transform: rotate(45deg);
   }
 }
-
 
 .disabled {
   input:checked ~ .checkmark {

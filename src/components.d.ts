@@ -15,9 +15,18 @@ export namespace Components {
     'handleClick': Function;
     'styles': any;
   }
+  interface NovaFontAwesome {
+    /**
+    * Props
+    */
+    'iconName': string;
+    'options'?: string;
+    'size'?: string;
+    'stylePrefix'?: string;
+  }
   interface NovaRate {
     /**
-    * Props This property allow to clear by setting value to 0
+    * Props This property allows clearing by setting the value to 0
     */
     'allowClear': boolean;
     /**
@@ -36,6 +45,13 @@ export namespace Components {
     * This property sets the caracter to display as symbol
     */
     'character': string;
+    /**
+    * This property sets the color
+    */
+    'color': string;
+    /**
+    * This property sets the initial value
+    */
     'configuration'?: any;
     /**
     * This property sets the number of stars
@@ -54,6 +70,10 @@ export namespace Components {
     * This property replaces character for an icon
     */
     'icon': string;
+    /**
+    * This property sets the size of the rate component
+    */
+    'size': number;
   }
   interface NovaTransfer {
     'columnStyle': any;
@@ -81,10 +101,12 @@ export namespace Components {
     /**
     * Common attributes
     */
-    'data'?: any;
+    'data'?: { items: any[]; };
     'defaultExpandAll': boolean;
     'disableTree': boolean;
     'disabled': boolean;
+    'getAllCheckedKeys': () => Promise<any>;
+    'getCheckedKeys': () => Promise<string[]>;
     'multiple': boolean;
     'nodeKey': string;
     'selectable': boolean;
@@ -107,8 +129,10 @@ export namespace Components {
     'disableCheckbox': boolean;
     'disabled': boolean;
     'expanded': boolean;
+    'getCheckedKeys': () => Promise<string[]>;
     'multiple': boolean;
     'nodeKey': string;
+    'refToSubnodes': HTMLNovaTreeNodeElement[];
     'selectable'?: boolean;
     'selected': boolean;
     'subnodes': NovaTreeNode[];
@@ -117,14 +141,14 @@ export namespace Components {
   interface NovaTreeSelect {
     'blockNode': boolean;
     'checkable': boolean;
-    'data'?: any;
+    'data'?: { items: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: any[]; }[]; }[]; }[]; }[]; };
     'disabled': boolean;
-    'dropdownStyle': any;
+    'dropdownStyle': {};
     'maxTagCount': number;
     'multiple': boolean;
     'placeholder': string;
     'selectedKeys': string[];
-    'styles': any;
+    'styles': {};
   }
 }
 
@@ -135,6 +159,12 @@ declare global {
   var HTMLNovaCheckboxElement: {
     prototype: HTMLNovaCheckboxElement;
     new (): HTMLNovaCheckboxElement;
+  };
+
+  interface HTMLNovaFontAwesomeElement extends Components.NovaFontAwesome, HTMLStencilElement {}
+  var HTMLNovaFontAwesomeElement: {
+    prototype: HTMLNovaFontAwesomeElement;
+    new (): HTMLNovaFontAwesomeElement;
   };
 
   interface HTMLNovaRateElement extends Components.NovaRate, HTMLStencilElement {}
@@ -168,6 +198,7 @@ declare global {
   };
   interface HTMLElementTagNameMap {
     'nova-checkbox': HTMLNovaCheckboxElement;
+    'nova-font-awesome': HTMLNovaFontAwesomeElement;
     'nova-rate': HTMLNovaRateElement;
     'nova-transfer': HTMLNovaTransferElement;
     'nova-tree': HTMLNovaTreeElement;
@@ -184,9 +215,18 @@ declare namespace LocalJSX {
     'onClicked'?: (event: CustomEvent<any>) => void;
     'styles'?: any;
   }
+  interface NovaFontAwesome extends JSXBase.HTMLAttributes<HTMLNovaFontAwesomeElement> {
+    /**
+    * Props
+    */
+    'iconName'?: string;
+    'options'?: string;
+    'size'?: string;
+    'stylePrefix'?: string;
+  }
   interface NovaRate extends JSXBase.HTMLAttributes<HTMLNovaRateElement> {
     /**
-    * Props This property allow to clear by setting value to 0
+    * Props This property allows clearing by setting the value to 0
     */
     'allowClear'?: boolean;
     /**
@@ -201,6 +241,13 @@ declare namespace LocalJSX {
     * This property sets the caracter to display as symbol
     */
     'character'?: string;
+    /**
+    * This property sets the color
+    */
+    'color'?: string;
+    /**
+    * This property sets the initial value
+    */
     'configuration'?: any;
     /**
     * This property sets the number of stars
@@ -226,6 +273,10 @@ declare namespace LocalJSX {
     'onOnFocus'?: (event: CustomEvent<any>) => void;
     'onOnHoverChange'?: (event: CustomEvent<any>) => void;
     'onOnKeyDown'?: (event: CustomEvent<any>) => void;
+    /**
+    * This property sets the size of the rate component
+    */
+    'size'?: number;
   }
   interface NovaTransfer extends JSXBase.HTMLAttributes<HTMLNovaTransferElement> {
     'columnStyle'?: any;
@@ -257,7 +308,7 @@ declare namespace LocalJSX {
     /**
     * Common attributes
     */
-    'data'?: any;
+    'data'?: { items: any[]; };
     'defaultExpandAll'?: boolean;
     'disableTree'?: boolean;
     'disabled'?: boolean;
@@ -288,6 +339,7 @@ declare namespace LocalJSX {
     'nodeKey'?: string;
     'onCheckNode'?: (event: CustomEvent<any>) => void;
     'onSelectNode'?: (event: CustomEvent<any>) => void;
+    'refToSubnodes'?: HTMLNovaTreeNodeElement[];
     'selectable'?: boolean;
     'selected'?: boolean;
     'subnodes'?: NovaTreeNode[];
@@ -296,18 +348,21 @@ declare namespace LocalJSX {
   interface NovaTreeSelect extends JSXBase.HTMLAttributes<HTMLNovaTreeSelectElement> {
     'blockNode'?: boolean;
     'checkable'?: boolean;
-    'data'?: any;
+    'data'?: { items: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: { nodeKey: string; text: string; disableCheckbox: boolean; disabled: boolean; selected: boolean; checked: boolean; expanded: boolean; subnodes: any[]; }[]; }[]; }[]; }[]; };
     'disabled'?: boolean;
-    'dropdownStyle'?: any;
+    'dropdownStyle'?: {};
     'maxTagCount'?: number;
     'multiple'?: boolean;
+    'onOnChange'?: (event: CustomEvent<any>) => void;
+    'onOnSelect'?: (event: CustomEvent<any>) => void;
     'placeholder'?: string;
     'selectedKeys'?: string[];
-    'styles'?: any;
+    'styles'?: {};
   }
 
   interface IntrinsicElements {
     'nova-checkbox': NovaCheckbox;
+    'nova-font-awesome': NovaFontAwesome;
     'nova-rate': NovaRate;
     'nova-transfer': NovaTransfer;
     'nova-tree': NovaTree;

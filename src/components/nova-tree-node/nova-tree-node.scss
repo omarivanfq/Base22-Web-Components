@@ -3,10 +3,7 @@ nova-tree-node {
   width: 100%;
   position: relative;
   box-sizing: border-box;
-}
-
-:host {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
 }
 
 .flex-container {
@@ -38,12 +35,11 @@ li {
   max-height: 0;
   transition: all 0.2s ease-out;
   opacity: 0;
-}
-
-/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
-.nested.active {
-  max-height: 100%;
-  opacity: 1;
+  /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+  &.active {
+    max-height: 100%;
+    opacity: 1;
+  }
 }
 
 nova-checkbox {
@@ -55,7 +51,7 @@ nova-checkbox {
   box-sizing: border-box;
   user-select: none;
   color: #555;
-  transition: all .17s linear;
+  transition: all 0.17s linear;
   padding: 3px 4px;
 
   &:hover {
@@ -68,13 +64,12 @@ nova-checkbox {
   }
 
   &.disabled {
-    color: rgba(0,0,0,0.25);
+    color: rgba(0, 0, 0, 0.25);
     &:hover {
-       cursor: not-allowed;
-    background-color: inherit;
+      cursor: not-allowed;
+      background-color: inherit;
     }
   }
-
 }
 
 .car {
@@ -88,14 +83,14 @@ nova-checkbox {
     display: inline-block;
     font-size: 10px;
     margin-right: 4px;
-    transition: all .07s linear;
+    transition: all 0.07s linear;
   }
 
   &:hover {
     cursor: pointer;
- }
+  }
 
   &.caret-down::before {
     transform: rotate(90deg);
-  } 
+  }
 }

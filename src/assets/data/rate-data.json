@@ -1,10 +1,9 @@
 {
-    "configuration": 
-    {
-        "allowHalf": true,
-        "allowClear": true,
-        "defaultValue": "2.5",
-        "count": 10,
-        "autoFocus": true
-    }
+  "configuration": {
+    "allowHalf": true,
+    "allowClear": true,
+    "defaultValue": "2.5",
+    "count": 10,
+    "autoFocus": true
+  }
 }

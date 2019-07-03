@@ -7,31 +7,257 @@
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
     />
     <title>Nova Tree</title>
+    <link rel="stylesheet" href="/assets/fontAwesome/font-awesome.css" />
     <script type="module" src="/build/nova.esm.js"></script>
     <script nomodule src="/build/nova.js"></script>
+    <style>
+      body {
+          background-color: #1769aa;
+          height: 100vh;
+          font-family: sans-serif;
+          padding: 0;
+          margin: 0;
+          position: relative;
+      }
+      a {
+          text-decoration: none;
+      }
+      .fabs {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          justify-content: center;
+          align-items: center;
+          width: 200px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 999;
+      }
+      .fab {
+          display: block;
+          color: #ffffff;
+          font-size: 14px;
+          vertical-align: center;
+          line-height: 75px;
+          text-align: center;
+          border-radius: 100%;
+          height: 75px;
+          width: 75px;
+          box-shadow: 0px 0px 26px 1px rgba(0,0,0,0.4);
+          margin: 15px;
+          transition: all .5s ease;
+      }
+      .fab:hover { 
+          cursor: pointer;
+          transform: scale(1.1);
+          box-shadow: 0px 0px 46px 1px rgba(0,0,0,0.7);
+      }
+      .fab-text {
+          font-family: Verdana;
+      }
+      .fab-1 { background-color: #0277bd;  }
+
+      .fab-1  i{
+          margin-top:24px;
+      }
+      .fab-2 { background-color: #f44336; }
+      .fab-3 { background-color: #e53935; }
+      .fab-4 { background-color: #d32f2f; }
+      h1 { color: #ffffff; text-align: center; font-size: 55px;
+          text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none;
+          position: absolute; left: 0; top: 0; width: 100%;}
+      h1 span { font-size: 45px; margin: 0 10px; }
+      .container {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+      }
+      .tree-container {
+        margin-top:50px;
+        background-color:white;
+        padding:30px 0px 30px 30px;
+        border-radius:10px;
+        box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.7);
+      }
+      figure{
+        background-color: #282c34;
+        color:#d19a66;
+        line-height: 1.5;
+        font-size: 14px;
+        padding-left:15px;
+      }
+
+      figure .chevron{
+        color: #ffffff;
+      }
+
+      figure .tag{
+        color: #FD6F6B;
+      }
+      figure .string{
+        color: #98c379;
+      }
+    </style>
   </head>
   <body>
-    <nova-tree
+    <h1><span>&lt</span>nova-tree<span>/&gt</span></h1>
+    <div class="fabs">
+      <a href="../../"class="fab fab-1"><nova-font-awesome icon-name="arrow-left" size="2x"/></a>
+    </div>
+    <div class="container">
+      <div class="tree-container">
+        <nova-tree
+          checkable
+          auto-expand-parent
+          multiple
+          selectable
+        >
+          <!--
+          default-expand-all
+          disable-tree
+          check-strictly
+          defaultExpandAll  auto-expand-parent
+          Favor de tomar en cuenta que tiene que llevar un - el texto cuhando son mayusculas
+        pra el correcto llamado yfucnioonamiento de la funcion  -->
+        </nova-tree>
+
+      </div>
+<figure>
+    <pre>
+        <code>
+    <span class="chevron">&lt;</span><span class="tag">nova-tree-select</span>
       checkable
       auto-expand-parent
-      default-expand-all
-      block-node
       multiple
       selectable
-    >
-      <!--
-      default-expand-all
-      disable-tree
-      check-strictly
-      defaultExpandAll  auto-expand-parent
-      Favor de tomar en cuenta que tiene que llevar un - el texto cuhando son mayusculas
-    pra el correcto llamado yfucnioonamiento de la funcion  -->
-    </nova-tree>
+    <span class="chevron">&gt;
+    &lt;/</span><span class="tag">nova-tree-select</span><span class="chevron">&gt;</span>     
+        </code> 
+    </pre>
+  </figure>
+    </div>
 
     <script>
   const TREE_ITEMS = [
+  {
+    nodeKey: "m2",
+    text: 'Like a Virgin',
+    disableCheckbox: false,
+    disabled: false,
+    selected: false,
+    checked: false,
+    expanded: false,
+    subnodes: [
     {
-      nodeKey: "op1",
+        nodeKey: "m2-1",
+        text: 'Material Girl',
+        disableCheckbox: false,
+        disabled: false,
+        selected: false,
+        checked: false,
+        expanded: false,
+        subnodes: [
+          {
+            nodeKey: "m2-1-1",
+            text: 'Material Girl (Extended Dance Remix)',
+            disableCheckbox: false,
+            disabled: false,
+            selected: false,
+            checked: false,
+            expanded: false,
+            subnodes: []
+          }
+        ]
+      },
+      {
+        nodeKey: "m2-2",
+        text: 'Angel',
+        disableCheckbox: false,
+        disabled: false,
+        selected: false,
+        checked: false,
+        expanded: false,
+        subnodes: []
+      },
+      {
+        nodeKey: "m2-3",
+        text: 'Like a Virgin',
+        disableCheckbox: false,
+        disabled: false,
+        selected: false,
+        checked: false,
+        expanded: false,
+        subnodes: [
+        {
+            nodeKey: "m2-3-1",
+            text: 'Like a Virgin (Extended Dance Remix)',
+            disableCheckbox: true,
+            disabled: false,
+            selected: false,
+            checked: true,
+            expanded: false,
+            subnodes: []
+          },
+          {
+            nodeKey: "m2-3-2",
+            text: 'Like A Virgin (Chrisser Remix)',
+            disableCheckbox: false,
+            disabled: false,
+            selected: false,
+            checked: false,
+            expanded: false,
+            subnodes: []
+          }
+        ]
+      },
+      {
+        nodeKey: "m2-5",
+        text: 'Love Dont Live Here Anymore',
+        disableCheckbox: false,
+        disabled: false,
+        selected: false,
+        checked: false,
+        expanded: false,
+        subnodes: []
+      },
+      {
+        nodeKey: "m2-6",
+        text: 'Dress You Up',
+        disableCheckbox: false,
+        disabled: true,
+        selected: false,
+        checked: false,
+        expanded: false,
+        subnodes: []
+      },
+      {
+        nodeKey: "m2-9",
+        text: 'Stay',
+        disableCheckbox: false,
+        disabled: false,
+        selected: false,
+        checked: false,
+        expanded: false,
+        subnodes: []
+      }
+    ]
+  },
+  {
+    nodeKey: "m4",
+    text: 'Like a Prayer',
+    disableCheckbox: false,
+    disabled: false,
+    selected: false,
+    checked: false,
+    expanded: false,
+    subnodes: [
+    {
+      nodeKey: "m4-1",
       text: "Like a Prayer",
       disableCheckbox: false,
       disabled: false,
@@ -40,7 +266,7 @@
       expanded: false,
       subnodes: [
         {
-          nodeKey: "op1-1",
+          nodeKey: "m4-1-1",
           text: 'Like a Prayer (12" dance mix)',
           disableCheckbox: false,
           disabled: false,
@@ -49,8 +275,18 @@
           expanded: false,
           subnodes: [
             {
-              nodeKey: "op1-1-1",
+              nodeKey: "m4-1-1-1",
               text: 'Act of Contriction',
+              disableCheckbox: false,
+              disabled: false,
+              selected: false,
+              checked: false,
+              expanded: false,
+              subnodes: []
+            },
+            {
+              nodeKey: "m4-1-1-2",
+              text: 'Keep It Together',
               disableCheckbox: false,
               disabled: false,
               selected: false,
@@ -61,7 +297,7 @@
           ]
         },
         {
-          nodeKey: "op1-2",
+          nodeKey: "m4-1-2",
           text: 'Like a Prayer (12" club version)',
           disableCheckbox: false,
           disabled: false,
@@ -71,7 +307,7 @@
           subnodes: []
         },
         {
-          nodeKey: "op1-3",
+          nodeKey: "m4-1-3",
           text: 'Like a Prayer (7" remix edit)',
           disableCheckbox: false,
           disabled: false,
@@ -83,7 +319,7 @@
       ]
     },
     {
-      nodeKey: "op2",
+      nodeKey: "m4-2",
       text: "Express Yourself",
       disableCheckbox: false,
       disabled: false,
@@ -92,7 +328,7 @@
       expanded: false,
       subnodes: [
         {
-          nodeKey: "op2-1",
+          nodeKey: "m4-2-1",
           text: "Express Yourself (Non-Stop Express Mix)",
           disableCheckbox: false,
           disabled: false,
@@ -102,7 +338,7 @@
           subnodes: []
         },
         {
-          nodeKey: "op2-2",
+          nodeKey: "m4-2-2",
           text: "Express Yourself (Local Mix)",
           disableCheckbox: false,
           disabled: false,
@@ -114,7 +350,7 @@
       ]
     },
     {
-      nodeKey: "op3",
+      nodeKey: "m4-3",
       text: "Love Song",
       disableCheckbox: false,
       disabled: false,
@@ -124,7 +360,7 @@
       subnodes: []
     },
     {
-      nodeKey: "op4",
+      nodeKey: "m4-4",
       text: "Till Death Do Us Part",
       disableCheckbox: false,
       disabled: false,
@@ -134,7 +370,7 @@
       subnodes: []
     },
     {
-      nodeKey: "op6",
+      nodeKey: "m4-5",
       text: "Cherish",
       disableCheckbox: false,
       disabled: true,
@@ -143,7 +379,7 @@
       expanded: false,
       subnodes: [
         {
-          nodeKey: "op6-1",
+          nodeKey: "m4-5-1",
           text: "Cherish (Lehay Remix)",
           disableCheckbox: false,
           disabled: false,
@@ -155,6 +391,8 @@
       ]
     }
   ]
+  } 
+]
   </script>
 
     <script>

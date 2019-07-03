@@ -1,9 +1,9 @@
-import { Component, Element, Prop } from "@stencil/core";
-import { Fragment } from "../../FunctionalComponents/Fragment";
+import { Component, Element, Prop, h } from "@stencil/core";
+import Fragment from "stencil-fragment";
 
 @Component({
   tag: "nova-font-awesome",
-  styleUrls: ["../../../globals/scss/main.scss", "nova-font-awesome.scss"],
+  styleUrls: ["nova-font-awesome.scss"],
   shadow: false
 })
 export class NovaFontAwesome {

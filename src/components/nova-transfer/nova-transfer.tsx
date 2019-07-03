@@ -88,7 +88,7 @@ export class NovaTransfer {
     event that is emitted when items are selected
   */
   @Event() select: EventEmitter;
-    /*
+  /*
       event that is emitted when items are filtered
     */
   @Event() filter: EventEmitter;
@@ -122,14 +122,16 @@ export class NovaTransfer {
   componentDidLoad() {
     this.sourceFooter = this._isThereSourceFooter();
     this.targetFooter = this._isThereTargetFooter();
-    this.el.querySelectorAll("*[slot]").forEach(s => (s as any).style.visibility="visible");
+    this.el
+      .querySelectorAll("*[slot]")
+      .forEach(s => ((s as any).style.visibility = "visible"));
   }
 
   /* 
     HANDLERS
   */
   @Method()
-  async handleSelect(key:string) {
+  async handleSelect(key: string) {
     var item = this.data.items.find(item => item.key === key);
     this._handleSelect(item);
   }
@@ -212,10 +214,12 @@ export class NovaTransfer {
           ...this.filteredItems.filter(i => this._isItemInTarget(i.key))
         ]; //[...this.data.items]; // restore filtered items array
       }
-      this.filter.emit({ direction: LEFT, 
+      this.filter.emit({
+        direction: LEFT,
         filteredKeys: this.filteredItems
-        .filter(item => this.data.targetKeys.indexOf(item.key) === -1)
-        .map(item => item.key)});
+          .filter(item => this.data.targetKeys.indexOf(item.key) === -1)
+          .map(item => item.key)
+      });
     }
   };
 
@@ -241,10 +245,12 @@ export class NovaTransfer {
           ...this.filteredItems.filter(i => !this._isItemInTarget(i.key))
         ]; //[...this.data.items]; // restore filtered items array
       }
-      this.filter.emit({ direction: RIGHT, 
+      this.filter.emit({
+        direction: RIGHT,
         filteredKeys: this.filteredItems
-        .filter(item => this.data.targetKeys.indexOf(item.key) !== -1)
-        .map(item => item.key)});
+          .filter(item => this.data.targetKeys.indexOf(item.key) !== -1)
+          .map(item => item.key)
+      });
     }
   };
 
@@ -327,9 +333,7 @@ export class NovaTransfer {
                 onScroll={event => this._handleItemsScroll(LEFT, event)}
               >
                 <slot name="source-column">
-                  <ul>
-                    {this._getItems(LEFT)}
-                  </ul>
+                  <ul>{this._getItems(LEFT)}</ul>
                 </slot>
               </div>
               <span class="empty-msg">
@@ -383,9 +387,7 @@ export class NovaTransfer {
                 onScroll={event => this._handleItemsScroll(RIGHT, event)}
               >
                 <slot name="target-column">
-                  <ul>
-                    {this._getItems(RIGHT) }
-                  </ul>
+                  <ul>{this._getItems(RIGHT)}</ul>
                 </slot>
               </div>
               <span class="empty-msg">
@@ -407,16 +409,22 @@ export class NovaTransfer {
     if (this.el.shadowRoot.querySelectorAll("slot").length !== 0) {
       var slots = this.el.shadowRoot.querySelectorAll("slot");
       var slotsArr = Array.prototype.slice.call(slots);
-      return slotsArr.find(s => s.name === "source-footer").assignedNodes().length > 0;
+      return (
+        slotsArr.find(s => s.name === "source-footer").assignedNodes().length >
+        0
+      );
     }
-    return false;  
+    return false;
   }
 
   private _isThereTargetFooter() {
     if (this.el.shadowRoot.querySelectorAll("slot").length !== 0) {
       var slots = this.el.shadowRoot.querySelectorAll("slot");
       var slotsArr = Array.prototype.slice.call(slots);
-      return slotsArr.find(s => s.name === "target-footer").assignedNodes().length > 0
+      return (
+        slotsArr.find(s => s.name === "target-footer").assignedNodes().length >
+        0
+      );
     }
     return false;
   }
@@ -440,28 +448,24 @@ export class NovaTransfer {
 
   // return the number of items selected from source column
   private _getSourceSelected() {
-    return this.selected.filter(
-      key => {
-        var item = this.filteredItems.find(item => item.key === key);
-        if (!item) {
-          return false;
-        }
-        return !this._isItemInTarget(key) && !item.disabled
+    return this.selected.filter(key => {
+      var item = this.filteredItems.find(item => item.key === key);
+      if (!item) {
+        return false;
       }
-    ).length;
+      return !this._isItemInTarget(key) && !item.disabled;
+    }).length;
   }
 
   // return the number of items selected from target column
   private _getTargetSelected() {
-    return this.selected.filter(
-      key => {
-        var item = this.filteredItems.find(item => item.key === key);
-        if (!item) {
-          return false;
-        }
-        return this._isItemInTarget(key) && !item.disabled
+    return this.selected.filter(key => {
+      var item = this.filteredItems.find(item => item.key === key);
+      if (!item) {
+        return false;
       }
-    ).length;
+      return this._isItemInTarget(key) && !item.disabled;
+    }).length;
   }
 
   // transfers the selected items to the target (right)

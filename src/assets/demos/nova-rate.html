@@ -1,51 +1,122 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
-    />
-    <title>Nova Rate Component</title>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script type="module" src="/build/nova.esm.js"></script>
-    <script nomodule src="/build/nova.js"></script>
-  </head>
-  <body>
-    <nova-rate></nova-rate>
+        <link rel="stylesheet" href="/assets/fontAwesome/font-awesome.css" />
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
-      var rate = document.querySelector("nova-rate");
+        <script type="module" src="/build/nova.esm.js"></script>
+        <script nomodule src="/build/nova.js"></script>
+        <style>
+                body {
+                    background-color: #1769aa;
+                    height: 100vh;
+                    font-family: sans-serif;
+                    padding: 0;
+                    margin: 0;
+                    position: relative;
+                }
+                a {
+                    text-decoration: none;
+                }
+                .fabs {
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    width: 200px;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    z-index: 999;
+                }
+                .fab {
+                    display: block;
+                    color: #ffffff;
+                    font-size: 14px;
+                    vertical-align: center;
+                    line-height: 75px;
+                    text-align: center;
+                    border-radius: 100%;
+                    height: 75px;
+                    width: 75px;
+                    box-shadow: 0px 0px 26px 1px rgba(0,0,0,0.4);
+                    margin: 15px;
+                    transition: all .5s ease;
+                }
+                .fab:hover { 
+                    cursor: pointer;
+                    transform: scale(1.1);
+                    box-shadow: 0px 0px 46px 1px rgba(0,0,0,0.7);
+                }
+                .fab-text {
+                    font-family: Verdana;
+                }
+                .fab-1 { background-color: #0277bd;  }
 
-      axios
-        .get("../data/rate-data.json")
-        .then(function(response) {
-          var config = response.data.configuration;
-          rate.configuration = config;
-          console.log(config);
-        })
-        .catch(console.error);
-      window.onload = function() {
-        // let rating = document.querySelector("nova-rate");
-        // rating.shadowRoot.children.item(1).focus();
-        // rating.focusComponent();
-        // rating.addEventListener("onChange", function(event) {
-        //   console.log(event.detail);
-        // });
-        // rating.addEventListener("onBlur", function(event) {
-        //   console.log(event);
-        // });
-        // rating.addEventListener("onKeyDown", function(event) {
-        //   console.log(event);
-        // });
-        // rating.addEventListener("onFocus", function(event) {
-        //   console.log(event);
-        // });
-        // rating.addEventListener("onHoverChange", function(event) {
-        //   console.log(event);
-        // });
-      };
-    </script>
-  </body>
+                .fab-1  i{
+                    margin-top:24px;
+                }
+                .fab-2 { background-color: #f44336; }
+                .fab-3 { background-color: #e53935; }
+                .fab-4 { background-color: #d32f2f; }
+                h1 { color: #ffffff; text-align: center; font-size: 55px;
+                    text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none;
+                    position: absolute; left: 0; top: 0; width: 100%;}
+                h1 span { font-size: 45px; margin: 0 10px; }
+                .container {
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                }
+    
+                figure{
+                  background-color: #282c34;
+                  color:#d19a66;
+                  line-height: 1.5;
+                  font-size: 14px;
+                  padding-left:15px;
+                }
+    
+                figure .chevron{
+                  color: #ffffff;
+                }
+    
+                figure .tag{
+                  color: #FD6F6B;
+                }
+                figure .string{
+                  color: #98c379;
+                }
+            </style>
+        </head>
+        <body>
+                <h1><span>&lt</span>nova-rate<span>/&gt</span></h1>
+                <div class="fabs">
+                    <a  href="../../"class="fab fab-1"><nova-font-awesome icon-name="arrow-left" size="2x"/></a>
+                    <a  href="./nova-rate.html"class="fab-text fab fab-2">default</a>
+                    <a href="./nova-rate-custom-1.html"class="fab-text fab fab-3">custom 1</a>
+                    <a href="./nova-rate-custom-2.html" class="fab-text fab fab-4">custom 2</a>                                            
+                </div>
+                <div class="container">
+                <nova-rate></nova-rate>
+
+<figure>
+    <pre>
+        <code>
+    <span class="chevron">&lt;</span><span class="tag">nova-rate</span><span class="chevron">&gt;&lt;/</span><span class="tag">nova-rate</span><span class="chevron">&gt;</span>       
+        </code> 
+    </pre>
+</figure>
+            </div>
+    </body>
 </html>
+

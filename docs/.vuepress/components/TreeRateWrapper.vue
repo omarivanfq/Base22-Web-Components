@@ -2,7 +2,7 @@
   <div class="nova-rate">
     <h2>Demo lola</h2>
 
-    <nova-rate></nova-rate>
+    <nova-rate class="js-nova-rate"></nova-rate>
     <p></p>
     <input
       type="button"
@@ -27,3 +27,15 @@
     <input type="button" value="its workin" onClick="console.log('yheaitis')" />
   </div>
 </template>
+
+<script>
+customElements.whenDefined("nova-rate").then(function() {
+  var transfer = document.querySelector(".js-nova-transfer");
+  transfer.componentOnReady().then(function(instanceComponent) {
+    // Do something
+    // instanceComponent.configuration = configuration;
+    // instanceComponent.data = data;
+    // instanceComponent.renderComponent();
+  });
+});
+</script>

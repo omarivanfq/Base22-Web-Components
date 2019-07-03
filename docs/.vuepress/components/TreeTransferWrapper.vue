@@ -2,7 +2,7 @@
   <div class="nova-transfer">
     <h2>Demo</h2>
 
-    <nova-transfer> </nova-transfer>
+    <nova-transfer class="js-nova-transfer"> </nova-transfer>
 
     <input
       type="button"
@@ -132,3 +132,14 @@
     </script>
   </div>
 </template>
+<script>
+customElements.whenDefined("nova-transfer").then(function() {
+  var transfer = document.querySelector(".js-nova-transfer");
+  transfer.componentOnReady().then(function(instanceComponent) {
+    // Do something
+    // instanceComponent.configuration = configuration;
+    // instanceComponent.data = data;
+    // instanceComponent.renderComponent();
+  });
+});
+</script>

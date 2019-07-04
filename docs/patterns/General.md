@@ -14,13 +14,20 @@
 
 ## Team Dependencies
 
+- [Stencil](https://stenciljs.com/)
 - [Stencil-SASS](https://www.npmjs.com/package/@stencil/sass)
-- [Airbnb-ESLint](https://travishorn.com/setting-up-eslint-on-vs-code-with-airbnb-javascript-style-guide-6eb78a535ba6) - ESLint with the very popular [Airbnb style guide](https://github.com/airbnb/javascript)
+- [@types/jest](https://www.npmjs.com/package/@types/jest)
+- [typescript-eslint](https://typescript-eslint.io)
+- [ESLint](eslint.org)
+- [Jest](https://jestjs.io/)
+- [Prettier](https://prettier.io)
+- [stencil-fragment](https://www.npmjs.com/package/stencil-fragment)
+- [VuePress](https://vuepress.vuejs.org/)
 
 ## Authors
 
 - Eduardo Hernández Garza - [http://github.com/eddyhdzg](http://github.com/eddyhdzg)
 - David
 - Omar
-- Sergio
+- Sergio López Madriz ([SerLizar](https://github.com/SerLizar))
 - Ivan

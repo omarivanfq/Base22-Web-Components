@@ -6,6 +6,7 @@ import {
   Prop,
   h,
   State,
+  Watch,
   Method
 } from "@stencil/core";
 import { DEFAULT_CONFIGURATION } from "./default-configuration";
@@ -92,7 +93,6 @@ export class NovaTransfer {
       event that is emitted when items are filtered
     */
   @Event() filter: EventEmitter;
-
   /*
     STATES
   */
@@ -114,6 +114,11 @@ export class NovaTransfer {
   @State() targetFooter: boolean;
 
   @Element() el: HTMLElement;
+
+  @Watch("data")
+  public dataChange(_newValue: any, _oldValue: any): void {
+   this._init();
+  }
 
   componentWillLoad() {
     this._init();
@@ -209,10 +214,7 @@ export class NovaTransfer {
         ];
         this.search.emit({ direction: LEFT, value: PATTERN });
       } else {
-        this.filteredItems = [
-          ...this.data.items.filter(i => !this._isItemInTarget(i.key)),
-          ...this.filteredItems.filter(i => this._isItemInTarget(i.key))
-        ]; //[...this.data.items]; // restore filtered items array
+        this._restoreSourceFilteredItems();
       }
       this.filter.emit({
         direction: LEFT,
@@ -222,6 +224,28 @@ export class NovaTransfer {
       });
     }
   };
+
+  private _restoreSourceFilteredItems() {
+    this.filteredItems = [
+      ...this.data.items.filter(i => !this._isItemInTarget(i.key)),
+      ...this.filteredItems.filter(i => this._isItemInTarget(i.key))
+    ];
+  }
+
+  private _restoreTargetFilteredItems() {
+    this.filteredItems = [
+      ...this.data.items.filter(i => this._isItemInTarget(i.key)),
+      ...this.filteredItems.filter(i => !this._isItemInTarget(i.key))
+    ];
+  }
+
+  private _clearSourceSearchbox() {
+    this.el.shadowRoot.querySelectorAll(".search-container")[0].querySelector("input").value="";
+  }
+
+  private _clearTargetSearchbox() {
+    this.el.shadowRoot.querySelectorAll(".search-container")[1].querySelector("input").value="";
+  }
 
   private _handleTargetQuery = e => {
     if (!this.disabled) {
@@ -239,11 +263,7 @@ export class NovaTransfer {
         ];
         this.search.emit({ direction: RIGHT, value: PATTERN });
       } else {
-        //  this.filteredItems = [...this.data.items]; // restore filtered items
-        this.filteredItems = [
-          ...this.data.items.filter(i => this._isItemInTarget(i.key)),
-          ...this.filteredItems.filter(i => !this._isItemInTarget(i.key))
-        ]; //[...this.data.items]; // restore filtered items array
+        this._restoreTargetFilteredItems();
       }
       this.filter.emit({
         direction: RIGHT,
@@ -303,18 +323,19 @@ export class NovaTransfer {
     this.targetFooter = this._isThereTargetFooter();
     return (
       <div class="wrapper" style={this.wrapperStyle}>
-        <div class={"container" + (this.disabled ? " disabled" : "")}>
+        <div class={ "container" + (this.disabled ? " disabled" : "") }>
           <div class="column" style={this.columnStyle}>
             <TransferColumnHeader
               title={ this.configuration.labels.titleSource }
-              selectedCount={this._getSourceSelected()}
-              total={ this.filteredItems.length - this.data.targetKeys.length }
+              selectedCount={ this._getSourceSelected() }
+         //     total={ this.filteredItems.length - this.data.targetKeys.length }
+              total={ this.filteredItems.filter(i => !this._isItemInTarget(i.key)).length }
               totalEnabled={ this._getTotalEnabledFromSource() }
               handleSelectAll={ () => this._handleSelectAll(LEFT) }
-              disabled={this.disabled}
-              unit={this.configuration.labels.unit}
-              units={this.configuration.labels.units}
-              showSelectAll={this.showSelectAll}
+              disabled={ this.disabled }
+              unit={ this.configuration.labels.unit }
+              units={ this.configuration.labels.units }
+              showSelectAll={ this.showSelectAll }
               >
             </TransferColumnHeader>
             <div
@@ -358,17 +379,17 @@ export class NovaTransfer {
           >
           </TransferOperationButtons>
 
-          <div class="column" style={this.columnStyle}>
+          <div class="column" style={ this.columnStyle }>
             <TransferColumnHeader
                 title={ this.configuration.labels.titleTarget }
-                selectedCount={this._getTargetSelected()}
+                selectedCount={ this._getTargetSelected() }
                 totalEnabled={ this._getTotalEnabledFromTarget() }
-                total={ this.data.targetKeys.length }
+                total={ this.filteredItems.filter(i => this._isItemInTarget(i.key)).length }
                 handleSelectAll={ () => this._handleSelectAll(RIGHT) }
-                disabled={this.disabled}
-                unit={this.configuration.labels.unit}
-                units={this.configuration.labels.units}
-                showSelectAll={this.showSelectAll}
+                disabled={ this.disabled }
+                unit={ this.configuration.labels.unit }
+                units={ this.configuration.labels.units }
+                showSelectAll={ this.showSelectAll }
                 >
               </TransferColumnHeader>
             <div
@@ -488,6 +509,10 @@ export class NovaTransfer {
         moveKeys
       });
       this.transfered = [...moveKeys];
+      this._restoreTargetFilteredItems();
+      if (this.showSearch) {
+        this._clearTargetSearchbox();
+      }
     }
   }
 
@@ -510,6 +535,10 @@ export class NovaTransfer {
         moveKeys
       });
       this.transfered = [...moveKeys];
+      this._restoreSourceFilteredItems();
+      if (this.showSearch) {
+        this._clearSourceSearchbox();
+      }
     }
   }
 

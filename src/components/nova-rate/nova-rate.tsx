@@ -28,57 +28,61 @@ export class NovaRate {
    */
 
   /**
+<<<<<<< HEAD
+   *  Allow to clear by setting value to 0
+=======
    *  This property allows clearing by setting the value to 0
+>>>>>>> 415f5cbc2572b371020888be68cc67e7d8859083
    */
   @Prop() public allowClear: boolean = true;
 
   /**
-   *  This property allow half values
+   *  Allow half values
    */
   @Prop() public allowHalf: boolean = false;
 
   /**
-   *  This property focus the ul when component is mounted
+   *  Focus the component when mounted
    */
   @Prop() public autoFocus: boolean = false;
 
   /**
-   *  This property sets the caracter to display as symbol
+   *  Replace the icon for a caracter, empty will set the icon
    */
   @Prop() public character: string = "";
 
   /**
-   *  This property replaces character for an icon
+   *  Sets font awesome icon
    */
   @Prop() public icon: string = "star";
 
   /**
-   *  This property makes the component "read only"
+   *  Makes the component "read only"
    */
   @Prop() public disabled: boolean = false;
 
   /**
-   *  This property sets the number of stars
+   *  Sets the number of stars
    */
   @Prop() public count: number = 5;
 
   /**
-   *  This property sets the initial value
+   *  Sets the initial value
    */
   @Prop() public defaultValue: number = 0;
 
   /**
-   *  This property sets the size of the rate component
+   *  Sets the size of the rate component
    */
   @Prop() public size: number = 20;
 
   /**
-   *  This property sets the color
+   *  Sets the color
    */
   @Prop() public color: string = "#fadb14";
 
   /**
-   *  This property sets the initial value
+   *  Sets the initial configuration
    */
 
   @Prop({ mutable: true }) public configuration?: any = {};

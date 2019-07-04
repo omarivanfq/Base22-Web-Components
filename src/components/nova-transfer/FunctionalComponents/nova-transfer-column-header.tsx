@@ -17,11 +17,11 @@ export const TransferColumnHeader: FunctionalComponent<
 TransferColumnHeaderProps
 > = ({ selectedCount, total, totalEnabled, handleSelectAll, title, 
         unit, units, disabled, showSelectAll }) => {
-  
+
     var checkboxProps = {
         handleClick: () => handleSelectAll(),
         checked: selectedCount === totalEnabled && totalEnabled > 0,
-        disabled: disabled
+        disabled: totalEnabled === 0
     };
 
     return (

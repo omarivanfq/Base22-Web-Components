@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
         text-decoration: none;
       }
       body {
-        background-color: #d18038;
+        background-color: #1769aa;
         height: 100vh;
         font-family: sans-serif;
         padding: 0;
@@ -58,17 +58,16 @@
       .fab-1 { 
         background-color: #0277bd; 
       }
-
       .fab-1  i {
-        margin-top:24px;
+        margin-top: 24px;
       }
       .fab-2 { background-color: #f49542; }
       .fab-3 { background-color: #d18038; }
       .fab-4 { background-color: #945b28; }
-      h1 { color: #ffffff; text-align: center; font-size: 55px;
+      h1 { color: #ffffff; text-align: center; font-size: 44px;
         text-shadow: -3px 0px 15px rgba(0, 0, 0, 0.72); user-select: none;
-        position: absolute; left: 0; top: 0; width: 100%;}
-      h1 span { font-size: 45px; margin: 0 10px; }
+        width: 100%; }
+      h1 span { font-size: 40px; margin: 0 10px; }
       .container {
         height: 100%;
         width: 100%;
@@ -78,74 +77,89 @@
         align-items: center;
         position: absolute;
       }
-      .back {
-        display: block;
-        position: fixed;
-        left: 0;
-        top: 0;
-        background-color: #3a6ece;
-        height: 100vh;
-        z-index: -999;
+      .component-container {
+        width: 75%;
+        height: 100%;
+        padding-top: 5%;
+        padding-left: 7%;
       }
       figure {
         background-color: #282c34;
         color:#d19a66;
         line-height: 1.5;
         font-size: 14px;
+        width: 25%;
+        height: 100%;
+        margin: 0;
+        font-family: monospace;
+        position: relative;
       }
-
       figure .chevron {
         color: #ffffff;
       }
-
       figure .tag {
         color: #FD6F6B;
       }
       figure .string {
         color: #98c379;
       }
-
+      code {
+        display: block;
+        font-size: 15px;
+        text-align: left; 
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        width: 80%;
+      }
+      .back {
+        display: block;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background-color: #d18038;
+        height: 100vh;
+        z-index: -999;
+      }
       </style>
     </head>
     <body>
       <div class="back"></div>
-      <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
       <div class="fabs">
         <a class="fab fab-1" href="../../"><nova-font-awesome icon-name="arrow-left" size="2x"/></a>
         <a class="fab-text fab fab-2" href="./nova-transfer-basic.html">basic</a>
-        <a class="fab-text fab fab-3" >advanced</a>
+        <a class="fab-text fab fab-3">advanced</a>
         <a class="fab-text fab fab-4" href="./nova-transfer-custom.html">custom</a>                                            
       </div>
         <div class="container">
-          <nova-transfer show-select-all show-search>
-            <p slot="source-footer" style="padding: 8px 0; text-align: center;">
-              Footer 1
-            </p>
-            <p slot="target-footer" style="padding: 8px 0; text-align: center;">
-              Footer 2
-            </p>
-          </nova-transfer>
-<figure>
-    <pre>
-      <code>
-    <span class="chevron">&lt;</span><span class="tag">nova-transfer</span>     
-      show-slect-all 
-      show-search
-    <span class="chevron">&gt;
-      <span class="chevron">&lt;</span><span class="tag">p</span>     
-        slot=<span class="string">"source-footer"</span>  
-        style=<span class="string">"padding: 8px 0px; 
-              text-align:center"</span>
-      <span class="chevron">&gt; Footer 1 &lt;/</span><span class="tag">p</span><span class="chevron">&gt;</span>
-      <span class="chevron">&lt;</span><span class="tag">p</span>     
-        slot=<span class="string">"source-footer"</span>  
-        style=<span class="string">"padding: 8px 0px; 
-              text-align:center"</span>
-      <span class="chevron">&gt; Footer 2 &lt;/</span><span class="tag">p</span><span class="chevron">&gt;</span>      
-    &lt;/</span><span class="tag">nova-transfer</span><span class="chevron">&gt;</span>
-      </code> 
-  </pre>
-</figure>
+          <div class="component-container">
+            <h1><span>&lt</span>nova-transfer<span>/&gt</span></h1>
+            <nova-transfer show-select-all show-search>
+              <p slot="source-footer" style="padding: 8px 0; text-align: center;">
+                Footer 1
+              </p>
+              <p slot="target-footer" style="padding: 8px 0; text-align: center;">
+                Footer 2
+              </p>
+            </nova-transfer>
+          </div>
+          <figure>
+            <code>
+              <span class="chevron">&lt;</span><span class="tag">nova-transfer</span>     
+              <br/><span style="margin-left: 15px">show-select-all</span>
+              <br/><span style="margin-left: 15px">show-search<span class="chevron">&gt;</span>
+              <br><span class="chevron" style="margin-left: 30px">&lt;</span><span class="tag">p</span>     
+                slot=<span class="string">"source-footer"</span><span class="chevron">&gt;
+              <br/><span style="margin-left: 45px">Footer 1 </span>
+              <br/><span style="margin-left: 30px">&lt;/</span><span class="tag">p</span><span class="chevron">&gt;<br/></span></span>
+              <span class="chevron" style="margin-left: 30px">&lt;</span><span class="tag">p</span>     
+                slot=<span class="string">"source-footer"</span><span class="chevron">&gt;
+              <br/><span style="margin-left: 45px">Footer 2 </span>
+              <br/><span style="margin-left: 30px">&lt;/</span><span class="tag">p</span><span class="chevron">&gt;</span></span>
+              <br/>&lt;/</span><span class="tag">nova-transfer</span><span class="chevron">&gt;</span>   
+            </code> 
+          </figure>
         </div>
         <script>
           /* event listeners */
@@ -172,7 +186,7 @@
           transfer.renderItem = item => item.title + "-" + item.description;
           transfer.filterOption = (value, item) =>
             item.title.toUpperCase().indexOf(value.toUpperCase()) !== -1 
-             || item.description.toUpperCase().indexOf(value.toUpperCase()) !== -1 
+              || item.description.toUpperCase().indexOf(value.toUpperCase()) !== -1 
         </script>
         <script>
           // customized styles for the columns
@@ -180,7 +194,7 @@
             boxShadow: "0px 0px 53px -11px rgba(0,0,0,1)",
             width: "45%"
           };
-          // customized styles for the operation buttons (<,>)
+          // customized styles for the operation buttons (<, >)
           transfer.operationStyle = {
             width: "10%",
             zIndex: 777
